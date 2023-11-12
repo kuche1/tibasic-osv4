@@ -4,6 +4,9 @@
 
 import tibasiclib
 
+CMDS_ALL = []
+CMDS_ALL += (CMDS_BATTERY := ['battery', 'b', 'B'])
+
 with tibasiclib.TiBasicLib(
     program_name='aaosv4', # TODO automate this
     dependencies=[
@@ -21,7 +24,8 @@ with tibasiclib.TiBasicLib(
         with tb.iff(f'length({command})=0'): # avoid errors related to `=` down the line
             tb.continuee(main_menu)
 
-        with tb.iff(f'{command}="b"|{command}="B"|{command}="battery"'):
+        # with tb.iff(f'{command}="b"|{command}="B"|{command}="battery"'):
+        with tb.if_var_equ_strs(command, CMDS_BATTERY):
             tb.call('getbtry')
             # return in Ans
             # 0:4 <-> low:high
@@ -42,3 +46,5 @@ with tibasiclib.TiBasicLib(
 
         tb.printstr('unknown action')
         tb.printvar(command)
+        tb.printstr('here is the list of actions:')
+        tb.printstr(' '.join(CMDS_ALL))

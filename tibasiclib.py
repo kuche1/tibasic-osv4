@@ -117,6 +117,15 @@ class TiBasicLib:
         s.raw('Then')
         return ContextManager(s, lambda:s.raw('End'))
     
+    def if_var_equ_strs(s, var, strings):
+        assert type(strings) == list
+        cond = ''
+        for string in strings:
+            cond += f'{var}="{string}"|'
+        if cond.endswith('|'):
+            cond = cond[:-1]
+        return s.iff(cond)
+
     def whiletrue(s, label):
         s.label(label)
         return ContextManager(s, lambda:s.goto(label))
