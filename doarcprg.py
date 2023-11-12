@@ -5,9 +5,6 @@ import tibasiclib
 
 with tibasiclib.TiBasicLib(
     program_name='doarcprg',
-    dependencies=[
-        'zdoarc',
-    ],
     archive=False,
     ) as tb:
 

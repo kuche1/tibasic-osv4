@@ -10,11 +10,6 @@ CMDS_ALL.append(CMDS_RASPISANIE := ['RASPISANIE', 'R'])
 
 with tibasiclib.TiBasicLib(
     program_name='aaosv4', # TODO automate this
-    dependencies=[
-        'getbtry',
-        'getmem',
-        'rspsnie',
-    ],
     archive=False,
     ) as tb:
 

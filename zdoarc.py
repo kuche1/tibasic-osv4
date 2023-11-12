@@ -28,8 +28,6 @@ import tibasiclib
 
 with tibasiclib.TiBasicLib(
     program_name='zdoarc',
-    dependencies=[
-    ],
     archive=False,
     ) as tb:
 

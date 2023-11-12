@@ -28,8 +28,6 @@ import tibasiclib
 
 with tibasiclib.TiBasicLib(
     program_name='zunarc',
-    dependencies=[
-    ],
     archive=False,
     ) as tb:
 

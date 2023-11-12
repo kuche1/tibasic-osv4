@@ -35,7 +35,7 @@ class TiBasicLib:
 
     # python stuff
 
-    def __init__(s, program_name, dependencies, archive=True):
+    def __init__(s, program_name, archive=True):
         if len(program_name) > 8:
             raise Exception(f'invalid program name `{program_name}`; it needs to be less than or equal to 8 characters')
 
@@ -43,15 +43,6 @@ class TiBasicLib:
         s.tibasic_source_file = f'/tmp/{s.program_name}.tib' # extension has to be `.tib` otherwise the compiler refuses to work
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
-
-        s.dependencies = dependencies
-        s.dependencies += ['unarcprg', 'doarcprg']
-        for file in s.dependencies:
-            try:
-                # note that python will take care of double includes
-                __import__(file)
-            except ModuleNotFoundError:
-                raise Exception(f'could not find program `{file}`; the dependencies need to be reachable by PATH')
 
         s.archive = archive
 
@@ -146,13 +137,16 @@ class TiBasicLib:
         s.goto(label)
     
     def call(s, program_name, asm=False):
-        if program_name not in s.dependencies:
-            raise Exception(f'missing dependency `{program_name}`; all program calls need to be specified as dependencies')
-        program_name = program_name.upper()
 
-        # TODO remove the dependency field and instead import the program right here
-        # also make it so that we can check if it has been set to archived so thath
-        # we know if we need to unarchive it
+        dependencies = ['unarcprg', 'doarcprg'] + [program_name]
+        for file in dependencies:
+            try:
+                # note that python will take care of double includes
+                __import__(file)
+            except ModuleNotFoundError:
+                raise Exception(f'could not find program `{file}`')
+
+        program_name = program_name.upper()
 
         if not asm:
             s.raw(f'"{program_name}') # set Ans

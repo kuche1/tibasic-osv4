@@ -5,9 +5,6 @@ import tibasiclib
 
 with tibasiclib.TiBasicLib(
     program_name='unarcprg',
-    dependencies=[
-        'zunarc',
-    ],
     archive=False,
     ) as tb:
 

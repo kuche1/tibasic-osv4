@@ -6,9 +6,6 @@ import tibasiclib
 
 with tibasiclib.TiBasicLib(
     program_name='getbtry',
-    dependencies=[
-        'zgetbtry',
-    ],
     ) as tb:
 
     tb.call('zgetbtry', asm=True)
