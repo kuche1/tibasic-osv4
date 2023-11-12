@@ -5,8 +5,7 @@ import tibasiclib
 # 0:4 <-> low:high
 
 with tibasiclib.TiBasicLib(
-    program_name='zgetbtry',
-    archive=False,
+        archive=False,
     ) as tb:
 
     tb.asm_prgm('''

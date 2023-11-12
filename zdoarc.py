@@ -27,8 +27,7 @@ import tibasiclib
 # "FTEST
 
 with tibasiclib.TiBasicLib(
-    program_name='zdoarc',
-    archive=False,
+        archive=False,
     ) as tb:
 
     tb.asm_prgm('''

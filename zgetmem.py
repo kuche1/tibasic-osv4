@@ -4,8 +4,7 @@ import tibasiclib
 # return in Ans
 
 with tibasiclib.TiBasicLib(
-    program_name='zgetmem',
-    archive=False,
+        archive=False,
     ) as tb:
 
     tb.asm_prgm('''

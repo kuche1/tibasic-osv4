@@ -9,8 +9,7 @@ CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M'])
 CMDS_ALL.append(CMDS_RASPISANIE := ['RASPISANIE', 'R'])
 
 with tibasiclib.TiBasicLib(
-    program_name='aaosv4', # TODO automate this
-    archive=False,
+        archive=False,
     ) as tb:
 
     main_menu = 'main menu'

@@ -1,5 +1,7 @@
 
 import subprocess
+import inspect
+import os
 
 # TODO
 # check if the file ends with new line and if that is the case delete it
@@ -35,7 +37,16 @@ class TiBasicLib:
 
     # python stuff
 
-    def __init__(s, program_name, archive=True):
+    def __init__(s, archive=True):
+        # get filename of caller
+        frame = inspect.stack()[1]
+        module = inspect.getmodule(frame[0])
+        file = module.__file__
+        file = os.path.basename(file)
+        if file.endswith('.py'):
+            file = file[:-3]
+        program_name = file
+
         if len(program_name) > 8:
             raise Exception(f'invalid program name `{program_name}`; it needs to be less than or equal to 8 characters')
 

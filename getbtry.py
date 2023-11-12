@@ -5,7 +5,6 @@ import tibasiclib
 # 0:4 <-> low:high
 
 with tibasiclib.TiBasicLib(
-    program_name='getbtry',
     ) as tb:
 
     tb.call('zgetbtry', asm=True)
