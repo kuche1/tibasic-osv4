@@ -5,12 +5,15 @@
 import tibasiclib
 
 CMDS_ALL = []
-CMDS_ALL += (CMDS_BATTERY := ['battery', 'b', 'B'])
+CMDS_ALL.append(CMDS_BATTERY := ['BATTERY', 'B', 'b'])
+CMDS_ALL.append(CMDS_EXIT := ['EXIT', 'E', 'e'])
+CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M', 'R'])
 
 with tibasiclib.TiBasicLib(
     program_name='aaosv4', # TODO automate this
     dependencies=[
         'getbtry',
+        'getmem',
     ]
     ) as tb:
 
@@ -44,7 +47,27 @@ with tibasiclib.TiBasicLib(
 
             tb.continuee(main_menu)
 
-        tb.printstr('unknown action')
+        with tb.if_var_equ_strs(command, CMDS_EXIT):
+            # TODO implement tb.breakk(main_menu)
+            tb.raw('Goto BR')
+
+            tb.continuee(main_menu)
+
+        with tb.if_var_equ_strs(command, CMDS_MEMORY):
+            tb.call('getmem')
+            # return in Ans
+
+            free_mem = tb.get_var_num()
+            tb.raw(f'Ans->{free_mem}')
+
+            tb.printstr('free memory:')
+            tb.printvar(free_mem)
+
+            tb.continuee(main_menu)
+
+        tb.printstr('unknown action:')
         tb.printvar(command)
         tb.printstr('here is the list of actions:')
-        tb.printstr(' '.join(CMDS_ALL))
+        tb.printstr(' '.join(['='.join(cmds) for cmds in CMDS_ALL]))
+
+    tb.raw('Lbl BR')

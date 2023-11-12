@@ -135,7 +135,7 @@ class TiBasicLib:
     
     def call(s, program_name, asm=False):
         if program_name not in s.dependencies:
-            raise Exception(f'missing dependency `{program_name}`; all called program calls need to be specified as dependencies')
+            raise Exception(f'missing dependency `{program_name}`; all program calls need to be specified as dependencies')
         program_name = program_name.upper()
         
         if asm:
@@ -149,7 +149,7 @@ class TiBasicLib:
         s.f.write(end)
     
     def asm_prgm(s, code):
-        s.raw('AsmPrgm')
+        s.raw('AsmPrgm', end='')
         code = code.replace('\n', '')
         code = code.replace('\t', '')
         code = code.replace(' ', '')
