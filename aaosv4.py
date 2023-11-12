@@ -14,7 +14,8 @@ with tibasiclib.TiBasicLib(
         'getbtry',
         'getmem',
         'rspsnie',
-    ]
+    ],
+    archive=False,
     ) as tb:
 
     main_menu = 'main menu'

@@ -30,7 +30,7 @@ class TiBasicLib:
 
     # python stuff
 
-    def __init__(s, program_name, dependencies):
+    def __init__(s, program_name, dependencies, archive=True):
         if len(program_name) > 8:
             raise Exception(f'invalid program name `{program_name}`; it needs to be less than or equal to 8 characters')
 
@@ -47,6 +47,8 @@ class TiBasicLib:
             except ModuleNotFoundError:
                 raise Exception(f'could not find program `{file}`; the dependencies need to be reachable by PATH')
 
+        s.archive = archive
+
         s.context_manager = ContextManager(s, lambda:0)
         s.labels = []
 
@@ -60,9 +62,13 @@ class TiBasicLib:
         s.f.close()
         if exc_type == None: # if no exceptions
             # compile
-            term(['ti84cc', '-o', s.compiled_file, s.tibasic_source_file])
+            cmd = ['ti84cc']
+            if s.archive:
+                cmd += ['-a']
+            cmd += ['-o', s.compiled_file, s.tibasic_source_file]
+            term(cmd)
             # send to calc
-            term(['tilp', '--no-gui', s.compiled_file])
+            term(['tilp', '--no-gui', '--silent', s.compiled_file])
 
     # IO
 
