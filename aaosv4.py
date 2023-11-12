@@ -1,19 +1,19 @@
 #! /usr/bin/env python3
 
-# usage: ./aaosv4.py
-
 import tibasiclib
 
 CMDS_ALL = []
 CMDS_ALL.append(CMDS_BATTERY := ['BATTERY', 'B', 'b'])
 CMDS_ALL.append(CMDS_EXIT := ['EXIT', 'E', 'e'])
-CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M', 'R'])
+CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M'])
+CMDS_ALL.append(CMDS_RASPISANIE := ['RASPISANIE', 'R'])
 
 with tibasiclib.TiBasicLib(
     program_name='aaosv4', # TODO automate this
     dependencies=[
         'getbtry',
         'getmem',
+        'rspsnie',
     ]
     ) as tb:
 
@@ -64,6 +64,19 @@ with tibasiclib.TiBasicLib(
             tb.printvar(free_mem)
 
             tb.continuee(main_menu)
+        
+        with tb.if_var_equ_strs(command, CMDS_RASPISANIE):
+            tb.call('rspsnie')
+
+            tb.continuee(main_menu)
+
+        # TODO prgmNOTES
+
+        # TODO prgmOFF
+
+        # TODO prgmTIME
+
+        # TODO prgmTIMESET
 
         tb.printstr('unknown action:')
         tb.printvar(command)
