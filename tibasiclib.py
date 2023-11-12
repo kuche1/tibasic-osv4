@@ -8,15 +8,17 @@ def term(cmds:list):
     subprocess.run(cmds, check=True)
 
 class ContextManager:
-    def __init__(s, on_exit):
+    def __init__(s, tibasicobj, on_exit):
         # s.on_etner = on_enter
         s.on_exit = on_exit
+        s.tibasicobj = tibasicobj
     def __enter__(s):
         # s.on_enter()
         return s
     def __exit__(s, exc_type, exc_value, exc_traceback):
         if exc_type == None: # if not exceptions
             s.on_exit()
+            s.tibasicobj.free_vars_used_in_scope()
 
 class TiBasicLib:
 
@@ -24,8 +26,10 @@ class TiBasicLib:
 
     disp_len_x = 16
 
-    str_regs = ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']
-    # can't put `Ans` here
+    vars_str = ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9'] # can't put `Ans` here
+    vars_num = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+    vars_num_in_use = [False] * len(vars_num)
+    vars_num_used_in_this_scope = []
 
     # python stuff
 
@@ -89,7 +93,7 @@ class TiBasicLib:
 
             to_write += f'"{prompt}",'
 
-        assert store_in in s.str_regs
+        assert store_in in s.vars_str
         to_write += f'{store_in}'
 
         s.raw(to_write)
@@ -110,11 +114,11 @@ class TiBasicLib:
     def iff(s, cond):
         s.raw(f'If {cond}')
         s.raw('Then')
-        return ContextManager(lambda:s.raw('End'))
+        return ContextManager(s, lambda:s.raw('End'))
     
     def whiletrue(s, label):
         s.label(label)
-        return ContextManager(lambda:s.goto(label))
+        return ContextManager(s, lambda:s.goto(label))
 
     def continuee(s, label):
         s.goto(label)
@@ -140,3 +144,18 @@ class TiBasicLib:
         code = code.replace('\t', '')
         code = code.replace(' ', '')
         s.raw(code, end='')
+
+    def get_var_num(s):
+        if False not in s.vars_num_in_use:
+            raise Exception('all vars used; time to implement a stack :(')
+        idx = s.vars_num_in_use.index(False)
+        s.vars_num_in_use[idx] = True
+        s.vars_num_used_in_this_scope.append(idx)
+        return s.vars_num[idx]
+
+    # NEVER CALL THIS
+    def free_vars_used_in_scope(s):
+        for var_idx in s.vars_num_used_in_this_scope:
+            assert s.vars_num_in_use[var_idx] == True
+            s.vars_num_in_use[var_idx] = False
+        s.vars_num_used_in_this_scope = []

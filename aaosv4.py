@@ -26,13 +26,16 @@ with tibasiclib.TiBasicLib(
             # return in Ans
             # 0:4 <-> low:high
 
-            tb.raw('Ans*20->A') # low bound
-            tb.raw('A+20->B') # high bound
+            low_bound = tb.get_var_num()
+            high_bound = tb.get_var_num()
+
+            tb.raw(f'Ans*20->{low_bound}')
+            tb.raw(f'{low_bound}+20->{high_bound}')
 
             tb.printstr('battery between')
-            tb.printvar('A')
+            tb.printvar(low_bound)
             tb.printstr('and')
-            tb.printvar('B')
+            tb.printvar(high_bound)
             tb.printstr('percent')
 
             tb.continuee(main_menu)
