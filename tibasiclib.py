@@ -9,11 +9,10 @@ def term(cmds:list):
 
 class ContextManager:
     def __init__(s, tibasicobj, on_exit):
-        # s.on_etner = on_enter
         s.on_exit = on_exit
         s.tibasicobj = tibasicobj
     def __enter__(s):
-        # s.on_enter()
+        s.tibasicobj.create_new_scope()
         return s
     def __exit__(s, exc_type, exc_value, exc_traceback):
         if exc_type == None: # if not exceptions
@@ -21,8 +20,6 @@ class ContextManager:
             s.tibasicobj.free_vars_used_in_scope()
 
 class TiBasicLib:
-
-    # constants
 
     disp_len_x = 16
 
@@ -50,12 +47,16 @@ class TiBasicLib:
             except ModuleNotFoundError:
                 raise Exception(f'could not find program `{file}`; the dependencies need to be reachable by PATH')
 
+        s.context_manager = ContextManager(s, lambda:0)
         s.labels = []
 
     def __enter__(s):
+        s.context_manager.__enter__()
         return s
 
     def __exit__(s, exc_type, exc_value, exc_traceback):
+        s.context_manager.__exit__(exc_type, exc_value, exc_traceback)
+
         s.f.close()
         if exc_type == None: # if no exceptions
             # compile
@@ -150,12 +151,16 @@ class TiBasicLib:
             raise Exception('all vars used; time to implement a stack :(')
         idx = s.vars_num_in_use.index(False)
         s.vars_num_in_use[idx] = True
-        s.vars_num_used_in_this_scope.append(idx)
+        s.vars_num_used_in_this_scope[-1].append(idx)
         return s.vars_num[idx]
 
     # NEVER CALL THIS
+    def create_new_scope(s):
+        s.vars_num_used_in_this_scope.append([])
+
+    # NEVER CALL THIS
     def free_vars_used_in_scope(s):
-        for var_idx in s.vars_num_used_in_this_scope:
+        for var_idx in s.vars_num_used_in_this_scope[-1]:
             assert s.vars_num_in_use[var_idx] == True
             s.vars_num_in_use[var_idx] = False
-        s.vars_num_used_in_this_scope = []
+        del s.vars_num_used_in_this_scope[-1]
