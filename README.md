@@ -2,13 +2,17 @@
 
 ## notes
 
+usage: ./aaosv4.py
+
+### related to code
+
 <!-- ### related to code
 
 Ans is always consideted trashed
 
 z is always considered trashed -->
 
-usage: ./aaosv4.py
+asm programs MUST NOT be archived
 
 ### generic
 

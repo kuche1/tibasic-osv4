@@ -6,7 +6,8 @@ import tibasiclib
 with tibasiclib.TiBasicLib(
     program_name='zgetmem',
     dependencies=[
-    ]
+    ],
+    archive=False,
     ) as tb:
 
     tb.asm_prgm('''

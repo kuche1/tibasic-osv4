@@ -23,10 +23,15 @@ class TiBasicLib:
 
     disp_len_x = 16
 
+    # variables
+
     vars_str = ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9'] # can't put `Ans` here
-    vars_num = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+
+    vars_num = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']
     vars_num_in_use = [False] * len(vars_num)
     vars_num_used_in_this_scope = []
+
+    var_ret = 'Z'
 
     # python stuff
 
@@ -40,6 +45,7 @@ class TiBasicLib:
         s.f = open(s.tibasic_source_file, 'w')
 
         s.dependencies = dependencies
+        s.dependencies += ['unarcprg', 'doarcprg']
         for file in s.dependencies:
             try:
                 # note that python will take care of double includes
@@ -143,10 +149,22 @@ class TiBasicLib:
         if program_name not in s.dependencies:
             raise Exception(f'missing dependency `{program_name}`; all program calls need to be specified as dependencies')
         program_name = program_name.upper()
-        
+
+        # TODO remove the dependency field and instead import the program right here
+        # also make it so that we can check if it has been set to archived so thath
+        # we know if we need to unarchive it
+
+        if not asm:
+            s.raw(f'"{program_name}') # set Ans
+            s.raw('prgmUNARCPRG')
+
         if asm:
             s.raw(f'Asm(', end='') # save 1 char by ommiting `)`
         s.raw(f'prgm{program_name}')
+
+        if not asm:
+            s.raw(f'"{program_name}') # set Ans
+            s.raw('prgmDOARCPRG')
 
     # other
 

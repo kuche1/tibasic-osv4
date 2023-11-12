@@ -31,13 +31,13 @@ with tibasiclib.TiBasicLib(
         # with tb.iff(f'{command}="b"|{command}="B"|{command}="battery"'):
         with tb.if_var_equ_strs(command, CMDS_BATTERY):
             tb.call('getbtry')
-            # return in Ans
+            # returns battery level
             # 0:4 <-> low:high
 
             low_bound = tb.get_var_num()
             high_bound = tb.get_var_num()
 
-            tb.raw(f'Ans*20->{low_bound}')
+            tb.raw(f'{tb.var_ret}*20->{low_bound}')
             tb.raw(f'{low_bound}+20->{high_bound}')
 
             tb.printstr('battery between')
@@ -56,10 +56,10 @@ with tibasiclib.TiBasicLib(
 
         with tb.if_var_equ_strs(command, CMDS_MEMORY):
             tb.call('getmem')
-            # return in Ans
+            # returns free bytes
 
             free_mem = tb.get_var_num()
-            tb.raw(f'Ans->{free_mem}')
+            tb.raw(f'{tb.var_ret}->{free_mem}')
 
             tb.printstr('free memory:')
             tb.printvar(free_mem)
