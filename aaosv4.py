@@ -170,7 +170,7 @@ with tibasiclib.TiBasicLib(
         tb.label(lbl_timer)
         with tb.scope():
             tb.call('timer')
-        tb.goto(lbl_press_any_key)
+        tb.continuee(lbl_main_menu)
 
         # TODO prgmNOTES
 

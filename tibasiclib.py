@@ -82,7 +82,7 @@ class TiBasicLib:
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
         s.previously_sent_file = f'{s.tibasic_source_file}-previously-sent' # needs tp be >8 characters long
-        s.previously_sent_file_max_mtime_diff = 60 * 8 # 8 minutes
+        s.previously_sent_file_max_mtime_diff = 60 * 20 # in seconds
 
         s.archive = archive # TODO autodetect final size and change this setting based on that (if flag not set)
 
@@ -299,13 +299,8 @@ class TiBasicLib:
         return vars[idx]
 
     def get_var_num(s):
-        # if False not in s.vars_num_in_use:
-        #     raise Exception('all vars used; time to implement a stack :(')
-        # idx = s.vars_num_in_use.index(False)
-        # s.vars_num_in_use[idx] = True
-        # s.vars_num_used_in_this_scope[-1].append(idx)
-        # return s.vars_num[idx]
-        return s._get_var(s.vars_num, s.vars_num_in_use, s.vars_num_used_in_this_scope)
+        # return s._get_var(s.vars_num, s.vars_num_in_use, s.vars_num_used_in_this_scope)
+        return s.get_var_num_stack()
     
     def get_var_str(s):
         return s._get_var(s.vars_str, s.vars_str_in_use, s.vars_str_used_in_this_scope)
