@@ -403,7 +403,7 @@ class TiBasicLib:
             assert len(str(s.stack_num)) <= 4, 'too many stacks, this can be fixed by not abusing `s.stack_num`'
             stack.name = f'[list]S{s.stack_num}'
 
-            s.raw(f'SetUpEditor {stack.name}') # TODO check if this is needed
+            s.setupeditor(stack.name) # TODO check if this is needed
             # create list if it doesn't exist
             # this will also unarchive it if it is archived
 
@@ -419,6 +419,14 @@ class TiBasicLib:
         # creates variable if it doesn't exist
         # also unarchives it if it is archived
         s.raw(f'SetUpEditor {var}')
+    
+    def setupeditor_lstr(s, var):
+        # length will be set to 1
+
+        s.setupeditor(var)
+
+        s.raw(f'If dim({var})=0')
+        s.raw(f'1->{var}(1)')
 
     # other
 
