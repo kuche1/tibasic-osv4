@@ -2,6 +2,7 @@
 import subprocess
 import inspect
 import os
+import hashlib
 
 # TODO
 # check if the file ends with new line and if that is the case delete it
@@ -12,6 +13,13 @@ def term(cmds:list, silent=False):
         subprocess.run(cmds, check=True, capture_output=True)
     else:
         subprocess.run(cmds, check=True)
+
+def calc_hash(path):
+    if os.path.isfile(path):
+        with open(path, 'rb') as f:
+            return hashlib.sha256(f.read()).hexdigest() # TODO sucks for big files
+    else:
+        return None
 
 class ContextManager:
     def __init__(s, tibasicobj, on_exit):
@@ -73,6 +81,7 @@ class TiBasicLib:
         s.program_name = program_name
         s.tibasic_source_file = f'/tmp/{s.program_name}.tib' # extension has to be `.tib` otherwise the compiler refuses to work
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
+        s.file_prev_version_hash = calc_hash(s.tibasic_source_file)
         s.f = open(s.tibasic_source_file, 'w')
 
         s.archive = archive # TODO autodetect final size and change this setting based on that (if flag not set)
@@ -88,19 +97,22 @@ class TiBasicLib:
 
         s.f.close()
         if exc_type == None: # if no exceptions
-            # compile
-            print(f'compiling `{s.program_name}`')
-            cmd = ['ti84cc']
-            if s.archive:
-                cmd += ['-a']
-            cmd += ['-o', s.compiled_file, s.tibasic_source_file]
-            term(cmd)
-            # send to calc # TODO check if the program was send shortly (or if it was changed) and do not send of so
-            print(f'sending `{s.program_name}`')
-            try:
-                term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
-            except subprocess.CalledProcessError:
-                print(f'ERROR: could not send `{s.program_name}`')
+            if calc_hash(s.tibasic_source_file) == s.file_prev_version_hash: # TODO also check for timestamp
+                print(f'skipping `{s.program_name}`')
+            else:
+                # compile
+                print(f'compiling `{s.program_name}`')
+                cmd = ['ti84cc']
+                if s.archive:
+                    cmd += ['-a']
+                cmd += ['-o', s.compiled_file, s.tibasic_source_file]
+                term(cmd)
+                # send to calc
+                print(f'sending `{s.program_name}`')
+                try:
+                    term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
+                except subprocess.CalledProcessError:
+                    print(f'ERROR: could not send `{s.program_name}`')
 
     # asserts
 
@@ -236,7 +248,7 @@ class TiBasicLib:
         labels = labels[6:]
 
         assert len(options) == 0, f'I am increadibly lazy; this needs to be fixed'
-    
+
     def press_any_key(s):
         s.printstr('PRESS ANY KEY')
         s.raw('Repeat Ans')
