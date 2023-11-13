@@ -31,7 +31,7 @@ with tibasiclib.TiBasicLib(
         lbl_date_set = tb.get_label()
         lbl_exit = tb.get_label()
         lbl_memory = tb.get_label()
-        # lbl_notes = tb.get_label()
+        lbl_notes = tb.get_label()
         lbl_poweroff = tb.get_label()
         # lbl_raspisanie = tb.get_label()
         lbl_time_get = tb.get_label()
@@ -46,7 +46,7 @@ with tibasiclib.TiBasicLib(
                 '"DATE:SET"',
                 '"EXIT"',
                 '"MEMORY"',
-                # '"NOTES"',
+                '"NOTES"',
                 '"POWEROFF"',
                 # '"RASPISANIE"',
                 '"TIME:GET"',
@@ -59,7 +59,7 @@ with tibasiclib.TiBasicLib(
                 lbl_date_set,
                 lbl_exit,
                 lbl_memory,
-                # lbl_notes,
+                lbl_notes,
                 lbl_poweroff,
                 # lbl_raspisanie,
                 lbl_time_get,
@@ -82,7 +82,7 @@ with tibasiclib.TiBasicLib(
             low_bound = tb.get_var_num_stack()
             high_bound = tb.get_var_num()
 
-            tb.raw(f'{tb.var_ret}*20->{low_bound}')
+            tb.raw(f'{tb.var_ret_num_0}*20->{low_bound}')
             tb.raw(f'{low_bound}+20->{high_bound}')
 
             tb.printstr('battery between')
@@ -127,16 +127,16 @@ with tibasiclib.TiBasicLib(
             # returns free bytes
 
             free_mem = tb.get_var_num()
-            tb.raw(f'{tb.var_ret}->{free_mem}')
+            tb.raw(f'{tb.var_ret_num_0}->{free_mem}')
 
             tb.printstr('free memory:')
             tb.printvar(free_mem)
         tb.goto(lbl_press_any_key)
 
-        # tb.label(lbl_notes)
-        # with tb.scope():
-        #     tb.call('notes')
-        # tb.continuee(lbl_main_menu)
+        tb.label(lbl_notes)
+        with tb.scope():
+            tb.call('notes')
+        tb.continuee(lbl_main_menu)
 
         tb.label(lbl_poweroff)
         with tb.scope():

@@ -9,6 +9,7 @@ import time
 # TODO
 # check if the file ends with new line and if that is the case delete it
 # try `expr(` for string to num conversion
+# add parameters for input and output variables
 
 # INFO
 # ti84+ ROM: 404     KB
@@ -55,11 +56,18 @@ class TiBasicLib:
     vars_str_in_use = [False] * len(vars_str)
     vars_str_used_in_this_scope = []
 
-    vars_num = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']
-    vars_num_in_use = [False] * len(vars_num)
-    vars_num_used_in_this_scope = []
+    # vars_num = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']
+    # vars_num_in_use = [False] * len(vars_num)
+    # vars_num_used_in_this_scope = []
 
-    var_ret = 'Z'
+    # variables used for args, return, trash
+
+    var_arg_str_0 = 'Str9'
+
+    var_ret_num_0 = 'Z'
+    var_ret_list_0 = 'L6'
+
+    var_trash_num_0 = 'Y'
 
     # stack
 
@@ -330,19 +338,21 @@ class TiBasicLib:
         return s.get_var_num_stack()
 
     def get_var_str(s):
+        # TODO maybe we could use Str9, Str8 to save the prev value of Str0, Str1 when requested this way
+        # and we could restore it on scope exit
         return s._get_var(s.vars_str, s.vars_str_in_use, s.vars_str_used_in_this_scope)
 
     def _create_new_scope(s):
-        s.vars_num_used_in_this_scope.append([])
+        # s.vars_num_used_in_this_scope.append([])
         s.vars_str_used_in_this_scope.append([])
         s.stack.append(StackInfo())
         s.stack_num += 1
 
     def _delete_last_scope(s):
-        for var_idx in s.vars_num_used_in_this_scope[-1]:
-            assert s.vars_num_in_use[var_idx] == True
-            s.vars_num_in_use[var_idx] = False
-        del s.vars_num_used_in_this_scope[-1]
+        # for var_idx in s.vars_num_used_in_this_scope[-1]:
+        #     assert s.vars_num_in_use[var_idx] == True
+        #     s.vars_num_in_use[var_idx] = False
+        # del s.vars_num_used_in_this_scope[-1]
 
         for var_idx in s.vars_str_used_in_this_scope[-1]:
             assert s.vars_str_in_use[var_idx] == True
