@@ -29,6 +29,8 @@ class TiBasicLib:
 
     # variables
 
+    label_count = 0
+
     vars_str = ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']
     vars_str_in_use = [False] * len(vars_str)
     vars_str_used_in_this_scope = []
@@ -193,18 +195,12 @@ class TiBasicLib:
     def utime_sec(s, var_num):
         s.raw(f'startTmr->{var_num}')
 
-    # other
+    # variable generation
 
-    def raw(s, code, end='\n'):
-        s.f.write(code)
-        s.f.write(end)
-    
-    def asm_prgm(s, code):
-        s.raw('AsmPrgm', end='')
-        code = code.replace('\n', '')
-        code = code.replace('\t', '')
-        code = code.replace(' ', '')
-        s.raw(code, end='')
+    def get_label(s):
+        ret = str(s.label_count)
+        s.label_count += 1
+        return ret
 
     def _get_var(s, vars, vars_in_use, vars_used_in_scope):
         if False not in vars_in_use:
@@ -230,7 +226,6 @@ class TiBasicLib:
         s.vars_num_used_in_this_scope.append([])
         s.vars_str_used_in_this_scope.append([])
 
-    # NEVER CALL THIS
     def _delete_last_scope(s):
         for var_idx in s.vars_num_used_in_this_scope[-1]:
             assert s.vars_num_in_use[var_idx] == True
@@ -241,3 +236,17 @@ class TiBasicLib:
             assert s.vars_str_in_use[var_idx] == True
             s.vars_str_in_use[var_idx] = False
         del s.vars_str_used_in_this_scope[-1]
+
+    # other
+
+    def raw(s, code, end='\n'):
+        s.f.write(code)
+        s.f.write(end)
+    
+    def asm_prgm(s, code):
+        s.raw('AsmPrgm', end='')
+        code = code.replace('\n', '')
+        code = code.replace('\t', '')
+        code = code.replace(' ', '')
+        s.raw(code, end='')
+
