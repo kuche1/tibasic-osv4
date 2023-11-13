@@ -4,6 +4,7 @@ import tibasiclib
 
 CMDS_ALL = []
 CMDS_ALL.append(CMDS_BATTERY := ['BATTERY', 'B', 'b'])
+CMDS_ALL.append(CMDS_DATE_SET := ['DATE:SET', 'DS'])
 CMDS_ALL.append(CMDS_EXIT := ['EXIT', 'E', 'e'])
 CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M'])
 CMDS_ALL.append(CMDS_RASPISANIE := ['RASPISANIE', 'R'])
@@ -17,7 +18,7 @@ with tibasiclib.TiBasicLib(
     with tb.whiletrue(main_menu):
 
         command = 'Str0'
-        tb.inputstr(command, '>>')
+        tb.input(command, '>>')
 
         with tb.iff(f'length({command})=0'): # avoid errors related to `=` down the line
             tb.continuee(main_menu)
@@ -39,6 +40,19 @@ with tibasiclib.TiBasicLib(
             tb.printstr('and')
             tb.printvar(high_bound)
             tb.printstr('percent')
+
+            tb.continuee(main_menu)
+        
+        with tb.if_var_equ_strs(command, CMDS_DATE_SET):
+            year = tb.get_var_num()
+            month = tb.get_var_num()
+            day = tb.get_var_num()
+
+            tb.input(year, 'Enter year: ')
+            tb.input(month, 'Enter month: ')
+            tb.input(day, 'Enter day: ')
+
+            tb.date_set(year, month, day)
 
             tb.continuee(main_menu)
 
@@ -70,6 +84,8 @@ with tibasiclib.TiBasicLib(
         # TODO prgmOFF
 
         # TODO prgmTIME
+        # getTmStr(24
+        # getDtStr(3 -> y/m/d
 
         # TODO prgmTIMESET
 

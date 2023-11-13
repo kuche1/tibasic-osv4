@@ -94,21 +94,20 @@ class TiBasicLib:
             assert var == var.upper()
         s.raw(f'Disp {var}')
 
-    def inputstr(s, store_in, prompt=None):
+    def input(s, store_in, prompt_str=None):
         to_write = ''
 
         to_write += 'Input '
 
-        if prompt != None:
-            assert '"' not in prompt
+        if prompt_str != None:
+            assert '"' not in prompt_str
 
-            while len(prompt) > s.disp_len_x:
-                s.printstr(prompt[:s.disp_len_x])
-                prompt = prompt[s.disp_len_x:]
+            while len(prompt_str) > s.disp_len_x:
+                s.printstr(prompt_str[:s.disp_len_x])
+                prompt_str = prompt_str[s.disp_len_x:]
 
-            to_write += f'"{prompt}",'
+            to_write += f'"{prompt_str}",'
 
-        assert store_in in s.vars_str
         to_write += f'{store_in}'
 
         s.raw(to_write)
@@ -170,6 +169,11 @@ class TiBasicLib:
         if not asm:
             s.raw(f'"{program_name}') # set Ans
             s.raw('prgmDOARCPRG')
+
+    # date and time
+
+    def date_set(s, var_year, var_month, var_day):
+        s.raw(f'setDate({var_year},{var_month},{var_day}')
 
     # other
 
