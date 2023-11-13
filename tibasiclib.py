@@ -23,6 +23,8 @@ class ContextManager:
 
 class TiBasicLib:
 
+    # display
+
     disp_len_x = 16
 
     # variables
@@ -35,7 +37,7 @@ class TiBasicLib:
 
     var_ret = 'Z'
 
-    # python stuff
+    # functions stuff
 
     def __init__(s, archive=True):
         # get filename of caller
