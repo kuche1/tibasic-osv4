@@ -157,10 +157,19 @@ class TiBasicLib:
 
     # asserts and checks
 
-    def _assert_str(s, text):
+    def _assert_str(s, text): # TODO can be improved; also naming is confusing, will probably be better if we have `str` and `rawstr`
         assert type(text) == str
         assert '"' not in text
     
+    def _assert_strvar_or_str(s, thing):
+        assert s.is_strvar(thing) or s.is_str(thing)
+    
+    def is_str(s, text):
+        return text.startswith('"')
+    
+    def is_strvar(s, var):
+        return var.startswith('Str') # TODO can be improved
+
     def is_list(s, var):
         return var.startswith('L') or var.startswith('[list]')
 
@@ -258,7 +267,11 @@ class TiBasicLib:
             s.raw('prgmDOARCPRG')
 
     def menu_raw(s, title, options, labels):
+        s._assert_strvar_or_str(title)
+    
         assert len(options) <= 7
+        for opt in options:
+            s._assert_strvar_or_str(opt)
 
         labels = [lbl.upper() for lbl in labels]
 
