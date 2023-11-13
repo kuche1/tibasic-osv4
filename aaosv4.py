@@ -180,8 +180,6 @@ with tibasiclib.TiBasicLib(
 
         with tb.scope():
             tb.label(lbl_press_any_key)
-
-            vn_tmp = tb.get_var_str()
-            tb.input(vn_tmp, 'ENTR 2 CONT') # TODO this is stupid, make an instruction that does that
+            tb.press_any_key()
 
     tb.label(lbl_main_menu_break)

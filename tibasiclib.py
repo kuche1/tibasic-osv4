@@ -236,6 +236,12 @@ class TiBasicLib:
         labels = labels[6:]
 
         assert len(options) == 0, f'I am increadibly lazy; this needs to be fixed'
+    
+    def press_any_key(s):
+        s.printstr('PRESS ANY KEY')
+        s.raw('Repeat Ans')
+        s.raw('getKey')
+        s.raw('End')
 
     # date and time
 
