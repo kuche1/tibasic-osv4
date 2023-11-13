@@ -194,6 +194,7 @@ class TiBasicLib:
     # variable generation
 
     def get_label(s):
+        assert s.label_count <= 99, 'time to fix this'
         ret = str(s.label_count)
         s.label_count += 1
         return ret
