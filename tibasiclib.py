@@ -64,7 +64,6 @@ class TiBasicLib:
         s.archive = archive
 
         s.context_manager = ContextManager(s, lambda:0)
-        s.labels = []
 
     def __enter__(s):
         s.context_manager.__enter__()
@@ -120,15 +119,11 @@ class TiBasicLib:
 
     # control flow
 
-    def label(s, name):
-        if name not in s.labels:
-            s.labels.append(name)
-        name = s.labels.index(name)
-        s.raw(f'Lbl {name}')
+    def label(s, label):
+        s.raw(f'Lbl {label}')
 
     def goto(s, label):
-        name = s.labels.index(label)
-        s.raw(f'Goto {name}')
+        s.raw(f'Goto {label}')
     
     # TODO would be awesome if we could find a way to check if only 1 line of code is in the if
     def iff(s, cond):
@@ -146,7 +141,6 @@ class TiBasicLib:
         return s.iff(cond)
 
     def whiletrue(s, label):
-        s.label(label)
         return ContextManager(s, lambda:s.goto(label))
 
     def continuee(s, label):

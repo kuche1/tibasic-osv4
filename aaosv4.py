@@ -18,6 +18,7 @@ with tibasiclib.TiBasicLib(
     ) as tb:
 
     lbl_main_menu = tb.get_label()
+    lbl_main_menu_break = tb.get_label()
 
     with tb.whiletrue(lbl_main_menu):
 
@@ -68,7 +69,7 @@ with tibasiclib.TiBasicLib(
 
         with tb.if_var_equ_strs(command, CMDS_EXIT):
             # TODO implement tb.breakk(lbl_main_menu)
-            tb.raw('Goto BR')
+            tb.goto(lbl_main_menu_break)
 
             tb.continuee(lbl_main_menu)
 
@@ -121,4 +122,4 @@ with tibasiclib.TiBasicLib(
         tb.printstr('here is the list of actions:')
         tb.printstr(' '.join(['='.join(cmds) for cmds in CMDS_ALL]))
 
-    tb.raw('Lbl BR')
+    tb.label(lbl_main_menu_break)
