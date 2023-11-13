@@ -6,8 +6,11 @@ import os
 # TODO
 # check if the file ends with new line and if that is the case delete it
 
-def term(cmds:list):
-    subprocess.run(cmds, check=True)
+def term(cmds:list, silent=False):
+    if silent:
+        subprocess.run(cmds, check=True, capture_output=True)
+    else:
+        subprocess.run(cmds, check=True)
 
 class ContextManager:
     def __init__(s, tibasicobj, on_exit):
@@ -75,13 +78,15 @@ class TiBasicLib:
         s.f.close()
         if exc_type == None: # if no exceptions
             # compile
+            print(f'compiling program `{s.program_name}`')
             cmd = ['ti84cc']
             if s.archive:
                 cmd += ['-a']
             cmd += ['-o', s.compiled_file, s.tibasic_source_file]
             term(cmd)
             # send to calc
-            term(['tilp', '--no-gui', '--silent', s.compiled_file])
+            print(f'sending program `{s.program_name}`')
+            term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
 
     # asserts
 
@@ -178,29 +183,28 @@ class TiBasicLib:
             s.raw(f'"{program_name}') # set Ans
             s.raw('prgmDOARCPRG')
 
-    def menu_raw(s, str_title, options, labels):
+    def menu_raw(s, title, options, labels):
         assert len(options) <= 7
-        s._assert_str(str_title)
 
-        code = f'Menu("{str_title}"'
+        code = f'Menu({title}'
         for opt, lab in zip(options, labels, strict=True):
             s._assert_str(opt)
             code += f',"{opt}",{lab}'
 
         s.raw(code)
     
-    def menu(s, str_title, options, labels):
+    def menu(s, title, options, labels):
         assert len(options) == len(labels)
 
         if len(options) <= 7:
-            return s.menu_raw(str_title, options, labels)
+            return s.menu_raw(title, options, labels)
 
         lbl_page_0 = s.get_label()
         lbl_page_1 = s.get_label()
 
         s.label(lbl_page_0)
         s.menu_raw(
-            str_title, # TODO? add page num
+            title, # TODO? add page num
             options[:6] + ["* NEXT"],
             labels[:6] + [lbl_page_1],
         )
@@ -209,7 +213,7 @@ class TiBasicLib:
 
         s.label(lbl_page_1)
         s.menu_raw(
-            str_title,
+            title,
             options[:6] + ['* PREV'],
             labels[:6] + [lbl_page_0],
         )

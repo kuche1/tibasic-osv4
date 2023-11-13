@@ -21,6 +21,21 @@ with tibasiclib.TiBasicLib(
 
     with tb.whiletrue(lbl_main_menu):
 
+        # menu title
+
+        vs_menu_title = tb.get_var_str()
+
+        with tb.scope():
+            vs_date = tb.get_var_str()
+            tb.date_get(vs_date)
+
+            vs_time = tb.get_var_str()
+            tb.time_get(vs_time)
+            
+            tb.raw(f'{vs_date}+" "+{vs_time}->{vs_menu_title}')
+
+        # menu labels
+
         lbl_battery = tb.get_label()
         lbl_date_get = tb.get_label()
         lbl_date_set = tb.get_label()
@@ -32,7 +47,7 @@ with tibasiclib.TiBasicLib(
         lbl_timer = tb.get_label()
 
         tb.menu(
-            "** AAOSV4 **",
+            vs_menu_title,
             [
                 CMD_BATTERY,
                 CMD_DATE_GET,
@@ -82,7 +97,6 @@ with tibasiclib.TiBasicLib(
             tb.goto(lbl_press_any_key)
 
         # with tb.if_var_equ_strs(command, CMDS_DATE_GET):
-        
         with tb.scope():
             tb.label(lbl_date_get)
             date = tb.get_var_str()
