@@ -14,12 +14,12 @@ class ContextManager:
         s.on_exit = on_exit
         s.tibasicobj = tibasicobj
     def __enter__(s):
-        s.tibasicobj.create_new_scope()
+        s.tibasicobj._create_new_scope()
         return s
     def __exit__(s, exc_type, exc_value, exc_traceback):
         if exc_type == None: # if not exceptions
             s.on_exit()
-            s.tibasicobj.free_vars_used_in_scope()
+            s.tibasicobj._delete_last_scope()
 
 class TiBasicLib:
 
@@ -29,7 +29,9 @@ class TiBasicLib:
 
     # variables
 
-    vars_str = ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9'] # can't put `Ans` here
+    vars_str = ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']
+    vars_str_in_use = [False] * len(vars_str)
+    vars_str_used_in_this_scope = []
 
     vars_num = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']
     vars_num_in_use = [False] * len(vars_num)
@@ -204,21 +206,38 @@ class TiBasicLib:
         code = code.replace(' ', '')
         s.raw(code, end='')
 
-    def get_var_num(s):
-        if False not in s.vars_num_in_use:
+    def _get_var(s, vars, vars_in_use, vars_used_in_scope):
+        if False not in vars_in_use:
             raise Exception('all vars used; time to implement a stack :(')
-        idx = s.vars_num_in_use.index(False)
-        s.vars_num_in_use[idx] = True
-        s.vars_num_used_in_this_scope[-1].append(idx)
-        return s.vars_num[idx]
+        idx = vars_in_use.index(False)
+        vars_in_use[idx] = True
+        vars_used_in_scope[-1].append(idx)
+        return vars[idx]
 
-    # NEVER CALL THIS
-    def create_new_scope(s):
+    def get_var_num(s):
+        # if False not in s.vars_num_in_use:
+        #     raise Exception('all vars used; time to implement a stack :(')
+        # idx = s.vars_num_in_use.index(False)
+        # s.vars_num_in_use[idx] = True
+        # s.vars_num_used_in_this_scope[-1].append(idx)
+        # return s.vars_num[idx]
+        return s._get_var(s.vars_num, s.vars_num_in_use, s.vars_num_used_in_this_scope)
+    
+    def get_var_str(s):
+        return s._get_var(s.vars_str, s.vars_str_in_use, s.vars_str_used_in_this_scope)
+
+    def _create_new_scope(s):
         s.vars_num_used_in_this_scope.append([])
+        s.vars_str_used_in_this_scope.append([])
 
     # NEVER CALL THIS
-    def free_vars_used_in_scope(s):
+    def _delete_last_scope(s):
         for var_idx in s.vars_num_used_in_this_scope[-1]:
             assert s.vars_num_in_use[var_idx] == True
             s.vars_num_in_use[var_idx] = False
         del s.vars_num_used_in_this_scope[-1]
+
+        for var_idx in s.vars_str_used_in_this_scope[-1]:
+            assert s.vars_str_in_use[var_idx] == True
+            s.vars_str_in_use[var_idx] = False
+        del s.vars_str_used_in_this_scope[-1]

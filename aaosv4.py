@@ -21,7 +21,7 @@ with tibasiclib.TiBasicLib(
 
     with tb.whiletrue(main_menu):
 
-        command = 'Str0' # TODO create a function for this
+        command = tb.get_var_str()
         tb.input(command, '>>')
 
         with tb.iff(f'length({command})=0'): # avoid errors related to `=` down the line
@@ -48,7 +48,7 @@ with tibasiclib.TiBasicLib(
             tb.continuee(main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_DATE_GET):
-            date = 'Str1' # TODO create a function for this
+            date = tb.get_var_str()
             tb.date_get(date)
             tb.printvar(date)
             tb.continuee(main_menu)
@@ -90,7 +90,7 @@ with tibasiclib.TiBasicLib(
             tb.continuee(main_menu)
         
         with tb.if_var_equ_strs(command, CMDS_TIME_GET):
-            time = 'Str1' # TODO create a function for this
+            time = tb.get_var_str()
             tb.time_get(time)
             tb.printvar(date)
             tb.continuee(main_menu)
