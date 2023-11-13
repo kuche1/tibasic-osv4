@@ -87,7 +87,7 @@ SetUpEditor [list]NTTI6
         # and unarchive if they do
 
         for i in range(2, 7+1):
-            with tb.iff(f'c={i}'):
+            with tb.iff(f'C={i}'):
                 tb.raw(f'SetUpEditor [list]ntdt{i}')
                 tb.raw(f'[list]ntdt{i}->L1')
 
