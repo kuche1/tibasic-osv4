@@ -48,9 +48,9 @@ with tibasiclib.TiBasicLib(
             month = tb.get_var_num()
             day = tb.get_var_num()
 
-            tb.input(year, 'Enter year: ')
-            tb.input(month, 'Enter month: ')
-            tb.input(day, 'Enter day: ')
+            tb.input(year, 'YEAR: ')
+            tb.input(month, 'MONTH: ')
+            tb.input(day, 'DAY: ')
 
             tb.date_set(year, month, day)
 
