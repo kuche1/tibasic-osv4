@@ -12,9 +12,11 @@ Ans is always consideted trashed
 
 z is always considered trashed -->
 
-archiving is good for big programs but it really sucks for small onces (since unarchiving takes time) so take good care of the flag
+archiving is good for big programs since it saves a lot of memory but it sucks for small onces since unarchiving and then archiving takes time
 
-also note that archiving WILL mess with any return values
+the compiler (the .py file) will attempt to archive what it consideres big files if the flag is not set
+
+also note that archiving WILL mess with Ans
 
 ### generic
 
