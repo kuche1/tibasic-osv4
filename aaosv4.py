@@ -82,7 +82,8 @@ with tibasiclib.TiBasicLib(
             # returns battery level
             # 0:4 <-> low:high
 
-            low_bound = tb.get_var_num()
+            # low_bound = tb.get_var_num()
+            low_bound = tb.get_var_num_stack()
             high_bound = tb.get_var_num()
 
             tb.raw(f'{tb.var_ret}*20->{low_bound}')
@@ -93,8 +94,7 @@ with tibasiclib.TiBasicLib(
             tb.printstr('and')
             tb.printvar(high_bound)
             tb.printstr('percent')
-
-            tb.goto(lbl_press_any_key)
+        tb.goto(lbl_press_any_key) # has to be here so that the `scope onexit` functionality executes
 
         # with tb.if_var_equ_strs(command, CMDS_DATE_GET):
         with tb.scope():
@@ -102,7 +102,7 @@ with tibasiclib.TiBasicLib(
             date = tb.get_var_str()
             tb.date_get(date)
             tb.printvar(date)
-            tb.goto(lbl_press_any_key)
+        tb.goto(lbl_press_any_key)
 
         # with tb.if_var_equ_strs(command, CMDS_DATE_SET):
         with tb.scope():
@@ -117,13 +117,13 @@ with tibasiclib.TiBasicLib(
 
             tb.date_set(year, month, day)
 
-            tb.goto(lbl_main_menu)
+        tb.goto(lbl_main_menu)
 
         # with tb.if_var_equ_strs(command, CMDS_EXIT):
         with tb.scope():
             tb.label(lbl_exit)
             # TODO implement tb.breakk(lbl_main_menu)
-            tb.goto(lbl_main_menu_break)
+        tb.goto(lbl_main_menu_break)
 
         # with tb.if_var_equ_strs(command, CMDS_MEMORY):
         with tb.scope():
@@ -137,13 +137,13 @@ with tibasiclib.TiBasicLib(
             tb.printstr('free memory:')
             tb.printvar(free_mem)
 
-            tb.goto(lbl_press_any_key)
+        tb.goto(lbl_press_any_key)
         
         # with tb.if_var_equ_strs(command, CMDS_RASPISANIE):
         with tb.scope():
             tb.label(lbl_raspisanie)
             tb.call('rspsnie')
-            tb.goto(lbl_main_menu)
+        tb.goto(lbl_main_menu)
         
         # with tb.if_var_equ_strs(command, CMDS_TIME_GET):
         with tb.scope():
@@ -151,7 +151,7 @@ with tibasiclib.TiBasicLib(
             time = tb.get_var_str()
             tb.time_get(time)
             tb.printvar(date)
-            tb.goto(lbl_press_any_key)
+        tb.goto(lbl_press_any_key)
 
         # with tb.if_var_equ_strs(command, CMDS_TIME_SET):
         with tb.scope():
@@ -166,13 +166,13 @@ with tibasiclib.TiBasicLib(
 
             tb.time_set(hour, minute, second)
 
-            tb.goto(lbl_main_menu)
+        tb.goto(lbl_main_menu)
 
         # with tb.if_var_equ_strs(command, CMDS_TIMER):
         with tb.scope():
             tb.label(lbl_timer)
             tb.call('timer')
-            tb.goto(lbl_press_any_key)
+        tb.goto(lbl_press_any_key)
 
         # TODO prgmNOTES
 

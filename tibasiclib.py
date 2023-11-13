@@ -21,9 +21,14 @@ class ContextManager:
         s.tibasicobj._create_new_scope()
         return s
     def __exit__(s, exc_type, exc_value, exc_traceback):
-        if exc_type == None: # if not exceptions
+        if exc_type == None: # if no exceptions
             s.on_exit()
             s.tibasicobj._delete_last_scope()
+
+class StackInfo:
+    in_use = False
+    var_count = 0
+    name = None
 
 class TiBasicLib:
 
@@ -44,6 +49,11 @@ class TiBasicLib:
     vars_num_used_in_this_scope = []
 
     var_ret = 'Z'
+
+    # stack
+
+    stack = []
+    stack_num = 0 # used for youngest stack
 
     # functions stuff
 
@@ -87,7 +97,10 @@ class TiBasicLib:
             term(cmd)
             # send to calc # TODO check if the program was send shortly (or if it was changed) and do not send of so
             print(f'sending `{s.program_name}`')
-            term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
+            try:
+                term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
+            except subprocess.CalledProcessError:
+                print(f'ERROR: could not send `{s.program_name}`')
 
     # asserts
 
@@ -274,6 +287,8 @@ class TiBasicLib:
     def _create_new_scope(s):
         s.vars_num_used_in_this_scope.append([])
         s.vars_str_used_in_this_scope.append([])
+        s.stack.append(StackInfo())
+        s.stack_num += 1
 
     def _delete_last_scope(s):
         for var_idx in s.vars_num_used_in_this_scope[-1]:
@@ -285,9 +300,34 @@ class TiBasicLib:
             assert s.vars_str_in_use[var_idx] == True
             s.vars_str_in_use[var_idx] = False
         del s.vars_str_used_in_this_scope[-1]
+
+        stack = s.stack[-1]
+        if stack.in_use:
+            s.del_var(stack.name)
+        del s.stack[-1]
     
     def scope(s):
         return ContextManager(s, lambda:0)
+    
+    def get_var_num_stack(s):
+        stack = s.stack[-1]
+
+        if not stack.in_use:
+            stack.in_use = True
+            assert len(str(s.stack_num)) <= 4, 'too many stacks, this can be fixed by not abusing `s.stack_num`'
+            stack.name = f'[list]S{s.stack_num}'
+
+            s.raw(f'SetUpEditor {stack.name}')
+            # create list if it doesn't exist
+            # this will also unarchive it if it is archived
+
+        stack.var_count += 1 # tibasic starts count at 1
+        ret = f'{stack.name}({stack.var_count})'
+
+        return ret
+    
+    def del_var(s, var):
+        s.raw(f'DelVar {var}')
 
     # other
 
