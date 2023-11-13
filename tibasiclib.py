@@ -187,6 +187,9 @@ class TiBasicLib:
     
     def time_set(s, var_hour, var_minute, var_second):
         s.raw(f'setTime({var_hour},{var_minute},{var_second}')
+    
+    def utime_sec(s, var_num):
+        s.raw(f'startTmr->{var_num}')
 
     # other
 

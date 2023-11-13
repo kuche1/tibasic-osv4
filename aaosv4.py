@@ -11,6 +11,7 @@ CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M'])
 CMDS_ALL.append(CMDS_RASPISANIE := ['RASPISANIE', 'R'])
 CMDS_ALL.append(CMDS_TIME_GET := ['TIME:GET', 'T'])
 CMDS_ALL.append(CMDS_TIME_SET := ['TIME:SET', 'TS'])
+CMDS_ALL.append(CMDS_TIMER := ['TIMER', 'TI'])
 
 with tibasiclib.TiBasicLib(
         archive=False,
@@ -107,16 +108,13 @@ with tibasiclib.TiBasicLib(
 
             tb.continuee(main_menu)
 
+        with tb.if_var_equ_strs(command, CMDS_TIMER):
+            tb.call('timer')
+            tb.continuee(main_menu)
 
         # TODO prgmNOTES
 
         # TODO prgmOFF
-
-        # TODO prgmTIME
-        # getTmStr(24
-        # getDtStr(3 -> y/m/d
-
-        # TODO prgmTIMESET
 
         tb.printstr('unknown action:')
         tb.printvar(command)
