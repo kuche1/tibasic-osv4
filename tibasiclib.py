@@ -81,7 +81,7 @@ class TiBasicLib:
         s.program_name = program_name
         s.tibasic_source_file = f'/tmp/{s.program_name}.tib' # extension has to be `.tib` otherwise the compiler refuses to work
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
-        s.file_prev_version_hash = calc_hash(s.tibasic_source_file)
+        s.file_prev_version_hash = calc_hash(s.tibasic_source_file) # TODO this is not ideal since something could happen in the middle of the transaction; it's better to increase create a new file of lin X+8 and use that instead
         s.f = open(s.tibasic_source_file, 'w')
 
         s.archive = archive # TODO autodetect final size and change this setting based on that (if flag not set)
