@@ -153,9 +153,8 @@ with tibasiclib.TiBasicLib(
             tb.printvar(date)
         tb.goto(lbl_press_any_key)
 
-        # with tb.if_var_equ_strs(command, CMDS_TIME_SET):
+        tb.label(lbl_time_set)
         with tb.scope():
-            tb.label(lbl_time_set)
             hour = tb.get_var_num()
             minute = tb.get_var_num()
             second = tb.get_var_num()
@@ -168,9 +167,8 @@ with tibasiclib.TiBasicLib(
 
         tb.goto(lbl_main_menu)
 
-        # with tb.if_var_equ_strs(command, CMDS_TIMER):
+        tb.label(lbl_timer)
         with tb.scope():
-            tb.label(lbl_timer)
             tb.call('timer')
         tb.goto(lbl_press_any_key)
 

@@ -113,6 +113,7 @@ class TiBasicLib:
                     term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
+                    os.remove(s.tibasic_source_file)
 
     # asserts
 
@@ -327,7 +328,7 @@ class TiBasicLib:
     def scope(s):
         return ContextManager(s, lambda:0)
     
-    def get_var_num_stack(s):
+    def get_var_num_stack(s): # these vars don't really seem slower than the regular `A`, `B`, `C`, ...
         stack = s.stack[-1]
 
         if not stack.in_use:
@@ -335,7 +336,7 @@ class TiBasicLib:
             assert len(str(s.stack_num)) <= 4, 'too many stacks, this can be fixed by not abusing `s.stack_num`'
             stack.name = f'[list]S{s.stack_num}'
 
-            s.raw(f'SetUpEditor {stack.name}')
+            s.raw(f'SetUpEditor {stack.name}') # TODO check if this is needed
             # create list if it doesn't exist
             # this will also unarchive it if it is archived
 
