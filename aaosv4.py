@@ -17,15 +17,15 @@ with tibasiclib.TiBasicLib(
         archive=False,
     ) as tb:
 
-    main_menu = 'main menu'
+    lbl_main_menu = tb.get_label()
 
-    with tb.whiletrue(main_menu):
+    with tb.whiletrue(lbl_main_menu):
 
         command = tb.get_var_str()
         tb.input(command, '>>')
 
         with tb.iff(f'length({command})=0'): # avoid errors related to `=` down the line
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         # with tb.iff(f'{command}="b"|{command}="B"|{command}="battery"'):
         with tb.if_var_equ_strs(command, CMDS_BATTERY):
@@ -45,13 +45,13 @@ with tibasiclib.TiBasicLib(
             tb.printvar(high_bound)
             tb.printstr('percent')
 
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_DATE_GET):
             date = tb.get_var_str()
             tb.date_get(date)
             tb.printvar(date)
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_DATE_SET):
             year = tb.get_var_num()
@@ -64,13 +64,13 @@ with tibasiclib.TiBasicLib(
 
             tb.date_set(year, month, day)
 
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_EXIT):
-            # TODO implement tb.breakk(main_menu)
+            # TODO implement tb.breakk(lbl_main_menu)
             tb.raw('Goto BR')
 
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_MEMORY):
             tb.call('getmem')
@@ -82,18 +82,18 @@ with tibasiclib.TiBasicLib(
             tb.printstr('free memory:')
             tb.printvar(free_mem)
 
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
         
         with tb.if_var_equ_strs(command, CMDS_RASPISANIE):
             tb.call('rspsnie')
 
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
         
         with tb.if_var_equ_strs(command, CMDS_TIME_GET):
             time = tb.get_var_str()
             tb.time_get(time)
             tb.printvar(date)
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_TIME_SET):
             hour = tb.get_var_num()
@@ -106,11 +106,11 @@ with tibasiclib.TiBasicLib(
 
             tb.time_set(hour, minute, second)
 
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_TIMER):
             tb.call('timer')
-            tb.continuee(main_menu)
+            tb.continuee(lbl_main_menu)
 
         # TODO prgmNOTES
 
