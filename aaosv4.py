@@ -172,7 +172,7 @@ with tibasiclib.TiBasicLib(
         with tb.scope():
             tb.label(lbl_timer)
             tb.call('timer')
-            tb.goto(lbl_main_menu)
+            tb.goto(lbl_press_any_key)
 
         # TODO prgmNOTES
 
@@ -182,6 +182,6 @@ with tibasiclib.TiBasicLib(
             tb.label(lbl_press_any_key)
 
             vn_tmp = tb.get_var_str()
-            tb.input(vn_tmp, 'ENTR 2 CONT')
+            tb.input(vn_tmp, 'ENTR 2 CONT') # TODO this is stupid, make an instruction that does that
 
     tb.label(lbl_main_menu_break)

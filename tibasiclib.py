@@ -5,6 +5,7 @@ import os
 
 # TODO
 # check if the file ends with new line and if that is the case delete it
+# try `expr(` for string to num conversion
 
 def term(cmds:list, silent=False):
     if silent:
@@ -78,14 +79,14 @@ class TiBasicLib:
         s.f.close()
         if exc_type == None: # if no exceptions
             # compile
-            print(f'compiling program `{s.program_name}`')
+            print(f'compiling `{s.program_name}`')
             cmd = ['ti84cc']
             if s.archive:
                 cmd += ['-a']
             cmd += ['-o', s.compiled_file, s.tibasic_source_file]
             term(cmd)
-            # send to calc
-            print(f'sending program `{s.program_name}`')
+            # send to calc # TODO check if the program was send shortly (or if it was changed) and do not send of so
+            print(f'sending `{s.program_name}`')
             term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
 
     # asserts
