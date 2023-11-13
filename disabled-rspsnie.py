@@ -4,6 +4,8 @@ import bs4
 
 import tibasiclib
 
+# TODO da dovursha
+
 # AVTOBUSI = ['88']
 
 # class Spirka:

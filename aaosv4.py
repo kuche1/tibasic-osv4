@@ -31,9 +31,9 @@ with tibasiclib.TiBasicLib(
         lbl_date_set = tb.get_label()
         lbl_exit = tb.get_label()
         lbl_memory = tb.get_label()
-        lbl_notes = tb.get_label()
+        # lbl_notes = tb.get_label()
         lbl_poweroff = tb.get_label()
-        lbl_raspisanie = tb.get_label()
+        # lbl_raspisanie = tb.get_label()
         lbl_time_get = tb.get_label()
         lbl_time_set = tb.get_label()
         lbl_timer = tb.get_label()
@@ -46,9 +46,9 @@ with tibasiclib.TiBasicLib(
                 '"DATE:SET"',
                 '"EXIT"',
                 '"MEMORY"',
-                '"NOTES"',
+                # '"NOTES"',
                 '"POWEROFF"',
-                '"RASPISANIE"',
+                # '"RASPISANIE"',
                 '"TIME:GET"',
                 '"TIME:SET"',
                 '"TIMER"',
@@ -59,9 +59,9 @@ with tibasiclib.TiBasicLib(
                 lbl_date_set,
                 lbl_exit,
                 lbl_memory,
-                lbl_notes,
+                # lbl_notes,
                 lbl_poweroff,
-                lbl_raspisanie,
+                # lbl_raspisanie,
                 lbl_time_get,
                 lbl_time_set,
                 lbl_timer,
@@ -133,21 +133,20 @@ with tibasiclib.TiBasicLib(
             tb.printvar(free_mem)
         tb.goto(lbl_press_any_key)
 
-        tb.label(lbl_notes)
-        with tb.scope():
-            tb.call('notes')
-        tb.continuee(lbl_main_menu)
+        # tb.label(lbl_notes)
+        # with tb.scope():
+        #     tb.call('notes')
+        # tb.continuee(lbl_main_menu)
 
         tb.label(lbl_poweroff)
         with tb.scope():
             tb.call('pwroff')
         tb.continuee(lbl_main_menu)
         
-        # with tb.if_var_equ_strs(command, CMDS_RASPISANIE):
-        with tb.scope():
-            tb.label(lbl_raspisanie)
-            tb.call('rspsnie')
-        tb.goto(lbl_main_menu)
+        # tb.label(lbl_raspisanie)
+        # with tb.scope():
+        #     tb.call('rspsnie')
+        # tb.goto(lbl_main_menu)
         
         # with tb.if_var_equ_strs(command, CMDS_TIME_GET):
         with tb.scope():
