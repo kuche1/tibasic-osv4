@@ -63,8 +63,10 @@ class TiBasicLib:
     # variables used for args, return, trash
 
     var_arg_str_0 = 'Str9'
+    var_arg_list_0 = 'L5'
 
     var_ret_num_0 = 'Z'
+    var_ret_str_0 = 'Str8'
     var_ret_list_0 = 'L6'
 
     var_trash_num_0 = 'Y'
