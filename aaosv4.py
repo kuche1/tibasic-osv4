@@ -2,16 +2,17 @@
 
 import tibasiclib
 
-CMD_BATTERY = 'BATTERY'
-CMD_DATE_GET = 'DATE:GET'
-CMD_DATE_SET = 'DATE:SET'
-CMD_EXIT = 'EXIT'
-CMD_MEMORY = 'MEMORY'
-CMD_POWEROFF = 'POWEROFF'
-CMD_RASPISANIE = 'RASPISANIE'
-CMD_TIME_GET = 'TIME:GET'
-CMD_TIME_SET = 'TIME:SET'
-CMD_TIMER = 'TIMER'
+CMD_BATTERY = '"BATTERY"'
+CMD_DATE_GET = '"DATE:GET"'
+CMD_DATE_SET = '"DATE:SET"'
+CMD_EXIT = '"EXIT"'
+CMD_MEMORY = '"MEMORY"'
+CMD_NOTES = '"NOTES"'
+CMD_POWEROFF = '"POWEROFF"'
+CMD_RASPISANIE = '"RASPISANIE"'
+CMD_TIME_GET = '"TIME:GET"'
+CMD_TIME_SET = '"TIME:SET"'
+CMD_TIMER = '"TIMER"'
 
 with tibasiclib.TiBasicLib(
         archive=False,
@@ -42,6 +43,7 @@ with tibasiclib.TiBasicLib(
         lbl_date_set = tb.get_label()
         lbl_exit = tb.get_label()
         lbl_memory = tb.get_label()
+        lbl_notes = tb.get_label()
         lbl_poweroff = tb.get_label()
         lbl_raspisanie = tb.get_label()
         lbl_time_get = tb.get_label()
@@ -56,6 +58,7 @@ with tibasiclib.TiBasicLib(
                 CMD_DATE_SET,
                 CMD_EXIT,
                 CMD_MEMORY,
+                CMD_NOTES,
                 CMD_POWEROFF,
                 CMD_RASPISANIE,
                 CMD_TIME_GET,
@@ -68,6 +71,7 @@ with tibasiclib.TiBasicLib(
                 lbl_date_set,
                 lbl_exit,
                 lbl_memory,
+                lbl_notes,
                 lbl_poweroff,
                 lbl_raspisanie,
                 lbl_time_get,
@@ -129,9 +133,8 @@ with tibasiclib.TiBasicLib(
             # TODO implement tb.breakk(lbl_main_menu)
         tb.goto(lbl_main_menu_break)
 
-        # with tb.if_var_equ_strs(command, CMDS_MEMORY):
+        tb.label(lbl_memory)
         with tb.scope():
-            tb.label(lbl_memory)
             tb.call('getmem')
             # returns free bytes
 
@@ -141,6 +144,11 @@ with tibasiclib.TiBasicLib(
             tb.printstr('free memory:')
             tb.printvar(free_mem)
         tb.goto(lbl_press_any_key)
+
+        tb.label(lbl_notes)
+        with tb.scope():
+            tb.call('notes')
+        tb.continuee(lbl_main_menu)
 
         tb.label(lbl_poweroff)
         with tb.scope():

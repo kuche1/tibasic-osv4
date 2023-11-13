@@ -86,7 +86,7 @@ class TiBasicLib:
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
         s.previously_sent_file = f'{s.tibasic_source_file}-previously-sent' # needs tp be >8 characters long
-        s.previously_sent_file_max_mtime_diff = 60 * 20 # in seconds
+        s.previously_sent_file_max_mtime_diff = 60 * 25 # in seconds
 
         s.archive = archive
         s.archive_if_that_big = 500 # (bytes)
@@ -187,9 +187,13 @@ class TiBasicLib:
     # control flow
 
     def label(s, label):
+        # TODO since we're doing this in an idiotic manner we can actually check
+        # if a label has been declared twice (or a custom name has been given)
+        label = label.upper()
         s.raw(f'Lbl {label}')
 
     def goto(s, label):
+        label = label.upper()
         s.raw(f'Goto {label}')
     
     # TODO would be awesome if we could find a way to check if only 1 line of code is in the if
@@ -242,10 +246,11 @@ class TiBasicLib:
     def menu_raw(s, title, options, labels):
         assert len(options) <= 7
 
+        labels = [lbl.upper() for lbl in labels]
+
         code = f'Menu({title}'
         for opt, lab in zip(options, labels, strict=True):
-            s._assert_str(opt)
-            code += f',"{opt}",{lab}'
+            code += f',{opt},{lab}'
 
         s.raw(code)
     
@@ -261,7 +266,7 @@ class TiBasicLib:
         s.label(lbl_page_0)
         s.menu_raw(
             title, # TODO? add page num
-            options[:6] + ["* NEXT"],
+            options[:6] + ['"* NEXT"'],
             labels[:6] + [lbl_page_1],
         )
         options = options[6:]
@@ -270,7 +275,7 @@ class TiBasicLib:
         s.label(lbl_page_1)
         s.menu_raw(
             title,
-            options[:6] + ['* PREV'],
+            options[:6] + ['"* PREV"'],
             labels[:6] + [lbl_page_0],
         )
 
