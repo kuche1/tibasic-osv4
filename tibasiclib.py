@@ -172,6 +172,10 @@ class TiBasicLib:
 
     # date and time
 
+    def date_get(s, var_out):
+        assert var_out in s.vars_str
+        s.raw(f'getDtStr(3->{var_out}')
+
     def date_set(s, var_year, var_month, var_day):
         s.raw(f'setDate({var_year},{var_month},{var_day}')
 

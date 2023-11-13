@@ -4,6 +4,7 @@ import tibasiclib
 
 CMDS_ALL = []
 CMDS_ALL.append(CMDS_BATTERY := ['BATTERY', 'B', 'b'])
+CMDS_ALL.append(CMDS_DATE_GET := ['DATE:GET', 'DG', 'D'])
 CMDS_ALL.append(CMDS_DATE_SET := ['DATE:SET', 'DS'])
 CMDS_ALL.append(CMDS_EXIT := ['EXIT', 'E', 'e'])
 CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M'])
@@ -17,7 +18,7 @@ with tibasiclib.TiBasicLib(
 
     with tb.whiletrue(main_menu):
 
-        command = 'Str0'
+        command = 'Str0' # TODO create a function for this
         tb.input(command, '>>')
 
         with tb.iff(f'length({command})=0'): # avoid errors related to `=` down the line
@@ -42,7 +43,16 @@ with tibasiclib.TiBasicLib(
             tb.printstr('percent')
 
             tb.continuee(main_menu)
-        
+
+        with tb.if_var_equ_strs(command, CMDS_DATE_GET):
+            date = 'Str1' # TODO create a function for this
+
+            tb.date_get(date)
+
+            tb.printvar(date)
+
+            tb.continuee(main_menu)
+
         with tb.if_var_equ_strs(command, CMDS_DATE_SET):
             year = tb.get_var_num()
             month = tb.get_var_num()
