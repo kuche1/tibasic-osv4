@@ -182,8 +182,6 @@ with tibasiclib.TiBasicLib(
 
         # TODO prgmNOTES
 
-        # TODO prgmOFF
-
         with tb.scope():
             tb.label(lbl_press_any_key)
             tb.press_any_key()
