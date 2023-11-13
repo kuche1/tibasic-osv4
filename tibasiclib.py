@@ -178,6 +178,13 @@ class TiBasicLib:
 
     def date_set(s, var_year, var_month, var_day):
         s.raw(f'setDate({var_year},{var_month},{var_day}')
+    
+    def time_get(s, var_out):
+        assert var_out in s.vars_str
+        s.raw(f'getTmStr(24->{var_out}')
+    
+    def time_set(s, var_hour, var_minute, var_second):
+        s.raw(f'setTime({var_hour},{var_minute},{var_second}')
 
     # other
 

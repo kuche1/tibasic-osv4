@@ -9,6 +9,8 @@ CMDS_ALL.append(CMDS_DATE_SET := ['DATE:SET', 'DS'])
 CMDS_ALL.append(CMDS_EXIT := ['EXIT', 'E', 'e'])
 CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M'])
 CMDS_ALL.append(CMDS_RASPISANIE := ['RASPISANIE', 'R'])
+CMDS_ALL.append(CMDS_TIME_GET := ['TIME:GET', 'T'])
+CMDS_ALL.append(CMDS_TIME_SET := ['TIME:SET', 'TS'])
 
 with tibasiclib.TiBasicLib(
         archive=False,
@@ -46,11 +48,8 @@ with tibasiclib.TiBasicLib(
 
         with tb.if_var_equ_strs(command, CMDS_DATE_GET):
             date = 'Str1' # TODO create a function for this
-
             tb.date_get(date)
-
             tb.printvar(date)
-
             tb.continuee(main_menu)
 
         with tb.if_var_equ_strs(command, CMDS_DATE_SET):
@@ -88,6 +87,26 @@ with tibasiclib.TiBasicLib(
             tb.call('rspsnie')
 
             tb.continuee(main_menu)
+        
+        with tb.if_var_equ_strs(command, CMDS_TIME_GET):
+            time = 'Str1' # TODO create a function for this
+            tb.time_get(time)
+            tb.printvar(date)
+            tb.continuee(main_menu)
+
+        with tb.if_var_equ_strs(command, CMDS_TIME_SET):
+            hour = tb.get_var_num()
+            minute = tb.get_var_num()
+            second = tb.get_var_num()
+
+            tb.input(hour, 'HOUR: ')
+            tb.input(minute, 'MINUTE: ')
+            tb.raw(f'0->{second}')
+
+            tb.time_set(hour, minute, second)
+
+            tb.continuee(main_menu)
+
 
         # TODO prgmNOTES
 
