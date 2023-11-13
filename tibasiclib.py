@@ -119,7 +119,7 @@ class TiBasicLib:
                     compiled_binary_size = os.path.getsize(s.compiled_file)
                     print(f'`{s.program_name}`: compiled binary size is `{compiled_binary_size}` bytes')
                     if compiled_binary_size >= s.archive_if_that_big:
-                        print(f'`{s.program_name}`: compiled binary size is over `{s.archive_if_that_big}` bytes; archive flag will be set')
+                        print(f'`{s.program_name}`: compiled binary size is >= `{s.archive_if_that_big}` bytes; archive flag will be set')
                         s.archive = True
                     else:
                         s.archive = False

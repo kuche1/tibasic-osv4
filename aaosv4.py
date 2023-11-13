@@ -2,18 +2,6 @@
 
 import tibasiclib
 
-CMD_BATTERY = '"BATTERY"'
-CMD_DATE_GET = '"DATE:GET"'
-CMD_DATE_SET = '"DATE:SET"'
-CMD_EXIT = '"EXIT"'
-CMD_MEMORY = '"MEMORY"'
-CMD_NOTES = '"NOTES"'
-CMD_POWEROFF = '"POWEROFF"'
-CMD_RASPISANIE = '"RASPISANIE"'
-CMD_TIME_GET = '"TIME:GET"'
-CMD_TIME_SET = '"TIME:SET"'
-CMD_TIMER = '"TIMER"'
-
 with tibasiclib.TiBasicLib(
         archive=False,
     ) as tb:
@@ -53,17 +41,17 @@ with tibasiclib.TiBasicLib(
         tb.menu(
             vs_menu_title,
             [
-                CMD_BATTERY,
-                CMD_DATE_GET,
-                CMD_DATE_SET,
-                CMD_EXIT,
-                CMD_MEMORY,
-                CMD_NOTES,
-                CMD_POWEROFF,
-                CMD_RASPISANIE,
-                CMD_TIME_GET,
-                CMD_TIME_SET,
-                CMD_TIMER,
+                '"BATTERY"',
+                '"DATE:GET"',
+                '"DATE:SET"',
+                '"EXIT"',
+                '"MEMORY"',
+                '"NOTES"',
+                '"POWEROFF"',
+                '"RASPISANIE"',
+                '"TIME:GET"',
+                '"TIME:SET"',
+                '"TIMER"',
             ],
             [
                 lbl_battery,
