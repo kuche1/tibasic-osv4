@@ -52,7 +52,7 @@ class TiBasicLib:
 
     label_count = 0
 
-    vars_str = ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']
+    vars_str = ['Str0', 'Str1', 'Str2']
     vars_str_in_use = [False] * len(vars_str)
     vars_str_used_in_this_scope = []
 
@@ -70,6 +70,7 @@ class TiBasicLib:
     var_ret_list_0 = 'L6'
 
     var_trash_num_0 = 'Y'
+    var_trash_str = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3']
 
     # stack
 
@@ -154,11 +155,14 @@ class TiBasicLib:
                 else:
                     shutil.copyfile(s.compiled_file, s.previously_sent_file)
 
-    # asserts
+    # asserts and checks
 
     def _assert_str(s, text):
         assert type(text) == str
         assert '"' not in text
+    
+    def is_list(s, var):
+        return var.startswith('L') or var.startswith('[list]')
 
     # IO
 
@@ -266,33 +270,55 @@ class TiBasicLib:
     
     def menu(s, title, options, labels):
         assert len(options) == len(labels)
-
+  
         if len(options) <= 7:
-            return s.menu_raw(title, options, labels)
+            if all([not s.is_list(opt) for opt in options]):
+                return s.menu_raw(title, options, labels)
 
-        lbl_page_0 = s.get_label()
-        lbl_page_1 = s.get_label()
+        lbl_page_cur = s.get_label()
+        lbl_page_prev = lbl_page_cur
 
-        s.label(lbl_page_0)
-        s.menu_raw(
-            title, # TODO? add page num
-            options[:6] + ['"* NEXT"'],
-            labels[:6] + [lbl_page_1],
-        )
-        options = options[6:]
-        labels = labels[6:]
+        while len(options):
+            if len(options) <= 5:
+                lbl_page_next = lbl_page_cur
+                str_next = '"** LAST PAGE"'
+            else:
+                lbl_page_next = s.get_label()
+                str_next = '"* NEXT"'
 
-        s.label(lbl_page_1)
-        s.menu_raw(
-            title,
-            options[:6] + ['"* PREV"'],
-            labels[:6] + [lbl_page_0],
-        )
+            if lbl_page_prev == lbl_page_cur:
+                str_prev = '"** FIRST PAGE"'
+            else:
+                str_prev = '"* PREV"'
 
-        options = options[6:]
-        labels = labels[6:]
+            s.label(lbl_page_cur)
 
-        assert len(options) == 0, f'I am increadibly lazy; this needs to be fixed'
+            options_slice = options[:5]
+            labels_slice  = labels [:5]
+
+            for idx, opt in enumerate(options_slice):
+                if s.is_list(opt):
+                    s.raw(f'{opt}->{s.var_arg_list_0}')
+
+                    s.call('lst2st')
+                    # input : tb.var_arg_list_0
+                    # output: tb.var_ret_str_0
+                    # trash : tb.var_trash_num_0
+
+                    s.raw(f'{s.var_ret_str_0}->{s.var_trash_str[idx]}')
+
+                    options_slice[idx] = s.var_trash_str[idx]
+
+            s.menu_raw(
+                title, # TODO? add page num
+                options_slice + [str_prev,      str_next],
+                labels_slice  + [lbl_page_prev, lbl_page_next],
+            )
+            options = options[len(options_slice):]
+            labels  = labels [len(labels_slice):]
+
+            lbl_page_prev = lbl_page_cur
+            lbl_page_cur = lbl_page_next
 
     def press_any_key(s):
         s.printstr('PRESS ANY KEY')
@@ -388,6 +414,11 @@ class TiBasicLib:
     
     def del_var(s, var):
         s.raw(f'DelVar {var}')
+    
+    def setupeditor(s, var):
+        # creates variable if it doesn't exist
+        # also unarchives it if it is archived
+        s.raw(f'SetUpEditor {var}')
 
     # other
 
@@ -402,3 +433,5 @@ class TiBasicLib:
         code = code.replace(' ', '')
         s.raw(code, end='')
 
+    def archive_var(s, var):
+        s.raw(f'Archive {var}')
