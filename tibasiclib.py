@@ -10,6 +10,10 @@ import time
 # check if the file ends with new line and if that is the case delete it
 # try `expr(` for string to num conversion
 
+# INFO
+# ti84+ ROM: 404     KB
+# ti84+ RAM:  16_354  B
+
 def term(cmds:list, silent=False):
     if silent:
         subprocess.run(cmds, check=True, capture_output=True)
@@ -64,7 +68,7 @@ class TiBasicLib:
 
     # functions stuff
 
-    def __init__(s, archive=True):
+    def __init__(s, archive=None):
         # get filename of caller
         frame = inspect.stack()[1]
         module = inspect.getmodule(frame[0])
@@ -84,7 +88,10 @@ class TiBasicLib:
         s.previously_sent_file = f'{s.tibasic_source_file}-previously-sent' # needs tp be >8 characters long
         s.previously_sent_file_max_mtime_diff = 60 * 20 # in seconds
 
-        s.archive = archive # TODO autodetect final size and change this setting based on that (if flag not set)
+        s.archive = archive
+        s.archive_if_that_big = 500 # (bytes)
+                                    # if `s.archive` is set to None and if the compiled binary is at least this big it will be archived
+                                    # note that this is not an accurate representation of the size the program will take on the calc
 
         s.context_manager = ContextManager(s, lambda:0)
 
@@ -96,31 +103,46 @@ class TiBasicLib:
         s.context_manager.__exit__(exc_type, exc_value, exc_traceback)
 
         s.f.close()
-        if exc_type == None: # if no exceptions
-            if os.path.isfile(s.previously_sent_file):
-                skip = calc_hash(s.tibasic_source_file) == calc_hash(s.previously_sent_file)
-                skip = skip and (s.previously_sent_file_max_mtime_diff >= abs(time.time() - os.path.getmtime(s.previously_sent_file)))
-            else:
-                skip = False
 
-            if skip:
-                print(f'skipping `{s.program_name}`')
-            else:
-                # compile
-                print(f'compiling `{s.program_name}`')
+        if exc_type == None: # if no exceptions
+
+            # compile
+            while True:
+                print(f'`{s.program_name}`: compiling')
                 cmd = ['ti84cc']
                 if s.archive:
                     cmd += ['-a']
                 cmd += ['-o', s.compiled_file, s.tibasic_source_file]
                 term(cmd)
+
+                if s.archive == None:
+                    compiled_binary_size = os.path.getsize(s.compiled_file)
+                    print(f'`{s.program_name}`: compiled binary size is `{compiled_binary_size}` bytes')
+                    if compiled_binary_size >= s.archive_if_that_big:
+                        print(f'`{s.program_name}`: compiled binary size is over `{s.archive_if_that_big}`; archive flag will be set')
+                        s.archive = True
+                    else:
+                        s.archive = False
+                else:
+                    break
+
+            if os.path.isfile(s.previously_sent_file):
+                skip = calc_hash(s.compiled_file) == calc_hash(s.previously_sent_file)
+                skip = skip and (s.previously_sent_file_max_mtime_diff >= abs(time.time() - os.path.getmtime(s.previously_sent_file)))
+            else:
+                skip = False
+
+            if skip:
+                print(f'`{s.program_name}`: skipping sending')
+            else:
                 # send to calc
-                print(f'sending `{s.program_name}`')
+                print(f'`{s.program_name}`: sending to calc')
                 try:
                     term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
                 else:
-                    shutil.copyfile(s.tibasic_source_file, s.previously_sent_file)
+                    shutil.copyfile(s.compiled_file, s.previously_sent_file)
 
     # asserts
 
