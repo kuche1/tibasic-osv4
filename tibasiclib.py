@@ -61,7 +61,7 @@ class TiBasicLib:
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
 
-        s.archive = archive
+        s.archive = archive # TODO autodetect final size and change this setting based on that (if flag not set)
 
         s.context_manager = ContextManager(s, lambda:0)
 
