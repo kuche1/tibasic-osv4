@@ -141,6 +141,7 @@ class TiBasicLib:
         return s.iff(cond)
 
     def whiletrue(s, label):
+        s.label(label)
         return ContextManager(s, lambda:s.goto(label))
 
     def continuee(s, label):
@@ -148,25 +149,26 @@ class TiBasicLib:
     
     def call(s, program_name, asm=False):
 
-        dependencies = ['unarcprg', 'doarcprg'] + [program_name]
+        dependencies = ['unarcprg', 'doarcprg'] + [program_name] # program name has to be the last item
         for file in dependencies:
             try:
-                # note that python will take care of double includes
-                __import__(file)
+                dep_module = __import__(file) # note that python will take care of double includes
             except ModuleNotFoundError:
                 raise Exception(f'could not find program `{file}`')
 
+            dep_tb = dep_module.tb # TODO this can crash (but it's a nice check)
+
         program_name = program_name.upper()
 
-        if not asm:
+        if dep_tb.archive:
             s.raw(f'"{program_name}') # set Ans
             s.raw('prgmUNARCPRG')
 
         if asm:
-            s.raw(f'Asm(', end='') # save 1 char by ommiting `)`
+            s.raw(f'Asm(', end='')
         s.raw(f'prgm{program_name}')
 
-        if not asm:
+        if dep_tb.archive:
             s.raw(f'"{program_name}') # set Ans
             s.raw('prgmDOARCPRG')
 

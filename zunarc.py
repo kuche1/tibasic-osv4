@@ -27,7 +27,7 @@ import tibasiclib
 # "FTEST
 
 with tibasiclib.TiBasicLib(
-        archive=False,
+        archive=False, # THIS MIST NEVER BE ARCHIVED
     ) as tb:
 
     tb.asm_prgm('''

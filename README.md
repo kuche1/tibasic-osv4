@@ -12,7 +12,7 @@ Ans is always consideted trashed
 
 z is always considered trashed -->
 
-asm programs MUST NOT be archived
+archiving is good for big programs but it really sucks for small onces (since unarchiving takes time) so take good care of the flag
 
 ### generic
 

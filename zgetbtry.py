@@ -5,7 +5,6 @@ import tibasiclib
 # 0:4 <-> low:high
 
 with tibasiclib.TiBasicLib(
-        archive=False,
     ) as tb:
 
     tb.asm_prgm('''
