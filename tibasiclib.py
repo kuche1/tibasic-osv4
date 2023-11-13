@@ -3,6 +3,8 @@ import subprocess
 import inspect
 import os
 import hashlib
+import shutil
+import time
 
 # TODO
 # check if the file ends with new line and if that is the case delete it
@@ -15,11 +17,8 @@ def term(cmds:list, silent=False):
         subprocess.run(cmds, check=True)
 
 def calc_hash(path):
-    if os.path.isfile(path):
-        with open(path, 'rb') as f:
-            return hashlib.sha256(f.read()).hexdigest() # TODO sucks for big files
-    else:
-        return None
+    with open(path, 'rb') as f:
+        return hashlib.sha256(f.read()).hexdigest() # TODO sucks for big files
 
 class ContextManager:
     def __init__(s, tibasicobj, on_exit):
@@ -81,8 +80,9 @@ class TiBasicLib:
         s.program_name = program_name
         s.tibasic_source_file = f'/tmp/{s.program_name}.tib' # extension has to be `.tib` otherwise the compiler refuses to work
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
-        s.file_prev_version_hash = calc_hash(s.tibasic_source_file) # TODO this is not ideal since something could happen in the middle of the transaction; it's better to increase create a new file of lin X+8 and use that instead
         s.f = open(s.tibasic_source_file, 'w')
+        s.previously_sent_file = f'{s.tibasic_source_file}-previously-sent' # needs tp be >8 characters long
+        s.previously_sent_file_max_mtime_diff = 60 * 8 # 8 minutes
 
         s.archive = archive # TODO autodetect final size and change this setting based on that (if flag not set)
 
@@ -97,7 +97,13 @@ class TiBasicLib:
 
         s.f.close()
         if exc_type == None: # if no exceptions
-            if calc_hash(s.tibasic_source_file) == s.file_prev_version_hash: # TODO also check for timestamp
+            if os.path.isfile(s.previously_sent_file):
+                skip = calc_hash(s.tibasic_source_file) == calc_hash(s.previously_sent_file)
+                skip = skip and (s.previously_sent_file_max_mtime_diff >= abs(time.time() - os.path.getmtime(s.previously_sent_file)))
+            else:
+                skip = False
+
+            if skip:
                 print(f'skipping `{s.program_name}`')
             else:
                 # compile
@@ -113,7 +119,8 @@ class TiBasicLib:
                     term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
-                    os.remove(s.tibasic_source_file)
+                else:
+                    shutil.copyfile(s.tibasic_source_file, s.previously_sent_file)
 
     # asserts
 
