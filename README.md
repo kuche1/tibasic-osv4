@@ -14,6 +14,8 @@ z is always considered trashed -->
 
 archiving is good for big programs but it really sucks for small onces (since unarchiving takes time) so take good care of the flag
 
+also note that archiving WILL mess with any return values
+
 ### generic
 
 list names are limited to 5 characters

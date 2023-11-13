@@ -83,10 +83,16 @@ class TiBasicLib:
             # send to calc
             term(['tilp', '--no-gui', '--silent', s.compiled_file])
 
+    # asserts
+
+    def _assert_str(s, text):
+        assert type(text) == str
+        assert '"' not in text
+
     # IO
 
     def printstr(s, text):
-        assert '"' not in text
+        s._assert_str(text)
 
         while text:
             part = text[:s.disp_len_x]
@@ -105,7 +111,7 @@ class TiBasicLib:
         to_write += 'Input '
 
         if prompt_str != None:
-            assert '"' not in prompt_str
+            s._assert_str(prompt_str)
 
             while len(prompt_str) > s.disp_len_x:
                 s.printstr(prompt_str[:s.disp_len_x])
@@ -172,6 +178,47 @@ class TiBasicLib:
             s.raw(f'"{program_name}') # set Ans
             s.raw('prgmDOARCPRG')
 
+    def menu_raw(s, str_title, options, labels):
+        assert len(options) <= 7
+        s._assert_str(str_title)
+
+        code = f'Menu("{str_title}"'
+        for opt, lab in zip(options, labels, strict=True):
+            s._assert_str(opt)
+            code += f',"{opt}",{lab}'
+
+        s.raw(code)
+    
+    def menu(s, str_title, options, labels):
+        assert len(options) == len(labels)
+
+        if len(options) <= 7:
+            return s.menu_raw(str_title, options, labels)
+
+        lbl_page_0 = s.get_label()
+        lbl_page_1 = s.get_label()
+
+        s.label(lbl_page_0)
+        s.menu_raw(
+            str_title, # TODO? add page num
+            options[:6] + ["* NEXT"],
+            labels[:6] + [lbl_page_1],
+        )
+        options = options[6:]
+        labels = labels[6:]
+
+        s.label(lbl_page_1)
+        s.menu_raw(
+            str_title,
+            options[:6] + ['* PREV'],
+            labels[:6] + [lbl_page_0],
+        )
+
+        options = options[6:]
+        labels = labels[6:]
+
+        assert len(options) == 0, f'I am increadibly lazy; this needs to be fixed'
+
     # date and time
 
     def date_get(s, var_out):
@@ -191,7 +238,7 @@ class TiBasicLib:
     def utime_sec(s, var_num):
         s.raw(f'startTmr->{var_num}')
 
-    # variable generation
+    # variable generation and scopes
 
     def get_label(s):
         assert s.label_count <= 99, 'time to fix this'
@@ -233,6 +280,9 @@ class TiBasicLib:
             assert s.vars_str_in_use[var_idx] == True
             s.vars_str_in_use[var_idx] = False
         del s.vars_str_used_in_this_scope[-1]
+    
+    def scope(s):
+        return ContextManager(s, lambda:0)
 
     # other
 

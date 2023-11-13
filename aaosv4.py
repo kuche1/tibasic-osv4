@@ -2,16 +2,15 @@
 
 import tibasiclib
 
-CMDS_ALL = []
-CMDS_ALL.append(CMDS_BATTERY := ['BATTERY', 'B', 'b'])
-CMDS_ALL.append(CMDS_DATE_GET := ['DATE:GET', 'DG', 'D'])
-CMDS_ALL.append(CMDS_DATE_SET := ['DATE:SET', 'DS'])
-CMDS_ALL.append(CMDS_EXIT := ['EXIT', 'E', 'e'])
-CMDS_ALL.append(CMDS_MEMORY := ['MEMORY', 'M'])
-CMDS_ALL.append(CMDS_RASPISANIE := ['RASPISANIE', 'R'])
-CMDS_ALL.append(CMDS_TIME_GET := ['TIME:GET', 'T'])
-CMDS_ALL.append(CMDS_TIME_SET := ['TIME:SET', 'TS'])
-CMDS_ALL.append(CMDS_TIMER := ['TIMER', 'TI'])
+CMD_BATTERY = 'BATTERY'
+CMD_DATE_GET = 'DATE:GET'
+CMD_DATE_SET = 'DATE:SET'
+CMD_EXIT = 'EXIT'
+CMD_MEMORY = 'MEMORY'
+CMD_RASPISANIE = 'RASPISANIE'
+CMD_TIME_GET = 'TIME:GET'
+CMD_TIME_SET = 'TIME:SET'
+CMD_TIMER = 'TIMER'
 
 with tibasiclib.TiBasicLib(
         archive=False,
@@ -22,14 +21,48 @@ with tibasiclib.TiBasicLib(
 
     with tb.whiletrue(lbl_main_menu):
 
-        command = tb.get_var_str()
-        tb.input(command, '>>')
+        lbl_battery = tb.get_label()
+        lbl_date_get = tb.get_label()
+        lbl_date_set = tb.get_label()
+        lbl_exit = tb.get_label()
+        lbl_memory = tb.get_label()
+        lbl_raspisanie = tb.get_label()
+        lbl_time_get = tb.get_label()
+        lbl_time_set = tb.get_label()
+        lbl_timer = tb.get_label()
 
-        with tb.iff(f'length({command})=0'): # avoid errors related to `=` down the line
-            tb.continuee(lbl_main_menu)
+        tb.menu(
+            "** AAOSV4 **",
+            [
+                CMD_BATTERY,
+                CMD_DATE_GET,
+                CMD_DATE_SET,
+                CMD_EXIT,
+                CMD_MEMORY,
+                CMD_RASPISANIE,
+                CMD_TIME_GET,
+                CMD_TIME_SET,
+                CMD_TIMER,
+            ],
+            [
+                lbl_battery,
+                lbl_date_get,
+                lbl_date_set,
+                lbl_exit,
+                lbl_memory,
+                lbl_raspisanie,
+                lbl_time_get,
+                lbl_time_set,
+                lbl_timer,
+            ]
+        )
 
-        # with tb.iff(f'{command}="b"|{command}="B"|{command}="battery"'):
-        with tb.if_var_equ_strs(command, CMDS_BATTERY):
+        lbl_press_any_key = tb.get_label()
+
+        # with tb.if_var_equ_strs(command, CMDS_BATTERY):
+        with tb.scope():
+            tb.label(lbl_battery)
+
             tb.call('getbtry')
             # returns battery level
             # 0:4 <-> low:high
@@ -46,15 +79,20 @@ with tibasiclib.TiBasicLib(
             tb.printvar(high_bound)
             tb.printstr('percent')
 
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_press_any_key)
 
-        with tb.if_var_equ_strs(command, CMDS_DATE_GET):
+        # with tb.if_var_equ_strs(command, CMDS_DATE_GET):
+        
+        with tb.scope():
+            tb.label(lbl_date_get)
             date = tb.get_var_str()
             tb.date_get(date)
             tb.printvar(date)
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_press_any_key)
 
-        with tb.if_var_equ_strs(command, CMDS_DATE_SET):
+        # with tb.if_var_equ_strs(command, CMDS_DATE_SET):
+        with tb.scope():
+            tb.label(lbl_date_set)
             year = tb.get_var_num()
             month = tb.get_var_num()
             day = tb.get_var_num()
@@ -65,15 +103,17 @@ with tibasiclib.TiBasicLib(
 
             tb.date_set(year, month, day)
 
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_main_menu)
 
-        with tb.if_var_equ_strs(command, CMDS_EXIT):
+        # with tb.if_var_equ_strs(command, CMDS_EXIT):
+        with tb.scope():
+            tb.label(lbl_exit)
             # TODO implement tb.breakk(lbl_main_menu)
             tb.goto(lbl_main_menu_break)
 
-            tb.continuee(lbl_main_menu)
-
-        with tb.if_var_equ_strs(command, CMDS_MEMORY):
+        # with tb.if_var_equ_strs(command, CMDS_MEMORY):
+        with tb.scope():
+            tb.label(lbl_memory)
             tb.call('getmem')
             # returns free bytes
 
@@ -83,20 +123,25 @@ with tibasiclib.TiBasicLib(
             tb.printstr('free memory:')
             tb.printvar(free_mem)
 
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_press_any_key)
         
-        with tb.if_var_equ_strs(command, CMDS_RASPISANIE):
+        # with tb.if_var_equ_strs(command, CMDS_RASPISANIE):
+        with tb.scope():
+            tb.label(lbl_raspisanie)
             tb.call('rspsnie')
-
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_main_menu)
         
-        with tb.if_var_equ_strs(command, CMDS_TIME_GET):
+        # with tb.if_var_equ_strs(command, CMDS_TIME_GET):
+        with tb.scope():
+            tb.label(lbl_time_get)
             time = tb.get_var_str()
             tb.time_get(time)
             tb.printvar(date)
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_press_any_key)
 
-        with tb.if_var_equ_strs(command, CMDS_TIME_SET):
+        # with tb.if_var_equ_strs(command, CMDS_TIME_SET):
+        with tb.scope():
+            tb.label(lbl_time_set)
             hour = tb.get_var_num()
             minute = tb.get_var_num()
             second = tb.get_var_num()
@@ -107,19 +152,22 @@ with tibasiclib.TiBasicLib(
 
             tb.time_set(hour, minute, second)
 
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_main_menu)
 
-        with tb.if_var_equ_strs(command, CMDS_TIMER):
+        # with tb.if_var_equ_strs(command, CMDS_TIMER):
+        with tb.scope():
+            tb.label(lbl_timer)
             tb.call('timer')
-            tb.continuee(lbl_main_menu)
+            tb.goto(lbl_main_menu)
 
         # TODO prgmNOTES
 
         # TODO prgmOFF
 
-        tb.printstr('unknown action:')
-        tb.printvar(command)
-        tb.printstr('here is the list of actions:')
-        tb.printstr(' '.join(['='.join(cmds) for cmds in CMDS_ALL]))
+        with tb.scope():
+            tb.label(lbl_press_any_key)
+
+            vn_tmp = tb.get_var_str()
+            tb.input(vn_tmp, 'ENTR 2 CONT')
 
     tb.label(lbl_main_menu_break)

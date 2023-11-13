@@ -4,6 +4,7 @@ import tibasiclib
 # return in Ans
 
 with tibasiclib.TiBasicLib(
+        archive=False, # must be false, otherwise the return value will be lost
     ) as tb:
 
     tb.asm_prgm('''
