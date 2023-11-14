@@ -292,29 +292,29 @@ class TiBasicLib:
     # def input_ut14(s, store_in, prompt_str=None): # TODO
         # prompt = 'ENTER UP TO 14 CHARACTERS'
 
-    def input(s, store, prompt):
+    def input(s, store, prompt, ut14c=False):
         if s.is_var_num(store):
-            return s.input_var_num(store, prompt)
+            return s.input_var_num(store, prompt, ut14c=ut14c)
         elif s.is_var_str(store):
-            return s.input_var_str(store, prompt)
+            return s.input_var_str(store, prompt, ut14c=ut14c)
         elif s.is_var_lstr(store):
-            return s.input_var_lstr(store, prompt)
+            return s.input_var_lstr(store, prompt, ut14c=ut14c)
         else:
             assert False, f'unsupported data type of `{store}`'
     
-    def input_var_num(s, var, prompt):
+    def input_var_num(s, var, prompt, ut14c=False):
         assert s.is_var_num(var)
-        return s._input_raw(var, prompt)
+        return s._input_raw(var, prompt, ut14c=ut14c)
 
-    def input_var_str(s, var, prompt):
+    def input_var_str(s, var, prompt, ut14c=False):
         assert s.is_var_str(var)
-        return s._input_raw(var, prompt)
+        return s._input_raw(var, prompt, ut14c=ut14c)
     
-    def input_var_lstr(s, var, prompt): # TODO rename to input_var_lstr
+    def input_var_lstr(s, var, prompt, ut14c=False): # TODO rename to input_var_lstr
         assert s.is_var_lstr(var)
 
         vs = s.VAR_TRASH_STR[0]
-        s.input(vs, prompt)
+        s.input_var_str(vs, prompt, ut14c=ut14c)
 
         s.raw(f'{vs}->{s.VAR_ARG_STR[0]}')
 
@@ -325,7 +325,12 @@ class TiBasicLib:
 
         s.raw(f'{s.VAR_RET_LIST[0]}->{var}')
 
-    def _input_raw(s, raw, prompt):
+    def _input_raw(s, raw, prompt, ut14c=False):
+        if ut14c:
+            ut14c = False
+            s.print('"VVVVVVVVVVVVVVXX"') # TODO absolutely idiotic
+            return s._input_raw(raw, prompt, ut14c=ut14c)
+
         if s.is_str(prompt):
             data = s.extract_str_data(prompt)
             while len(data) > s.DISP_LEN_X:

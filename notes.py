@@ -49,7 +49,7 @@ with tibasiclib.TiBasicLib() as tb:
 
             tb.label(lbl_rename)
             with tb.scope():
-                tb.input(vars_title[note_idx], '"ENTER NEW NAME: "')
+                tb.input(vars_title[note_idx], '"ENTER NEW NAME: "', ut14c=True)
             tb.goto(lbl_main_menu)
 
             tb.label(lbl_edit)
@@ -74,7 +74,7 @@ with tibasiclib.TiBasicLib() as tb:
                 for line_idx, line_label in enumerate(line_labels):
                     tb.label(line_label)
                     with tb.scope():
-                        tb.input(vars_content[note_idx][line_idx], '"ENTR NEW CNTENT:"')
+                        tb.input(vars_content[note_idx][line_idx], '"ENTR NEW CNTENT:"', ut14c=True)
                     tb.goto(lbl_note_main_menu)
 
                 tb.label(lbl_exit_this_notes_content_exitor)
