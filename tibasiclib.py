@@ -325,7 +325,7 @@ class TiBasicLib:
     ##########
     ########## Menu
     ##########
-    
+
     def menu(s, title, options, labels):
         assert len(options) == len(labels)
   
@@ -506,8 +506,10 @@ class TiBasicLib:
         s.raw(f'startTmr->{var_num}')
 
     ##########
-    ########## variable generation and scopes
+    ########## variable generation, deletion and scopes
     ##########
+    # TODO
+    # rename `get_` to `gen_`
 
     def get_label(s):
         assert s.label_count <= 99, 'time to fix this'
