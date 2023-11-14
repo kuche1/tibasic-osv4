@@ -39,6 +39,7 @@ with tibasiclib.TiBasicLib(
         lbl_time_set = tb.get_label()
         lbl_timer = tb.get_label()
         lbl_test = tb.get_label()
+        lbl_porn = tb.get_label()
 
         tb.menu(
             vls_menu_title,
@@ -46,6 +47,7 @@ with tibasiclib.TiBasicLib(
                 '"* EXIT"',
                 '"NOTES"',
                 '"TIMER"',
+                '"PORN"',
                 '"BATTERY"',
                 '"MEMORY"',
                 '"POWEROFF"',
@@ -60,6 +62,7 @@ with tibasiclib.TiBasicLib(
                 lbl_exit,
                 lbl_notes,
                 lbl_timer,
+                lbl_porn,
                 lbl_battery,
                 lbl_memory,
                 lbl_poweroff,
@@ -72,9 +75,13 @@ with tibasiclib.TiBasicLib(
             ]
         )
 
-        # with tb.if_var_equ_strs(command, CMDS_BATTERY):
+        tb.label(lbl_porn)
         with tb.scope():
-            tb.label(lbl_battery)
+            tb.call('porn')
+        tb.goto(lbl_main_menu)
+
+        tb.label(lbl_battery)
+        with tb.scope():
 
             tb.call('getbtry')
             # returns battery level
