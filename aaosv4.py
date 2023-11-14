@@ -97,7 +97,7 @@ with tibasiclib.TiBasicLib(
 
         tb.label(lbl_date_get)
         with tb.scope():
-            date = tb.get_var_str()
+            date = tb.gen_var_lstr()
             tb.date_get(date)
             tb.print(date)
 

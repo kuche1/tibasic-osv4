@@ -517,10 +517,22 @@ class TiBasicLib:
     def date_get(s, var):
         if s.is_var_num(var):
             assert False, 'not implemented yet'
+
         elif s.is_var_str(var):
             return s.raw(f'getDtStr(3->{var}')
+
         elif s.is_var_lstr(var):
-            assert False, 'not implemented yet'
+            s.date_get(s.var_trash_str[0])
+
+            s.raw(f'{s.var_trash_str[0]}->{s.var_arg_str_0}')
+
+            s.call('st2lst')
+            # input : tb.var_arg_str_0
+            # output: tb.var_ret_list_0
+            # trash : tb.var_trash_num_0
+
+            s.raw(f'{s.var_ret_list_0}->{var}')
+
         else:
             assert False, f'unsupported data type of `{var}`'
 
