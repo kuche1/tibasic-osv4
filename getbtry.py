@@ -3,6 +3,7 @@ import tibasiclib
 
 # returns battery level
 # 0:4 <-> low:high
+# output: tb.VAR_RET_NUM[0]
 
 with tibasiclib.TiBasicLib(
     ) as tb:

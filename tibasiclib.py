@@ -59,8 +59,15 @@ class TiBasicLib:
 
     DISP_LEN_X = 16
 
-    LSTR_SPACE = '{' + str(CHARACTER_MAP.index(' ')+1) + '}'
+    # related to the character map
+
     # NOTE mind the fact that fact that some of these "characters" consist of multiple bytes (example `[theta]`)
+    LCHAR_4     = str(CHARACTER_MAP.index('4') + 1)
+    LCHAR_SLASH = str(CHARACTER_MAP.index('/') + 1)
+    LCHAR_SPACE = str(CHARACTER_MAP.index(' ') + 1)
+
+    DIGIT_TO_LCHAR = 1
+    # add that much to a digit (so 0 to 9) and it will be valid to it's equivalent lchar
 
     # variables used for args, return, trash
 
@@ -696,3 +703,13 @@ class TiBasicLib:
 
     def archive_var(s, var):
         s.raw(f'Archive {var}')
+    
+    def digit_to_lchar(s, input_var, output_var):
+        if s.is_var_num(input_var):
+            pass
+        else:
+            assert False, f'unsupported type `{input_var}`' # TODO add support for regular digits
+        
+        assert s.is_var_num(output_var)
+
+        s.raw(f'{input_var}+{s.DIGIT_TO_LCHAR}->{output_var}')

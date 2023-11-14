@@ -16,15 +16,20 @@ with tibasiclib.TiBasicLib(
         vls_menu_title = tb.gen_var_lstr()
 
         with tb.scope():
-            vls_date = tb.gen_var_lstr()
-            tb.date_get(vls_date)
-
             vls_time = tb.gen_var_lstr()
             tb.time_get(vls_time)
 
-            tb.lst_cat(vls_menu_title, vls_date, tb.LSTR_SPACE)
-            tb.lst_cat(vls_menu_title, vls_menu_title, vls_time)
-            # TODO also add battery level
+            tb.call('getbtry')
+            # returns battery level
+            # 0:4 <-> low:high
+            # output: tb.VAR_RET_NUM[0]
+
+            v_battery = tb.get_var_num()
+            tb.raw(f'{tb.VAR_RET_NUM[0]}->{v_battery}')
+
+            tb.digit_to_lchar(v_battery, v_battery)
+
+            tb.lst_cat(vls_menu_title, vls_time, '{' + tb.LCHAR_SPACE +','+ v_battery +','+ tb.LCHAR_SLASH +','+ tb.LCHAR_4 + '}')
 
         # menu labels
 

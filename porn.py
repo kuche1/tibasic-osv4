@@ -1,8 +1,7 @@
 
 import tibasiclib
 
-# returns battery level
-# 0:4 <-> low:high
+# TODO implement
 
 with tibasiclib.TiBasicLib() as tb:
 
