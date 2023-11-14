@@ -5,7 +5,7 @@ from lib_character_map import CHARACTER_MAP
 # info
 #   converts list to string
 
-# input : tb.var_arg_list_0
+# input : tb.VAR_ARG_LIST[0]
 # output: tb.VAR_RET_STR[0]
 # trash : tb.VAR_TRASH_NUM[0]
 
@@ -13,7 +13,7 @@ with tibasiclib.TiBasicLib(
         archive=False, # this fnc is used way too often
     ) as tb:
 
-    vl_in = tb.var_arg_list_0
+    vl_in = tb.VAR_ARG_LIST[0]
     vs_out = tb.VAR_RET_STR[0]
     vn = tb.VAR_TRASH_NUM[0]
 

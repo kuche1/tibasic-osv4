@@ -69,7 +69,7 @@ class TiBasicLib:
     # variables used for args, return, trash
 
     var_arg_str_0 = 'Str9'
-    var_arg_list_0 = 'L5'
+    VAR_ARG_LIST = ['L5']
 
     VAR_RET_NUM = ['Z']
     VAR_RET_STR = ['Str8']
@@ -267,10 +267,10 @@ class TiBasicLib:
     def print_var_lstr(s, var):
         assert s.is_var_lstr(var)
 
-        s.raw(f'{var}->{s.var_arg_list_0}')
+        s.raw(f'{var}->{s.VAR_ARG_LIST[0]}')
 
         s.call('lst2st')
-        # input : tb.var_arg_list_0
+        # input : tb.VAR_ARG_LIST[0]
         # output: tb.VAR_RET_STR[0]
         # trash : tb.VAR_TRASH_NUM[0]
 
@@ -351,10 +351,10 @@ class TiBasicLib:
                 return s.menu_raw(title, options, labels)
 
         if s.is_var_lstr(title):
-            s.raw(f'{title}->{s.var_arg_list_0}')
+            s.raw(f'{title}->{s.VAR_ARG_LIST[0]}')
 
             s.call('lst2st')
-            # input : tb.var_arg_list_0
+            # input : tb.VAR_ARG_LIST[0]
             # output: tb.VAR_RET_STR[0]
             # trash : tb.VAR_TRASH_NUM[0]
 
@@ -396,10 +396,10 @@ class TiBasicLib:
                 elif s.is_var_str(opt):
                     pass
                 elif s.is_var_list(opt):
-                    s.raw(f'{opt}->{s.var_arg_list_0}')
+                    s.raw(f'{opt}->{s.VAR_ARG_LIST[0]}')
 
                     s.call('lst2st')
-                    # input : tb.var_arg_list_0
+                    # input : tb.VAR_ARG_LIST[0]
                     # output: tb.VAR_RET_STR[0]
                     # trash : tb.VAR_TRASH_NUM[0]
 
