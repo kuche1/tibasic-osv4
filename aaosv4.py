@@ -6,8 +6,8 @@ with tibasiclib.TiBasicLib(
         archive=False,
     ) as tb:
 
-    lbl_main_menu = tb.get_label()
-    lbl_main_menu_break = tb.get_label()
+    lbl_main_menu = tb.gen_label()
+    lbl_main_menu_break = tb.gen_label()
 
     with tb.whiletrue(lbl_main_menu):
 
@@ -69,19 +69,19 @@ with tibasiclib.TiBasicLib(
 
         # menu labels
 
-        lbl_battery = tb.get_label()
-        lbl_date_get = tb.get_label()
-        lbl_date_set = tb.get_label()
-        lbl_exit = tb.get_label()
-        lbl_memory = tb.get_label()
-        lbl_notes = tb.get_label()
-        lbl_poweroff = tb.get_label()
-        # lbl_raspisanie = tb.get_label()
-        lbl_time_get = tb.get_label()
-        lbl_time_set = tb.get_label()
-        lbl_timer = tb.get_label()
-        lbl_test = tb.get_label()
-        lbl_porn = tb.get_label()
+        lbl_battery = tb.gen_label()
+        lbl_date_get = tb.gen_label()
+        lbl_date_set = tb.gen_label()
+        lbl_exit = tb.gen_label()
+        lbl_memory = tb.gen_label()
+        lbl_notes = tb.gen_label()
+        lbl_poweroff = tb.gen_label()
+        # lbl_raspisanie = tb.gen_label()
+        lbl_time_get = tb.gen_label()
+        lbl_time_set = tb.gen_label()
+        lbl_timer = tb.gen_label()
+        lbl_test = tb.gen_label()
+        lbl_porn = tb.gen_label()
 
         tb.menu(
             vls_menu_title,

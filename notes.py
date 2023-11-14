@@ -9,15 +9,15 @@ with tibasiclib.TiBasicLib() as tb:
     vars_title    = [f'[list]NTTT{tb.encode_to_1char(i)}' for i in range(NUMBER_OF_NOTES)]
     vars_content = [[f'[list]NTC{tb.encode_to_1char(i)}{tb.encode_to_1char(k)}' for k in range(LINES_PER_NOTE)]  for i in range(NUMBER_OF_NOTES)]
 
-    lbl_exit = tb.get_label()
+    lbl_exit = tb.gen_label()
 
     for i in range(NUMBER_OF_NOTES):
         tb.setupeditor_lstr(vars_title[i])
 
-    lbl_main_menu = tb.get_label()
+    lbl_main_menu = tb.gen_label()
     tb.label(lbl_main_menu)
 
-    note_selection_labels = [tb.get_label() for _ in range(NUMBER_OF_NOTES)]
+    note_selection_labels = [tb.gen_label() for _ in range(NUMBER_OF_NOTES)]
 
     tb.menu(
         '"SELECT NOTE"',
@@ -29,9 +29,9 @@ with tibasiclib.TiBasicLib() as tb:
         tb.label(label)
         with tb.scope():
 
-            # lbl_menu = tb.get_label()
-            lbl_edit = tb.get_label()
-            lbl_rename = tb.get_label()
+            # lbl_menu = tb.gen_label()
+            lbl_edit = tb.gen_label()
+            lbl_rename = tb.gen_label()
 
             tb.menu(
                 '"NOTE ACTION"',
@@ -58,11 +58,11 @@ with tibasiclib.TiBasicLib() as tb:
                 for content_var in vars_content[note_idx]:
                     tb.setupeditor_lstr(content_var)
 
-                line_labels = [tb.get_label() for _ in range(LINES_PER_NOTE)]
+                line_labels = [tb.gen_label() for _ in range(LINES_PER_NOTE)]
 
-                lbl_exit_this_notes_content_exitor = tb.get_label()
+                lbl_exit_this_notes_content_exitor = tb.gen_label()
 
-                lbl_note_main_menu = tb.get_label()
+                lbl_note_main_menu = tb.gen_label()
                 tb.label(lbl_note_main_menu)
 
                 tb.menu(

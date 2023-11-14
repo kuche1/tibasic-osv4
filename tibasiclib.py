@@ -388,7 +388,7 @@ class TiBasicLib:
         else:
             assert False, f'unsupported data type of `{title}`'
 
-        lbl_page_cur = s.get_label()
+        lbl_page_cur = s.gen_label()
         lbl_page_prev = lbl_page_cur
 
         while len(options):
@@ -396,7 +396,7 @@ class TiBasicLib:
                 lbl_page_next = lbl_page_cur
                 str_next = '"X NEXT"'
             else:
-                lbl_page_next = s.get_label()
+                lbl_page_next = s.gen_label()
                 str_next = '"* NEXT"'
 
             if lbl_page_prev == lbl_page_cur:
@@ -600,7 +600,7 @@ class TiBasicLib:
     # TODO
     # rename `get_` to `gen_`
 
-    def get_label(s):
+    def gen_label(s):
         assert s.label_count <= 99, 'time to fix this'
         ret = str(s.label_count)
         s.label_count += 1

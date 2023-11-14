@@ -4,10 +4,10 @@ import tibasiclib
 with tibasiclib.TiBasicLib(
     ) as tb:
 
-    lbl_reset = tb.get_label()
-    lbl_show = tb.get_label()
-    lbl_exit = tb.get_label()
-    lbl_main_loop = tb.get_label()
+    lbl_reset = tb.gen_label()
+    lbl_show = tb.gen_label()
+    lbl_exit = tb.gen_label()
+    lbl_main_loop = tb.gen_label()
 
     vn_start = tb.get_var_num()
     vn_now = tb.get_var_num()
