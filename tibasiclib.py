@@ -68,7 +68,7 @@ class TiBasicLib:
 
     # variables used for args, return, trash
 
-    var_arg_str_0 = 'Str9'
+    VAR_ARG_STR = ['Str9']
     VAR_ARG_LIST = ['L5']
 
     VAR_RET_NUM = ['Z']
@@ -106,7 +106,7 @@ class TiBasicLib:
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
         s.previously_sent_file = f'/tmp/{s.program_name}-previously-sent' # needs tp be >8 characters long
-        s.previously_sent_file_max_mtime_diff = 60 * 30 # in seconds
+        s.previously_sent_file_max_mtime_diff = 60 * 45 # in seconds
 
         s.archive = archive
         s.archive_if_that_big = 500 # (bytes)
@@ -312,10 +312,10 @@ class TiBasicLib:
         vs = s.VAR_TRASH_STR[0]
         s.input(vs, prompt)
 
-        s.raw(f'{vs}->{s.var_arg_str_0}')
+        s.raw(f'{vs}->{s.VAR_ARG_STR[0]}')
 
         s.call('st2lst')
-        # input : tb.var_arg_str_0
+        # input : tb.VAR_ARG_STR[0]
         # output: tb.VAR_RET_LIST[0]
         # trash : tb.VAR_TRASH_NUM[0]
 
@@ -544,10 +544,10 @@ class TiBasicLib:
         elif s.is_var_lstr(var):
             s.date_get(s.VAR_TRASH_STR[0])
 
-            s.raw(f'{s.VAR_TRASH_STR[0]}->{s.var_arg_str_0}')
+            s.raw(f'{s.VAR_TRASH_STR[0]}->{s.VAR_ARG_STR[0]}')
 
             s.call('st2lst')
-            # input : tb.var_arg_str_0
+            # input : tb.VAR_ARG_STR[0]
             # output: tb.VAR_RET_LIST[0]
             # trash : tb.VAR_TRASH_NUM[0]
 
@@ -563,10 +563,10 @@ class TiBasicLib:
         elif s.is_var_lstr(var):
             s.time_get(s.VAR_TRASH_STR[0])
 
-            s.raw(f'{s.VAR_TRASH_STR[0]}->{s.var_arg_str_0}')
+            s.raw(f'{s.VAR_TRASH_STR[0]}->{s.VAR_ARG_STR[0]}')
 
             s.call('st2lst')
-            # input : tb.var_arg_str_0
+            # input : tb.VAR_ARG_STR[0]
             # output: tb.VAR_RET_LIST[0]
             # trash : tb.VAR_TRASH_NUM[0]
 
