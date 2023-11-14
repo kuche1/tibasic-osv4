@@ -602,14 +602,15 @@ class TiBasicLib:
             s.vars_str_in_use[var_idx] = False
         del s.vars_str_used_in_this_scope[-1]
 
-        stack_var_num = s.stack_var_num[-1]
-        if stack_var_num.in_use:
-            s.del_var(stack_var_num.name)
+        stack = s.stack_var_num[-1]
+        if stack.in_use:
+            s.del_var(stack.name)
         del s.stack_var_num[-1]
 
-        stack_var_lstr = s.stack_var_lstr[-1]
-        if stack_var_lstr.in_use:
-            s.del_var(stack_var_lstr.name)
+        stack = s.stack_var_lstr[-1]
+        if stack.in_use:
+            for i in range(1, stack.var_count+1): # TODO this sucks
+                s.del_var(stack.name + s.encode_to_1char(i))
         del s.stack_var_lstr[-1]
     
     def scope(s):
@@ -622,11 +623,6 @@ class TiBasicLib:
             stack.in_use = True
             num = s.encode_to_1char(s.stack_num) # if you get an error here you can either: (1: stop abusibng `s.stack_num`) (2: extend the 1char encoder) (3: use a 2char encoder)
             stack.name = f'[list]S{num}'
-
-            s.setupeditor(stack.name) # TODO check if this is needed
-            # create list if it doesn't exist
-            # this will also unarchive it if it is archived
-
         stack.var_count += 1 # tibasic starts count at 1
         num = s.encode_to_1char(stack.var_count)
         ret = f'{stack.name}({num})'
@@ -640,11 +636,6 @@ class TiBasicLib:
             stack.in_use = True
             num = s.encode_to_1char(s.stack_num) # if you get an error here you can either: (1: stop abusibng `s.stack_num`) (2: extend the 1char encoder) (3: use a 2char encoder)
             stack.name = f'[list]T{num}'
-
-            s.setupeditor(stack.name) # TODO check if this is needed
-            # create list if it doesn't exist
-            # this will also unarchive it if it is archived
-
         stack.var_count += 1 # tibasic starts count at 1
         num = s.encode_to_1char(stack.var_count)
         ret = f'{stack.name}{num}'
