@@ -46,6 +46,7 @@ class StackInfo:
     in_use = False
     var_count = 0
     name = None
+    allocated_lists = []
 
 class TiBasicLib:
 
@@ -604,13 +605,14 @@ class TiBasicLib:
 
         stack = s.stack_var_num[-1]
         if stack.in_use:
-            s.del_var(stack.name)
+            for l in stack.allocated_lists:
+                s.del_var(l)
         del s.stack_var_num[-1]
 
-        stack = s.stack_var_lstr[-1]
+        stack = s.stack_var_lstr[-1] # TODO copy-paste
         if stack.in_use:
-            for i in range(1, stack.var_count+1): # TODO this sucks
-                s.del_var(stack.name + s.encode_to_1char(i))
+            for l in stack.allocated_lists:
+                s.del_var(l)
         del s.stack_var_lstr[-1]
     
     def scope(s):
@@ -623,6 +625,7 @@ class TiBasicLib:
             stack.in_use = True
             num = s.encode_to_1char(s.stack_num) # if you get an error here you can either: (1: stop abusibng `s.stack_num`) (2: extend the 1char encoder) (3: use a 2char encoder)
             stack.name = f'[list]S{num}'
+            stack.allocated_lists += [stack.name]
         stack.var_count += 1 # tibasic starts count at 1
         num = s.encode_to_1char(stack.var_count)
         ret = f'{stack.name}({num})'
@@ -639,6 +642,7 @@ class TiBasicLib:
         stack.var_count += 1 # tibasic starts count at 1
         num = s.encode_to_1char(stack.var_count)
         ret = f'{stack.name}{num}'
+        stack.allocated_lists.append(ret)
 
         return ret
     
