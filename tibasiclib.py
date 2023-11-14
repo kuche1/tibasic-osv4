@@ -73,7 +73,7 @@ class TiBasicLib:
 
     var_ret_num_0 = 'Z'
     var_ret_str_0 = 'Str8'
-    var_ret_list_0 = 'L6'
+    VAR_RET_LIST = ['L6']
 
     VAR_TRASH_NUM = ['Y']
     VAR_TRASH_STR = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
@@ -316,10 +316,10 @@ class TiBasicLib:
 
         s.call('st2lst')
         # input : tb.var_arg_str_0
-        # output: tb.var_ret_list_0
+        # output: tb.VAR_RET_LIST[0]
         # trash : tb.VAR_TRASH_NUM[0]
 
-        s.raw(f'{s.var_ret_list_0}->{var}')
+        s.raw(f'{s.VAR_RET_LIST[0]}->{var}')
 
     # def input_ut14(s, store_in, prompt_str=None): # TODO
         # prompt = 'ENTER UP TO 14 CHARACTERS'
@@ -548,10 +548,10 @@ class TiBasicLib:
 
             s.call('st2lst')
             # input : tb.var_arg_str_0
-            # output: tb.var_ret_list_0
+            # output: tb.VAR_RET_LIST[0]
             # trash : tb.VAR_TRASH_NUM[0]
 
-            s.raw(f'{s.var_ret_list_0}->{var}')
+            s.raw(f'{s.VAR_RET_LIST[0]}->{var}')
 
         else:
             assert False, f'unsupported data type of `{var}`'
@@ -567,10 +567,10 @@ class TiBasicLib:
 
             s.call('st2lst')
             # input : tb.var_arg_str_0
-            # output: tb.var_ret_list_0
+            # output: tb.VAR_RET_LIST[0]
             # trash : tb.VAR_TRASH_NUM[0]
 
-            s.raw(f'{s.var_ret_list_0}->{var}')
+            s.raw(f'{s.VAR_RET_LIST[0]}->{var}')
 
         else:
             assert False, f'unsuported data type of `{var}`'
