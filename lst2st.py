@@ -6,7 +6,7 @@ from lib_character_map import CHARACTER_MAP
 #   converts list to string
 
 # input : tb.var_arg_list_0
-# output: tb.var_ret_str_0
+# output: tb.VAR_RET_STR[0]
 # trash : tb.VAR_TRASH_NUM[0]
 
 with tibasiclib.TiBasicLib(
@@ -14,7 +14,7 @@ with tibasiclib.TiBasicLib(
     ) as tb:
 
     vl_in = tb.var_arg_list_0
-    vs_out = tb.var_ret_str_0
+    vs_out = tb.VAR_RET_STR[0]
     vn = tb.VAR_TRASH_NUM[0]
 
     tb.raw('" "')

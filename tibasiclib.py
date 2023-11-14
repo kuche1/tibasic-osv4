@@ -72,7 +72,7 @@ class TiBasicLib:
     var_arg_list_0 = 'L5'
 
     var_ret_num_0 = 'Z'
-    var_ret_str_0 = 'Str8'
+    VAR_RET_STR = ['Str8']
     VAR_RET_LIST = ['L6']
 
     VAR_TRASH_NUM = ['Y']
@@ -271,10 +271,10 @@ class TiBasicLib:
 
         s.call('lst2st')
         # input : tb.var_arg_list_0
-        # output: tb.var_ret_str_0
+        # output: tb.VAR_RET_STR[0]
         # trash : tb.VAR_TRASH_NUM[0]
 
-        s.print(s.var_ret_str_0)
+        s.print(s.VAR_RET_STR[0])
 
     def print_var_num(s, var):
         assert s.is_var_num(var)
@@ -355,10 +355,10 @@ class TiBasicLib:
 
             s.call('lst2st')
             # input : tb.var_arg_list_0
-            # output: tb.var_ret_str_0
+            # output: tb.VAR_RET_STR[0]
             # trash : tb.VAR_TRASH_NUM[0]
 
-            s.raw(f'{s.var_ret_str_0}->{s.VAR_TRASH_STR[5]}')
+            s.raw(f'{s.VAR_RET_STR[0]}->{s.VAR_TRASH_STR[5]}')
 
             title = s.VAR_TRASH_STR[5]
         
@@ -400,10 +400,10 @@ class TiBasicLib:
 
                     s.call('lst2st')
                     # input : tb.var_arg_list_0
-                    # output: tb.var_ret_str_0
+                    # output: tb.VAR_RET_STR[0]
                     # trash : tb.VAR_TRASH_NUM[0]
 
-                    s.raw(f'{s.var_ret_str_0}->{s.VAR_TRASH_STR[idx]}')
+                    s.raw(f'{s.VAR_RET_STR[0]}->{s.VAR_TRASH_STR[idx]}')
 
                     options_slice[idx] = s.VAR_TRASH_STR[idx]
                 else:
