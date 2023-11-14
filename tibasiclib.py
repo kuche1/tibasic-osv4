@@ -606,9 +606,6 @@ class TiBasicLib:
         s.label_count += 1
         return ret
 
-    def get_var_num_stack(s):
-        return s.get_var_num_stack()
-
     def _create_new_scope(s):
         s.stack_var_num.append(StackInfo())
         s.stack_var_lstr.append(StackInfo())
@@ -630,7 +627,7 @@ class TiBasicLib:
     def scope(s):
         return ContextManager(s, lambda:0)
     
-    def get_var_num_stack(s): # these vars don't really seem slower than the regular `A`, `B`, `C`, ...
+    def gen_var_num(s): # these vars don't really seem slower than the regular `A`, `B`, `C`, ...
         stack = s.stack_var_num[-1]
 
         if not stack.in_use:
@@ -723,7 +720,7 @@ class TiBasicLib:
         assert tb.is_var_num(inp)
         assert tb.is_var_lstr(out)
 
-        vn = tb.get_var_num_stack()
+        vn = tb.gen_var_num()
 
         tb.raw(f'{inp}->{vn}')
 
