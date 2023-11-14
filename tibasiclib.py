@@ -5,6 +5,7 @@ import os
 import hashlib
 import shutil
 import time
+import sys
 
 # TODO
 # check if the file ends with new line and if that is the case delete it
@@ -17,9 +18,13 @@ import time
 
 def term(cmds:list, silent=False):
     if silent:
-        subprocess.run(cmds, check=True, capture_output=True)
+        stdout = subprocess.DEVNULL
+        stderr = subprocess.DEVNULL
     else:
-        subprocess.run(cmds, check=True)
+        stdout = None
+        stderr = None
+
+    subprocess.run(cmds, check=True, stdout=stdout, stderr=stderr)
 
 def calc_hash(path):
     with open(path, 'rb') as f:
@@ -152,7 +157,7 @@ class TiBasicLib:
                 # send to calc
                 print(f'`{s.program_name}`: sending to calc')
                 try:
-                    term(['tilp', '--no-gui', '--silent', s.compiled_file]) # for some stupid reason adding `, silent=True` causes it to be unable to send `notes`
+                    term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
                     sys.exit(1)
@@ -198,9 +203,35 @@ class TiBasicLib:
     # list
 
     def is_var_list(s, var):
-        if var.startswith('[list]'):
+        prefix = False
+
+        if var in ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6']:
             return True
-        return var in ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6']
+
+        if not var.startswith('[list]'):
+            return False
+        
+        if var.endswith(')'): # it's an index of a list, not a list
+            return False
+        
+        return True
+    
+    # num
+
+    def is_var_num(s, var):
+        if var in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
+            return True
+        
+        # TODO this sucks, it would be awesome if we could do it without copy-pasting
+        for start in ['[list]', 'L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6']:
+            if var.startswith(start):
+                break
+        else:
+            return False
+
+        # TODO we can improve the format checks
+
+        return var.endswith(')')
 
     ##########
     ########## IO [legacy]
@@ -262,6 +293,9 @@ class TiBasicLib:
         if s.is_var_lstr(atom):
             return s.print_var_lstr(atom)
         
+        if s.is_var_num(atom):
+            return s.print_var_num(atom)
+        
         assert False, f'could not determine type of `{atom}`'
     
     # TODO add a check for lower case letters
@@ -278,6 +312,9 @@ class TiBasicLib:
             s.raw(f'Disp "{chunk}') # save 1 char
         
         s.raw(f'Disp "{data}') # save 1 char
+    
+    def print_var_num(s, var):
+        s.raw(f'Disp {var}')
 
     ##########
     ########## control flow

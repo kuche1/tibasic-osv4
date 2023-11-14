@@ -87,9 +87,9 @@ with tibasiclib.TiBasicLib(
             tb.raw(f'{low_bound}+20->{high_bound}')
 
             tb.print_str('"BATTERY BETWEEN"')
-            tb.printvar(low_bound)
+            tb.print(low_bound)
             tb.print_str('"AND"')
-            tb.printvar(high_bound)
+            tb.print(high_bound)
             tb.print_str('"PERCENT"')
 
             tb.press_any_key()
