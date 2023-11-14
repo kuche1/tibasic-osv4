@@ -79,8 +79,8 @@ class TiBasicLib:
 
     # stack
 
-    stack = []
     stack_num = 0 # used for youngest stack
+    stack_var_num = []
 
     ##########
     ########## functions stuff
@@ -547,7 +547,7 @@ class TiBasicLib:
     def _create_new_scope(s):
         # s.vars_num_used_in_this_scope.append([])
         s.vars_str_used_in_this_scope.append([])
-        s.stack.append(StackInfo())
+        s.stack_var_num.append(StackInfo())
         s.stack_num += 1
 
     def _delete_last_scope(s):
@@ -561,28 +561,28 @@ class TiBasicLib:
             s.vars_str_in_use[var_idx] = False
         del s.vars_str_used_in_this_scope[-1]
 
-        stack = s.stack[-1]
-        if stack.in_use:
-            s.del_var(stack.name)
-        del s.stack[-1]
+        stack_var_num = s.stack_var_num[-1]
+        if stack_var_num.in_use:
+            s.del_var(stack_var_num.name)
+        del s.stack_var_num[-1]
     
     def scope(s):
         return ContextManager(s, lambda:0)
     
     def get_var_num_stack(s): # these vars don't really seem slower than the regular `A`, `B`, `C`, ...
-        stack = s.stack[-1]
+        stack_var_num = s.stack_var_num[-1]
 
-        if not stack.in_use:
-            stack.in_use = True
+        if not stack_var_num.in_use:
+            stack_var_num.in_use = True
             assert len(str(s.stack_num)) <= 4, 'too many stacks, this can be fixed by not abusing `s.stack_num`'
-            stack.name = f'[list]S{s.stack_num}'
+            stack_var_num.name = f'[list]S{s.stack_num}'
 
-            s.setupeditor(stack.name) # TODO check if this is needed
+            s.setupeditor(stack_var_num.name) # TODO check if this is needed
             # create list if it doesn't exist
             # this will also unarchive it if it is archived
 
-        stack.var_count += 1 # tibasic starts count at 1
-        ret = f'{stack.name}({stack.var_count})'
+        stack_var_num.var_count += 1 # tibasic starts count at 1
+        ret = f'{stack_var_num.name}({stack_var_num.var_count})'
 
         return ret
     
