@@ -394,13 +394,13 @@ class TiBasicLib:
         while len(options):
             if len(options) <= 5:
                 lbl_page_next = lbl_page_cur
-                str_next = '"** LAST PAGE"'
+                str_next = '"X NEXT"'
             else:
                 lbl_page_next = s.get_label()
                 str_next = '"* NEXT"'
 
             if lbl_page_prev == lbl_page_cur:
-                str_prev = '"** FIRST PAGE"'
+                str_prev = '"X PREV"'
             else:
                 str_prev = '"* PREV"'
 
@@ -430,8 +430,8 @@ class TiBasicLib:
 
             s._menu_raw(
                 title, # TODO? add page num
-                options_slice + [str_prev,      str_next],
-                labels_slice  + [lbl_page_prev, lbl_page_next],
+                [str_prev,      str_next]      + options_slice,
+                [lbl_page_prev, lbl_page_next] + labels_slice,
             )
             options = options[len(options_slice):]
             labels  = labels [len(labels_slice):]
