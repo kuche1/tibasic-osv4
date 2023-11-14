@@ -485,12 +485,8 @@ class TiBasicLib:
         s.raw('End')
 
     ##########
-    ########## date and time
+    ########## date and time [legacy]
     ##########
-
-    def date_get(s, var_out):
-        assert var_out in s.vars_str
-        s.raw(f'getDtStr(3->{var_out}')
 
     def date_set(s, var_year, var_month, var_day):
         s.raw(f'setDate({var_year},{var_month},{var_day}')
@@ -504,6 +500,20 @@ class TiBasicLib:
     
     def utime_sec(s, var_num):
         s.raw(f'startTmr->{var_num}')
+
+    ##########
+    ########## date and time [updated]
+    ##########
+
+    def date_get(s, var):
+        if s.is_var_num(var):
+            assert False, 'not implemented yet'
+        elif s.is_var_str(var):
+            return s.raw(f'getDtStr(3->{var}')
+        elif s.is_var_lstr(var):
+            assert False, 'not implemented yet'
+        else:
+            assert False, f'unsupported data type of `{var}`'
 
     ##########
     ########## variable generation, deletion and scopes
