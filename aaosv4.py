@@ -28,7 +28,7 @@ with tibasiclib.TiBasicLib(
             # 0:4 <-> low:high
             # output: tb.VAR_RET_NUM[0]
 
-            v_battery = tb.get_var_num()
+            v_battery = tb.get_var_num_stack()
             tb.raw(f'{tb.VAR_RET_NUM[0]}->{v_battery}')
 
             tb.digit_to_lchar(v_battery, v_battery)
@@ -38,7 +38,7 @@ with tibasiclib.TiBasicLib(
             tb.call('getmem')
             # output: tb.VAR_RET_NUM[0]
 
-            vn_memory = tb.get_var_num()
+            vn_memory = tb.get_var_num_stack()
             tb.raw(f'{tb.VAR_RET_NUM[0]}->{vn_memory}')
             tb.raw(f'int({vn_memory}/1024->{vn_memory}') # now in KiB, rounded down; value should be between 16 and 0
 
@@ -129,9 +129,9 @@ with tibasiclib.TiBasicLib(
             # returns battery level
             # 0:4 <-> low:high
 
-            # low_bound = tb.get_var_num()
+            # low_bound = tb.get_var_num_stack()
             low_bound = tb.get_var_num_stack()
-            high_bound = tb.get_var_num()
+            high_bound = tb.get_var_num_stack()
 
             tb.raw(f'{tb.VAR_RET_NUM[0]}*20->{low_bound}')
             tb.raw(f'{low_bound}+20->{high_bound}')
@@ -156,9 +156,9 @@ with tibasiclib.TiBasicLib(
 
         tb.label(lbl_date_set)
         with tb.scope():
-            year = tb.get_var_num()
-            month = tb.get_var_num()
-            day = tb.get_var_num()
+            year = tb.get_var_num_stack()
+            month = tb.get_var_num_stack()
+            day = tb.get_var_num_stack()
 
             tb.input(year,  '"YEAR: "')
             tb.input(month, '"MONTH: "')
@@ -179,7 +179,7 @@ with tibasiclib.TiBasicLib(
             tb.call('getmem')
             # returns free bytes
 
-            free_mem = tb.get_var_num()
+            free_mem = tb.get_var_num_stack()
             tb.raw(f'{tb.VAR_RET_NUM[0]}->{free_mem}')
 
             tb.print_str('"FREE MEMORY:"')
@@ -213,9 +213,9 @@ with tibasiclib.TiBasicLib(
 
         tb.label(lbl_time_set)
         with tb.scope():
-            hour = tb.get_var_num()
-            minute = tb.get_var_num()
-            second = tb.get_var_num()
+            hour = tb.get_var_num_stack()
+            minute = tb.get_var_num_stack()
+            second = tb.get_var_num_stack()
 
             tb.input(hour,   '"HOUR: "')
             tb.input(minute, '"MINUTE: "')

@@ -9,8 +9,8 @@ with tibasiclib.TiBasicLib(
     lbl_exit = tb.gen_label()
     lbl_main_loop = tb.gen_label()
 
-    vn_start = tb.get_var_num()
-    vn_now = tb.get_var_num()
+    vn_start = tb.get_var_num_stack()
+    vn_now = tb.get_var_num_stack()
 
     tb.utime_sec(vn_start)
 

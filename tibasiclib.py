@@ -606,7 +606,7 @@ class TiBasicLib:
         s.label_count += 1
         return ret
 
-    def get_var_num(s):
+    def get_var_num_stack(s):
         return s.get_var_num_stack()
 
     def _create_new_scope(s):
@@ -723,7 +723,7 @@ class TiBasicLib:
         assert tb.is_var_num(inp)
         assert tb.is_var_lstr(out)
 
-        vn = tb.get_var_num()
+        vn = tb.get_var_num_stack()
 
         tb.raw(f'{inp}->{vn}')
 
