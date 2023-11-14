@@ -597,8 +597,6 @@ class TiBasicLib:
     ##########
     ########## variable generation, deletion and scopes
     ##########
-    # TODO
-    # rename `get_` to `gen_`
 
     def gen_label(s):
         assert s.label_count <= 99, 'time to fix this'
