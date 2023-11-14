@@ -76,7 +76,7 @@ class TiBasicLib:
     var_ret_list_0 = 'L6'
 
     var_trash_num_0 = 'Y'
-    var_trash_str = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
+    VAR_TRASH_STR = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
 
     # stack
 
@@ -309,7 +309,7 @@ class TiBasicLib:
     def input_var_lstr(s, var, prompt): # TODO rename to input_var_lstr
         assert s.is_var_lstr(var)
 
-        vs = s.var_trash_str[0]
+        vs = s.VAR_TRASH_STR[0]
         s.input(vs, prompt)
 
         s.raw(f'{vs}->{s.var_arg_str_0}')
@@ -358,9 +358,9 @@ class TiBasicLib:
             # output: tb.var_ret_str_0
             # trash : tb.var_trash_num_0
 
-            s.raw(f'{s.var_ret_str_0}->{s.var_trash_str[5]}')
+            s.raw(f'{s.var_ret_str_0}->{s.VAR_TRASH_STR[5]}')
 
-            title = s.var_trash_str[5]
+            title = s.VAR_TRASH_STR[5]
         
         elif s.is_str(title):
             pass
@@ -403,9 +403,9 @@ class TiBasicLib:
                     # output: tb.var_ret_str_0
                     # trash : tb.var_trash_num_0
 
-                    s.raw(f'{s.var_ret_str_0}->{s.var_trash_str[idx]}')
+                    s.raw(f'{s.var_ret_str_0}->{s.VAR_TRASH_STR[idx]}')
 
-                    options_slice[idx] = s.var_trash_str[idx]
+                    options_slice[idx] = s.VAR_TRASH_STR[idx]
                 else:
                     assert False, f'unsupported type of `{opt}`'
 
@@ -542,9 +542,9 @@ class TiBasicLib:
             return s.raw(f'getDtStr(3->{var}')
 
         elif s.is_var_lstr(var):
-            s.date_get(s.var_trash_str[0])
+            s.date_get(s.VAR_TRASH_STR[0])
 
-            s.raw(f'{s.var_trash_str[0]}->{s.var_arg_str_0}')
+            s.raw(f'{s.VAR_TRASH_STR[0]}->{s.var_arg_str_0}')
 
             s.call('st2lst')
             # input : tb.var_arg_str_0
@@ -561,9 +561,9 @@ class TiBasicLib:
             return s.raw(f'getTmStr(24->{var}')
 
         elif s.is_var_lstr(var):
-            s.time_get(s.var_trash_str[0])
+            s.time_get(s.VAR_TRASH_STR[0])
 
-            s.raw(f'{s.var_trash_str[0]}->{s.var_arg_str_0}')
+            s.raw(f'{s.VAR_TRASH_STR[0]}->{s.var_arg_str_0}')
 
             s.call('st2lst')
             # input : tb.var_arg_str_0
