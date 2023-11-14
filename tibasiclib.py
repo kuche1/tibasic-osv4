@@ -62,7 +62,12 @@ class TiBasicLib:
     # related to the character map
 
     # NOTE mind the fact that fact that some of these "characters" consist of multiple bytes (example `[theta]`)
+    LCHAR_0     = str(CHARACTER_MAP.index('0') + 1)
+    LCHAR_1     = str(CHARACTER_MAP.index('1') + 1)
     LCHAR_4     = str(CHARACTER_MAP.index('4') + 1)
+    LCHAR_6     = str(CHARACTER_MAP.index('6') + 1)
+    LCHAR_K     = str(CHARACTER_MAP.index('K') + 1)
+    LCHAR_X     = str(CHARACTER_MAP.index('X') + 1)
     LCHAR_SLASH = str(CHARACTER_MAP.index('/') + 1)
     LCHAR_SPACE = str(CHARACTER_MAP.index(' ') + 1)
 
@@ -704,7 +709,7 @@ class TiBasicLib:
     def archive_var(s, var):
         s.raw(f'Archive {var}')
     
-    def digit_to_lchar(s, input_var, output_var):
+    def digit_to_lchar(s, output_var, input_var):
         if s.is_var_num(input_var):
             pass
         else:
@@ -713,3 +718,21 @@ class TiBasicLib:
         assert s.is_var_num(output_var)
 
         s.raw(f'{input_var}+{s.DIGIT_TO_LCHAR}->{output_var}')
+
+    def num0to16_to_lstr(tb, out, inp):
+        assert tb.is_var_num(inp)
+        assert tb.is_var_lstr(out)
+
+        vn = tb.get_var_num()
+
+        tb.raw(f'{inp}->{vn}')
+
+        tb.raw(f'If int({vn}/10)=0')
+        tb.raw('Then')
+        tb.raw(f'{0+tb.DIGIT_TO_LCHAR}->{out}(1)')
+        tb.raw('Else')
+        tb.raw(f'{1+tb.DIGIT_TO_LCHAR}->{out}(1)')
+        tb.raw(f'{vn}-10->{vn}')
+        tb.raw('End')
+
+        tb.digit_to_lchar(f'{out}(2)', vn)

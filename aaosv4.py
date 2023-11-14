@@ -16,8 +16,12 @@ with tibasiclib.TiBasicLib(
         vls_menu_title = tb.gen_var_lstr() # TODO also add the free memory
 
         with tb.scope():
+            # get time
+
             vls_time = tb.gen_var_lstr()
             tb.time_get(vls_time)
+
+            # get battery
 
             tb.call('getbtry')
             # returns battery level
@@ -29,7 +33,39 @@ with tibasiclib.TiBasicLib(
 
             tb.digit_to_lchar(v_battery, v_battery)
 
-            tb.lst_cat(vls_menu_title, vls_time, '{' + tb.LCHAR_SPACE +','+ v_battery +','+ tb.LCHAR_SLASH +','+ tb.LCHAR_4 + '}')
+            # get mem
+
+            tb.call('getmem')
+            # output: tb.VAR_RET_NUM[0]
+
+            vn_memory = tb.get_var_num()
+            tb.raw(f'{tb.VAR_RET_NUM[0]}->{vn_memory}')
+            tb.raw(f'int({vn_memory}/1024->{vn_memory}') # now in KiB, rounded down; value should be between 16 and 0
+
+            vls_memory = tb.gen_var_lstr()
+
+            tb.num0to16_to_lstr(vls_memory, vn_memory)
+
+            # glue together
+
+            tb.lst_cat(
+                vls_menu_title,
+                vls_time,
+                '{'
+                    + tb.LCHAR_SPACE +','+ v_battery +','+ tb.LCHAR_SLASH +','+ tb.LCHAR_4
+                    +','+ tb.LCHAR_SPACE
+                + '}'
+            )
+
+            tb.lst_cat(vls_menu_title, vls_menu_title, vls_memory)
+
+            tb.lst_cat(
+                vls_menu_title,
+                vls_menu_title,
+                '{'
+                    + tb.LCHAR_SLASH +','+ tb.LCHAR_1 +','+ tb.LCHAR_6 +','+ tb.LCHAR_K
+                + '}'
+            )
 
         # menu labels
 
