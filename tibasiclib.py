@@ -289,6 +289,9 @@ class TiBasicLib:
     ########## Input [updated]
     ##########
 
+    # def input_ut14(s, store_in, prompt_str=None): # TODO
+        # prompt = 'ENTER UP TO 14 CHARACTERS'
+
     def input(s, store, prompt):
         if s.is_var_num(store):
             return s.input_var_num(store, prompt)
@@ -321,9 +324,6 @@ class TiBasicLib:
         # trash : tb.VAR_TRASH_NUM[0]
 
         s.raw(f'{s.VAR_RET_LIST[0]}->{var}')
-
-    # def input_ut14(s, store_in, prompt_str=None): # TODO
-        # prompt = 'ENTER UP TO 14 CHARACTERS'
 
     def _input_raw(s, raw, prompt):
         if s.is_str(prompt):
