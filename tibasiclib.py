@@ -53,10 +53,9 @@ class StackInfo:
 
 class TiBasicLib:
 
-    # TODO use this ONLY FOR CONSTANTS AND NOTHING ELSE !!!!
-    # otherwise python full fuck you over
-
-    # constants
+    ##########
+    ########## constants
+    ##########
 
     DISP_LEN_X = 16
 
@@ -74,6 +73,10 @@ class TiBasicLib:
     VAR_TRASH_NUM = ['Y']
     VAR_TRASH_STR = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
 
+    ##########
+    ########## shared data over different instances
+    ##########
+
     # label
 
     label_count = 0
@@ -85,7 +88,7 @@ class TiBasicLib:
     stack_var_lstr = []
 
     ##########
-    ########## functions stuff
+    ########## functions
     ##########
 
     def __init__(s, archive=None):
