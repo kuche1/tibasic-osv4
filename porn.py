@@ -1,9 +1,9 @@
 
-import tibasiclib
+import lib_tibasic
 
 # TODO implement
 
-with tibasiclib.TiBasicLib() as tb:
+with lib_tibasic.TiBasicLib() as tb:
 
     tb.print('"NOT IMPLEMENTED YET"')
     tb.press_any_key()

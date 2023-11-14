@@ -1,8 +1,8 @@
 #! /usr/bin/env python3
 
-import tibasiclib
+import lib_tibasic
 
-with tibasiclib.TiBasicLib(
+with lib_tibasic.TiBasicLib(
         archive=False,
     ) as tb:
 

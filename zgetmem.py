@@ -1,9 +1,9 @@
 
-import tibasiclib
+import lib_tibasic
 
 # return in Ans
 
-with tibasiclib.TiBasicLib(
+with lib_tibasic.TiBasicLib(
         archive=False, # must be false, otherwise the return value will be lost
     ) as tb:
 

@@ -2,7 +2,7 @@
 import requests
 import bs4
 
-import tibasiclib
+import lib_tibasic
 
 # TODO da dovursha
 
@@ -61,7 +61,7 @@ import tibasiclib
 
 #         breakpoint()
 
-with tibasiclib.TiBasicLib(
+with lib_tibasic.TiBasicLib(
     ) as tb:
 
     tb.print_str('"ZA SEGA SAMO RASPISANIETO NA 88 BA4KA"')

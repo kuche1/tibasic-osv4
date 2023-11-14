@@ -1,10 +1,10 @@
 
-import tibasiclib
+import lib_tibasic
 
 NUMBER_OF_NOTES = 5
 LINES_PER_NOTE = 5
 
-with tibasiclib.TiBasicLib() as tb:
+with lib_tibasic.TiBasicLib() as tb:
 
     vars_title    = [f'[list]NTTT{tb.encode_to_1char(i)}' for i in range(NUMBER_OF_NOTES)]
     vars_content = [[f'[list]NTC{tb.encode_to_1char(i)}{tb.encode_to_1char(k)}' for k in range(LINES_PER_NOTE)]  for i in range(NUMBER_OF_NOTES)]

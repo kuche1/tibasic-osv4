@@ -1,5 +1,5 @@
 
-import tibasiclib
+import lib_tibasic
 from lib_character_map import CHARACTER_MAP
 
 # info
@@ -9,7 +9,7 @@ from lib_character_map import CHARACTER_MAP
 # output: tb.VAR_RET_LIST[0]
 # trash : tb.VAR_TRASH_NUM[0]
 
-with tibasiclib.TiBasicLib(
+with lib_tibasic.TiBasicLib(
         archive=False, # this fnc is used way too often
     ) as tb:
 

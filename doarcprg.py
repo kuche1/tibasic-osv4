@@ -1,9 +1,9 @@
 
-import tibasiclib
+import lib_tibasic
 
 # input: Ans - string - program name (eg notes)
 
-with tibasiclib.TiBasicLib(
+with lib_tibasic.TiBasicLib(
         archive=False, # THIS MIST NEVER BE ARCHIVED
     ) as tb:
 

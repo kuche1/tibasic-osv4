@@ -1,7 +1,7 @@
 
-import tibasiclib
+import lib_tibasic
 
-with tibasiclib.TiBasicLib(
+with lib_tibasic.TiBasicLib(
     ) as tb:
 
     lbl_reset = tb.gen_label()

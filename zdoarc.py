@@ -1,5 +1,5 @@
 
-import tibasiclib
+import lib_tibasic
 
 #info
 #   archives anything
@@ -26,7 +26,7 @@ import tibasiclib
 # "ETEST
 # "FTEST
 
-with tibasiclib.TiBasicLib(
+with lib_tibasic.TiBasicLib(
         archive=False, # THIS MIST NEVER BE ARCHIVED
     ) as tb:
 
