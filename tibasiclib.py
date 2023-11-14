@@ -62,10 +62,6 @@ class TiBasicLib:
 
     LSTR_SPACE = '{' + str(CHARACTER_MAP.index(' ')+1) + '}'
 
-    # variables
-
-    label_count = 0
-
     # variables used for args, return, trash
 
     VAR_ARG_STR = ['Str9']
@@ -77,6 +73,10 @@ class TiBasicLib:
 
     VAR_TRASH_NUM = ['Y']
     VAR_TRASH_STR = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
+
+    # label
+
+    label_count = 0
 
     # stack
 
