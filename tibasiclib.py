@@ -235,44 +235,6 @@ class TiBasicLib:
         return var.endswith(')')
 
     ##########
-    ########## IO [legacy]
-    ##########
-
-    def input_legacy(s, store_in, prompt_str=None):
-        to_write = ''
-
-        to_write += 'Input '
-
-        if prompt_str != None:
-            s._assert_str(prompt_str)
-
-            while len(prompt_str) > s.DISP_LEN_X:
-                s.print_str(f'"{prompt_str[:s.DISP_LEN_X]}"')
-                prompt_str = prompt_str[s.DISP_LEN_X:]
-
-            to_write += f'"{prompt_str}",'
-
-        to_write += f'{store_in}'
-
-        s.raw(to_write)
-    
-    def input_lstr(s, store_in, prompt_str):
-        assert s.is_var_list(store_in)
-        assert s.is_str(prompt_str)
-
-        s.input_legacy(s.var_arg_str_0, s.extract_str_data(prompt_str))
-
-        s.call('st2lst')
-        # input : tb.var_arg_str_0
-        # output: tb.var_ret_list_0
-        # trash : tb.var_trash_num_0
-
-        s.raw(f'{s.var_ret_list_0}->{store_in}')
-
-    # def input_ut14(s, store_in, prompt_str=None): # TODO
-        # prompt = 'ENTER UP TO 14 CHARACTERS'
-
-    ##########
     ########## Output [updated]
     ##########
 
@@ -319,6 +281,57 @@ class TiBasicLib:
     ##########
     ########## Input [updated]
     ##########
+
+    def input(s, store, prompt):
+        if s.is_var_num(store):
+            return s.input_var_num(store, prompt)
+        elif s.is_var_str(store):
+            return s.input_var_str(store, prompt)
+        elif s.is_var_lstr(store):
+            return s.input_var_lstr(store, prompt)
+        else:
+            assert False, f'unsupported data type of `{store}`'
+    
+    def input_var_num(s, var, prompt):
+        assert s.is_var_num(var)
+        return s._input_raw(var, prompt)
+
+    def input_var_str(s, var, prompt):
+        assert s.is_var_str(var)
+        return s._input_raw(var, prompt)
+    
+    def input_var_lstr(s, var, prompt): # TODO rename to input_var_lstr
+        assert s.is_var_lstr(var)
+
+        vs = s.var_trash_str[0]
+        s.input(vs, prompt)
+
+        s.raw(f'{vs}->{s.var_arg_str_0}')
+
+        s.call('st2lst')
+        # input : tb.var_arg_str_0
+        # output: tb.var_ret_list_0
+        # trash : tb.var_trash_num_0
+
+        s.raw(f'{s.var_ret_list_0}->{var}')
+
+    # def input_ut14(s, store_in, prompt_str=None): # TODO
+        # prompt = 'ENTER UP TO 14 CHARACTERS'
+
+    def _input_raw(s, raw, prompt):
+        if s.is_str(prompt):
+            data = s.extract_str_data(prompt)
+            while len(data) > s.DISP_LEN_X:
+                chunk = data[:s.DISP_LEN_X]
+                data = data[s.DISP_LEN_X:]
+                s.print(f'"{chunk}"')
+            prompt = f'"{data}"' # cannot save 1 char here TODO or can we?
+        elif s.is_var_str(prompt):
+            pass
+        else:
+            assert False, f'unsupported data type of `{prompt}`'
+
+        s.raw(f'Input {prompt},{raw}')
 
     ##########
     ########## control flow

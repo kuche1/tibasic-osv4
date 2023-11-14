@@ -110,9 +110,9 @@ with tibasiclib.TiBasicLib(
             month = tb.get_var_num()
             day = tb.get_var_num()
 
-            tb.input_legacy(year, 'YEAR: ')
-            tb.input_legacy(month, 'MONTH: ')
-            tb.input_legacy(day, 'DAY: ')
+            tb.input(year,  '"YEAR: "')
+            tb.input(month, '"MONTH: "')
+            tb.input(day,   '"DAY: "')
 
             tb.date_set(year, month, day)
 
@@ -168,8 +168,8 @@ with tibasiclib.TiBasicLib(
             minute = tb.get_var_num()
             second = tb.get_var_num()
 
-            tb.input_legacy(hour, 'HOUR: ')
-            tb.input_legacy(minute, 'MINUTE: ')
+            tb.input(hour,   '"HOUR: "')
+            tb.input(minute, '"MINUTE: "')
             tb.raw(f'0->{second}')
 
             tb.time_set(hour, minute, second)
