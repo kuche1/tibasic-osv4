@@ -17,4 +17,4 @@ with tibasiclib.TiBasicLib(
     vl_out = tb.VAR_RET_LIST[0]
     vn = tb.VAR_TRASH_NUM[0]
 
-    tb.raw(f'seq(inString({CHARACTER_MAP},sub({vs_in},{vn},1)),{vn},1,length({vs_in}))->{vl_out}')
+    tb.raw(f'seq(inString("{CHARACTER_MAP}",sub({vs_in},{vn},1)),{vn},1,length({vs_in}))->{vl_out}')

@@ -45,6 +45,7 @@ with tibasiclib.TiBasicLib(
             [
                 '"* EXIT"',
                 '"NOTES"',
+                '"TIMER"',
                 '"BATTERY"',
                 '"MEMORY"',
                 '"POWEROFF"',
@@ -53,12 +54,12 @@ with tibasiclib.TiBasicLib(
                 # '"RASPISANIE"',
                 '"TIME:GET"',
                 '"TIME:SET"',
-                '"TIMER"',
                 '"TEST"',
             ],
             [
                 lbl_exit,
                 lbl_notes,
+                lbl_timer,
                 lbl_battery,
                 lbl_memory,
                 lbl_poweroff,
@@ -67,7 +68,6 @@ with tibasiclib.TiBasicLib(
                 # lbl_raspisanie,
                 lbl_time_get,
                 lbl_time_set,
-                lbl_timer,
                 lbl_test,
             ]
         )

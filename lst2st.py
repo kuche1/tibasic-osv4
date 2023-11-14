@@ -19,7 +19,7 @@ with tibasiclib.TiBasicLib(
 
     tb.raw('" "')
     tb.raw(f'For({vn},1,dim({vl_in}))')
-    tb.raw(f'Ans+sub({CHARACTER_MAP},{vl_in}({vn}),1)')
+    tb.raw(f'Ans+sub("{CHARACTER_MAP}",{vl_in}({vn}),1)')
     tb.raw('End')
 
     ##### This is the code that handles what hapens if the str length is 0, however this time I won't allow for such cases

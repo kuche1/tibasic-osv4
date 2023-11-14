@@ -328,7 +328,7 @@ class TiBasicLib:
     def _input_raw(s, raw, prompt, ut14c=False):
         if ut14c:
             ut14c = False
-            s.print('"VVVVVVVVVVVVVVXX"') # TODO absolutely idiotic
+            s.print('"VVVVVVVVVVVVVVXX"') # TODO absolutely idiotic; adding some trimming wouldn't be bad
             return s._input_raw(raw, prompt, ut14c=ut14c)
 
         if s.is_str(prompt):
