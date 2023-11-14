@@ -238,7 +238,7 @@ class TiBasicLib:
     ########## IO [legacy]
     ##########
 
-    def input(s, store_in, prompt_str=None):
+    def input_legacy(s, store_in, prompt_str=None):
         to_write = ''
 
         to_write += 'Input '
@@ -260,7 +260,7 @@ class TiBasicLib:
         assert s.is_var_list(store_in)
         assert s.is_str(prompt_str)
 
-        s.input(s.var_arg_str_0, s.extract_str_data(prompt_str))
+        s.input_legacy(s.var_arg_str_0, s.extract_str_data(prompt_str))
 
         s.call('st2lst')
         # input : tb.var_arg_str_0
@@ -273,7 +273,7 @@ class TiBasicLib:
         # prompt = 'ENTER UP TO 14 CHARACTERS'
 
     ##########
-    ########## IO [updated]
+    ########## Output [updated]
     ##########
 
     # print
@@ -315,6 +315,10 @@ class TiBasicLib:
     def print_var_str(s, var):
         assert s.is_var_str(var)
         s.raw(f'Disp {var}')
+
+    ##########
+    ########## Input [updated]
+    ##########
 
     ##########
     ########## control flow

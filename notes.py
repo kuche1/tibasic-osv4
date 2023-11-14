@@ -49,14 +49,6 @@ with tibasiclib.TiBasicLib() as tb:
 
             tb.label(lbl_rename)
             with tb.scope():
-                # tb.input(tb.var_arg_str_0, 'ENTER NEW NAME: ')
-
-                # tb.call('st2lst')
-                # # input : tb.var_arg_str_0
-                # # output: tb.var_ret_list_0
-                # # trash : tb.var_trash_num_0
-
-                # tb.raw(f'{tb.var_ret_list_0}->{vars_title[note_idx]}')
                 tb.input_lstr(vars_title[note_idx], '"ENTER NEW NAME: "')
             tb.goto(lbl_main_menu)
 
@@ -82,14 +74,6 @@ with tibasiclib.TiBasicLib() as tb:
                 for line_idx, line_label in enumerate(line_labels):
                     tb.label(line_label)
                     with tb.scope():
-                        # tb.input(tb.var_arg_str_0, 'ENTR NEW CNTENT:')
-
-                        # tb.call('st2lst')
-                        # # input : tb.var_arg_str_0
-                        # # output: tb.var_ret_list_0
-                        # # trash : tb.var_trash_num_0
-
-                        # tb.raw(f'{tb.var_ret_list_0}->{vars_content[note_idx][line_idx]}')
                         tb.input_lstr(vars_content[note_idx][line_idx], '"ENTR NEW CNTENT:"')
                     tb.goto(lbl_note_main_menu)
 
