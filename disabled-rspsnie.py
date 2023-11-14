@@ -64,4 +64,4 @@ import tibasiclib
 with tibasiclib.TiBasicLib(
     ) as tb:
 
-    tb.printstr('ZA SEGA SAMO RASPISANIETO NA 88 BA4KA')
+    tb.print_str('"ZA SEGA SAMO RASPISANIETO NA 88 BA4KA"')

@@ -151,9 +151,10 @@ class TiBasicLib:
                 # send to calc
                 print(f'`{s.program_name}`: sending to calc')
                 try:
-                    term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
+                    term(['tilp', '--no-gui', '--silent', s.compiled_file]) # for some stupid reason adding `, silent=True` causes it to be unable to send `notes`
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
+                    sys.exit(1)
                 else:
                     shutil.copyfile(s.compiled_file, s.previously_sent_file)
 
@@ -214,14 +215,6 @@ class TiBasicLib:
     ########## IO [legacy]
     ##########
 
-    def printstr(s, text):
-        s._assert_str(text)
-
-        while text:
-            part = text[:s.DISP_LEN_X]
-            text = text[len(part):]
-            s.raw(f'Disp "{part}') # save 1 char by ommiting `"`
-        
     # TODO what is var is bigger than screen len
     def printvar(s, var):
         if len(var) == 1:
@@ -237,7 +230,7 @@ class TiBasicLib:
             s._assert_str(prompt_str)
 
             while len(prompt_str) > s.DISP_LEN_X:
-                s.printstr(prompt_str[:s.DISP_LEN_X])
+                s.print_str(f'"{prompt_str[:s.DISP_LEN_X]}"')
                 prompt_str = prompt_str[s.DISP_LEN_X:]
 
             to_write += f'"{prompt_str}",'
@@ -280,6 +273,8 @@ class TiBasicLib:
         
         assert False, f'could not determine type of `{atom}`'
     
+    # TODO add a check for lower case letters
+    # and turn them into upper case if a PM optimisation flag has been set
     def print_str(s, data):
         assert s.is_str(data)
 
@@ -423,7 +418,7 @@ class TiBasicLib:
             lbl_page_cur = lbl_page_next
 
     def press_any_key(s):
-        s.printstr('PRESS ANY KEY')
+        s.print_str('"PRESS ANY KEY"')
         s.raw('Repeat Ans')
         s.raw('getKey')
         s.raw('End')

@@ -96,23 +96,19 @@ with tibasiclib.TiBasicLib() as tb:
                 tb.label(lbl_exit_this_notes_content_exitor)
                 with tb.scope():
                     for content_var_idx, content_var in enumerate(vars_content[note_idx]):
-                        tb.printstr(f'ARCH CONTENT {content_var_idx+1}/{LINES_PER_NOTE}')
+                        tb.print_str(f'"ARCH CONTENT {content_var_idx+1}/{LINES_PER_NOTE}"')
                         tb.archive_var(content_var)
-                tb.printstr('ARCH CNTNTS DONE')
+                tb.print_str('"ARCH CNTNTS DONE"')
                 tb.goto(lbl_main_menu)
 
-                # tb.printstr('NOT IMPLEMENTED YET')
-                # tb.press_any_key()
-                # # tb.setupeditor_lstr(vars_content[i])
-                # # ...
             tb.goto(lbl_main_menu)
 
     tb.label(lbl_exit)
     with tb.scope():
         for i in range(NUMBER_OF_NOTES):
-            tb.printstr(f'ARCH TITLE {i+1}/{NUMBER_OF_NOTES}')
+            tb.print_str(f'"ARCH TITLE {i+1}/{NUMBER_OF_NOTES}"')
             tb.archive_var(vars_title[i])
-        tb.printstr('ARCH TITLES DONE')
+        tb.print_str('"ARCH TITLES DONE"')
 
 
     # create note titles if hey don't exist

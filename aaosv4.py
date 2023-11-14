@@ -86,11 +86,11 @@ with tibasiclib.TiBasicLib(
             tb.raw(f'{tb.var_ret_num_0}*20->{low_bound}')
             tb.raw(f'{low_bound}+20->{high_bound}')
 
-            tb.printstr('battery between')
+            tb.print_str('"BATTERY BETWEEN"')
             tb.printvar(low_bound)
-            tb.printstr('and')
+            tb.print_str('"AND"')
             tb.printvar(high_bound)
-            tb.printstr('percent')
+            tb.print_str('"PERCENT"')
 
             tb.press_any_key()
         tb.goto(lbl_main_menu) # has to be here so that the `scope onexit` functionality executes
@@ -132,7 +132,7 @@ with tibasiclib.TiBasicLib(
             free_mem = tb.get_var_num()
             tb.raw(f'{tb.var_ret_num_0}->{free_mem}')
 
-            tb.printstr('free memory:')
+            tb.print_str('"FREE MEMORY:"')
             tb.printvar(free_mem)
 
             tb.press_any_key()
