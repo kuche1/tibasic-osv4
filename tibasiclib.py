@@ -7,6 +7,8 @@ import shutil
 import time
 import sys
 
+from lib_character_map import CHARACTER_MAP
+
 # TODO
 # check if the file ends with new line and if that is the case delete it
 # try `expr(` for string to num conversion
@@ -43,28 +45,26 @@ class ContextManager:
             s.tibasicobj._delete_last_scope()
 
 class StackInfo:
-    in_use = False
-    var_count = 0
-    name = None
-    allocated_lists = []
+    def __init__(s):
+        s.in_use = False
+        s.var_count = 0
+        s.name = None
+        s.allocated_lists = []
 
 class TiBasicLib:
 
-    # display
+    # TODO use this ONLY FOR CONSTANTS AND NOTHING ELSE !!!!
+    # otherwise python full fuck you over
+
+    # constants
 
     DISP_LEN_X = 16
+
+    LSTR_SPACE = '{' + str(CHARACTER_MAP.index(' ')+1) + '}'
 
     # variables
 
     label_count = 0
-
-    vars_str = ['Str0', 'Str1', 'Str2']
-    vars_str_in_use = [False] * len(vars_str)
-    vars_str_used_in_this_scope = []
-
-    # vars_num = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y']
-    # vars_num_in_use = [False] * len(vars_num)
-    # vars_num_used_in_this_scope = []
 
     # variables used for args, return, trash
 
@@ -76,7 +76,7 @@ class TiBasicLib:
     var_ret_list_0 = 'L6'
 
     var_trash_num_0 = 'Y'
-    var_trash_str = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3']
+    var_trash_str = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
 
     # stack
 
@@ -193,6 +193,9 @@ class TiBasicLib:
         return data[1:-1]
     
     # list
+
+    def is_list(s, var):
+        return var.startswith('{') and var.endswith('}')
 
     def is_var_list(s, var):
         prefix = False
@@ -343,12 +346,28 @@ class TiBasicLib:
     def menu(s, title, options, labels):
         assert len(options) == len(labels)
   
-        # if len(options) <= 7:
-        #     if all([not s.is_var_list(opt) for opt in options]):
-        #         return s.menu_raw(title, options, labels)
+        if len(options) <= 7:
+            if all([s.is_str(opt) and s.is_var_str(opt) for opt in options]):
+                return s.menu_raw(title, options, labels)
 
         if s.is_var_lstr(title):
-            assert False, f'lstr not implemented yet for menu titles: `{title}`'
+            s.raw(f'{title}->{s.var_arg_list_0}')
+
+            s.call('lst2st')
+            # input : tb.var_arg_list_0
+            # output: tb.var_ret_str_0
+            # trash : tb.var_trash_num_0
+
+            s.raw(f'{s.var_ret_str_0}->{s.var_trash_str[5]}')
+
+            title = s.var_trash_str[5]
+        
+        elif s.is_str(title):
+            pass
+        elif s.if_var_str(title):
+            pass
+        else:
+            assert False, f'unsupported data type of `{title}`'
 
         lbl_page_cur = s.get_label()
         lbl_page_prev = lbl_page_cur
@@ -568,41 +587,15 @@ class TiBasicLib:
         s.label_count += 1
         return ret
 
-    def _get_var(s, vars, vars_in_use, vars_used_in_scope):
-        if False not in vars_in_use:
-            raise Exception('all vars used; time to implement a stack :(')
-        idx = vars_in_use.index(False)
-        vars_in_use[idx] = True
-        vars_used_in_scope[-1].append(idx)
-        return vars[idx]
-
     def get_var_num(s):
-        # return s._get_var(s.vars_num, s.vars_num_in_use, s.vars_num_used_in_this_scope)
         return s.get_var_num_stack()
 
-    def get_var_str(s):
-        # TODO maybe we could use Str9, Str8 to save the prev value of Str0, Str1 when requested this way
-        # and we could restore it on scope exit
-        return s._get_var(s.vars_str, s.vars_str_in_use, s.vars_str_used_in_this_scope)
-
     def _create_new_scope(s):
-        # s.vars_num_used_in_this_scope.append([])
-        s.vars_str_used_in_this_scope.append([])
         s.stack_var_num.append(StackInfo())
         s.stack_var_lstr.append(StackInfo())
         s.stack_num += 1
 
     def _delete_last_scope(s):
-        # for var_idx in s.vars_num_used_in_this_scope[-1]:
-        #     assert s.vars_num_in_use[var_idx] == True
-        #     s.vars_num_in_use[var_idx] = False
-        # del s.vars_num_used_in_this_scope[-1]
-
-        for var_idx in s.vars_str_used_in_this_scope[-1]:
-            assert s.vars_str_in_use[var_idx] == True
-            s.vars_str_in_use[var_idx] = False
-        del s.vars_str_used_in_this_scope[-1]
-
         stack = s.stack_var_num[-1]
         if stack.in_use:
             for l in stack.allocated_lists:
@@ -625,7 +618,7 @@ class TiBasicLib:
             stack.in_use = True
             num = s.encode_to_1char(s.stack_num) # if you get an error here you can either: (1: stop abusibng `s.stack_num`) (2: extend the 1char encoder) (3: use a 2char encoder)
             stack.name = f'[list]S{num}'
-            stack.allocated_lists += [stack.name]
+            stack.allocated_lists.append(stack.name)
         stack.var_count += 1 # tibasic starts count at 1
         num = s.encode_to_1char(stack.var_count)
         ret = f'{stack.name}({num})'
@@ -668,6 +661,16 @@ class TiBasicLib:
         assert num >= 0
         return '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[num] # if this crashes then we need to add some more characters
         # also it's fine if some if these characters cause touble and we need to remove them
+
+    ##########
+    ########## lists
+    ##########
+
+    # NOTE don't use this for appending a single element since this is way too slow, in that case use http://tibasicdev.wikidot.com/augment
+    def lst_cat(s, store_in, list1, list2):
+        assert s.is_var_list(list1) or s.is_list(list1)
+        assert s.is_var_list(list2) or s.is_list(list2)
+        s.raw(f'augment({list1},{list2})->{store_in}')
 
     ##########
     ########## other

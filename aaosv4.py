@@ -13,16 +13,17 @@ with tibasiclib.TiBasicLib(
 
         # menu title
 
-        vs_menu_title = tb.get_var_str()
+        vls_menu_title = tb.gen_var_lstr()
 
         with tb.scope():
-            vs_date = tb.get_var_str()
-            tb.date_get(vs_date)
+            vls_date = tb.gen_var_lstr()
+            tb.date_get(vls_date)
 
-            vs_time = tb.get_var_str()
-            tb.time_get(vs_time)
+            vls_time = tb.gen_var_lstr()
+            tb.time_get(vls_time)
 
-            tb.raw(f'{vs_date}+" "+{vs_time}->{vs_menu_title}')
+            tb.lst_cat(vls_menu_title, vls_date, tb.LSTR_SPACE)
+            tb.lst_cat(vls_menu_title, vls_menu_title, vls_time)
 
         # menu labels
 
@@ -40,7 +41,7 @@ with tibasiclib.TiBasicLib(
         lbl_test = tb.get_label()
 
         tb.menu(
-            vs_menu_title,
+            vls_menu_title,
             [
                 '"* EXIT"',
                 '"NOTES"',
