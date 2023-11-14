@@ -166,17 +166,6 @@ class TiBasicLib:
                     shutil.copyfile(s.compiled_file, s.previously_sent_file)
 
     ##########
-    ########## asserts, checks, data extraction [legacy]
-    ##########
-
-    def _assert_str(s, text): # TODO can be improved; also naming is confusing, will probably be better if we have `str` and `rawstr`
-        assert type(text) == str
-        assert '"' not in text
-
-    def _assert_strvar_or_str(s, thing):
-        assert s.is_var_str(thing) or s.is_str(thing)
-
-    ##########
     ########## asserts, checks, data extraction [updated]
     ##########
 
@@ -334,6 +323,100 @@ class TiBasicLib:
         s.raw(f'Input {prompt},{raw}')
 
     ##########
+    ########## Menu
+    ##########
+    
+    def menu(s, title, options, labels):
+        assert len(options) == len(labels)
+  
+        # if len(options) <= 7:
+        #     if all([not s.is_var_list(opt) for opt in options]):
+        #         return s.menu_raw(title, options, labels)
+
+        if s.is_var_lstr(title):
+            assert False, f'lstr not implemented yet for menu titles: `{title}`'
+
+        lbl_page_cur = s.get_label()
+        lbl_page_prev = lbl_page_cur
+
+        while len(options):
+            if len(options) <= 5:
+                lbl_page_next = lbl_page_cur
+                str_next = '"** LAST PAGE"'
+            else:
+                lbl_page_next = s.get_label()
+                str_next = '"* NEXT"'
+
+            if lbl_page_prev == lbl_page_cur:
+                str_prev = '"** FIRST PAGE"'
+            else:
+                str_prev = '"* PREV"'
+
+            s.label(lbl_page_cur)
+
+            options_slice = options[:5]
+            labels_slice  = labels [:5]
+
+            for idx, opt in enumerate(options_slice):
+                if s.is_str(opt):
+                    pass
+                elif s.is_var_str(opt):
+                    pass
+                elif s.is_var_list(opt):
+                    s.raw(f'{opt}->{s.var_arg_list_0}')
+
+                    s.call('lst2st')
+                    # input : tb.var_arg_list_0
+                    # output: tb.var_ret_str_0
+                    # trash : tb.var_trash_num_0
+
+                    s.raw(f'{s.var_ret_str_0}->{s.var_trash_str[idx]}')
+
+                    options_slice[idx] = s.var_trash_str[idx]
+                else:
+                    assert False, f'unsupported type of `{opt}`'
+
+            s._menu_raw(
+                title, # TODO? add page num
+                options_slice + [str_prev,      str_next],
+                labels_slice  + [lbl_page_prev, lbl_page_next],
+            )
+            options = options[len(options_slice):]
+            labels  = labels [len(labels_slice):]
+
+            lbl_page_prev = lbl_page_cur
+            lbl_page_cur = lbl_page_next
+
+    def _menu_raw(s, title, options, labels):
+        if s.is_str(title):
+            data = s.extract_str_data(title)
+            if len(data) > s.DISP_LEN_X:
+                print(f'WARNING: menu title will clip `{title}`')
+        elif s.is_var_str(title):
+            pass
+        else:
+            assert False, f'unsupported type of `{title}`'
+    
+        assert len(options) <= 7
+        for opt in options:
+            if s.is_str(opt):
+                data = s.extract_str_data(opt)
+                if len(data) > 14:
+                    print(f'WARNING: menu item will clip `{opt}`')
+            elif s.is_var_str(opt):
+                pass
+            else:
+                assert False, f'unsupported type of `{opt}`'
+
+        labels = [lbl.upper() for lbl in labels]
+
+        code = f'Menu({title}'
+        for opt, lab in zip(options, labels, strict=True):
+            code += f',{opt},{lab}'
+
+        s.raw(code)
+
+    ##########
     ########## control flow
     ##########
 
@@ -348,6 +431,7 @@ class TiBasicLib:
         s.raw(f'Goto {label}')
     
     # TODO would be awesome if we could find a way to check if only 1 line of code is in the if
+    # i vsu6tnost moje ako proverim kolko novi reda sa zapisani v faila sprqmo posledniq put
     def iff(s, cond):
         s.raw(f'If {cond}')
         s.raw('Then')
@@ -393,74 +477,6 @@ class TiBasicLib:
         if dep_tb.archive:
             s.raw(f'"{program_name}') # set Ans
             s.raw('prgmDOARCPRG')
-
-    def menu_raw(s, title, options, labels):
-        s._assert_strvar_or_str(title)
-    
-        assert len(options) <= 7
-        for opt in options:
-            s._assert_strvar_or_str(opt)
-            # TODO check if str and if len is >14 and warn that it will clip
-
-        labels = [lbl.upper() for lbl in labels]
-
-        code = f'Menu({title}'
-        for opt, lab in zip(options, labels, strict=True):
-            code += f',{opt},{lab}'
-
-        s.raw(code)
-    
-    def menu(s, title, options, labels):
-        assert len(options) == len(labels)
-  
-        if len(options) <= 7:
-            if all([not s.is_var_list(opt) for opt in options]):
-                return s.menu_raw(title, options, labels)
-
-        lbl_page_cur = s.get_label()
-        lbl_page_prev = lbl_page_cur
-
-        while len(options):
-            if len(options) <= 5:
-                lbl_page_next = lbl_page_cur
-                str_next = '"** LAST PAGE"'
-            else:
-                lbl_page_next = s.get_label()
-                str_next = '"* NEXT"'
-
-            if lbl_page_prev == lbl_page_cur:
-                str_prev = '"** FIRST PAGE"'
-            else:
-                str_prev = '"* PREV"'
-
-            s.label(lbl_page_cur)
-
-            options_slice = options[:5]
-            labels_slice  = labels [:5]
-
-            for idx, opt in enumerate(options_slice):
-                if s.is_var_list(opt):
-                    s.raw(f'{opt}->{s.var_arg_list_0}')
-
-                    s.call('lst2st')
-                    # input : tb.var_arg_list_0
-                    # output: tb.var_ret_str_0
-                    # trash : tb.var_trash_num_0
-
-                    s.raw(f'{s.var_ret_str_0}->{s.var_trash_str[idx]}')
-
-                    options_slice[idx] = s.var_trash_str[idx]
-
-            s.menu_raw(
-                title, # TODO? add page num
-                options_slice + [str_prev,      str_next],
-                labels_slice  + [lbl_page_prev, lbl_page_next],
-            )
-            options = options[len(options_slice):]
-            labels  = labels [len(labels_slice):]
-
-            lbl_page_prev = lbl_page_cur
-            lbl_page_cur = lbl_page_next
 
     def press_any_key(s):
         s.print_str('"PRESS ANY KEY"')

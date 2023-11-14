@@ -36,7 +36,7 @@ with tibasiclib.TiBasicLib() as tb:
             tb.menu(
                 '"NOTE ACTION"',
                 [
-                    '"EXIT"',
+                    '"* EXIT"',
                     '"EDIT"',
                     '"RENAME"',
                 ],
@@ -66,7 +66,7 @@ with tibasiclib.TiBasicLib() as tb:
                 tb.label(lbl_note_main_menu)
 
                 tb.menu(
-                    '"EDIT"',
+                    '"EDIT CONTENT"',
                     ['"* EXIT"']                         + vars_content[note_idx],
                     [lbl_exit_this_notes_content_exitor] + line_labels,
                 )
