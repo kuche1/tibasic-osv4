@@ -77,10 +77,6 @@ class TiBasicLib:
     ########## shared data over different instances
     ##########
 
-    # label
-
-    label_count = 0
-
     # stack
 
     stack_num = 0 # used for youngest stack
@@ -117,6 +113,8 @@ class TiBasicLib:
                                     # note that this is not an accurate representation of the size the program will take on the calc
 
         s.context_manager = ContextManager(s, lambda:0)
+
+        s.label_count = 0
 
     def __enter__(s):
         s.context_manager.__enter__()
