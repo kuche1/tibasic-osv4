@@ -109,27 +109,3 @@ with tibasiclib.TiBasicLib() as tb:
             tb.print_str(f'"ARCH TITLE {i+1}/{NUMBER_OF_NOTES}"')
             tb.archive_var(vars_title[i])
         tb.print_str('"ARCH TITLES DONE"')
-
-
-    # create note titles if hey don't exist
-    # this will unarchive them if they do
-    # tb.setupeditor('[list]')
-
-
-    # tb.input(tb.var_arg_str_0, 'idkman:')
-
-    # tb.call('st2lst')
-    # # input : tb.var_arg_str_0
-    # # output: tb.var_ret_list_0
-    # # trash : tb.var_trash_num_0
-
-    # tb.raw(f'{tb.var_ret_list_0}->{tb.var_arg_list_0}')
-
-    # tb.call('lst2st')
-    # # input : tb.var_arg_list_0
-    # # output: tb.var_ret_str_0
-    # # trash : tb.var_trash_num_0
-
-    # tb.printvar(tb.var_ret_str_0)
-
-    # tb.press_any_key()

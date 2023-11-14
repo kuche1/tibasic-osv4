@@ -237,12 +237,6 @@ class TiBasicLib:
     ########## IO [legacy]
     ##########
 
-    # TODO what is var is bigger than screen len
-    def printvar(s, var):
-        if len(var) == 1:
-            assert var == var.upper()
-        s.raw(f'Disp {var}')
-
     def input(s, store_in, prompt_str=None):
         to_write = ''
 
@@ -314,6 +308,9 @@ class TiBasicLib:
         s.raw(f'Disp "{data}') # save 1 char
     
     def print_var_num(s, var):
+        s.raw(f'Disp {var}')
+    
+    def print_var_str(s, var):
         s.raw(f'Disp {var}')
 
     ##########

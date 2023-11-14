@@ -99,7 +99,7 @@ with tibasiclib.TiBasicLib(
         with tb.scope():
             date = tb.get_var_str()
             tb.date_get(date)
-            tb.printvar(date)
+            tb.print(date)
 
             tb.press_any_key()
         tb.goto(lbl_main_menu)
@@ -133,7 +133,7 @@ with tibasiclib.TiBasicLib(
             tb.raw(f'{tb.var_ret_num_0}->{free_mem}')
 
             tb.print_str('"FREE MEMORY:"')
-            tb.printvar(free_mem)
+            tb.print(free_mem)
 
             tb.press_any_key()
         tb.goto(lbl_main_menu)
@@ -158,7 +158,7 @@ with tibasiclib.TiBasicLib(
             tb.label(lbl_time_get)
             time = tb.get_var_str()
             tb.time_get(time)
-            tb.printvar(date)
+            tb.print(date)
             tb.press_any_key()
         tb.goto(lbl_main_menu)
 

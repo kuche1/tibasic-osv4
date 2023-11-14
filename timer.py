@@ -25,7 +25,7 @@ with tibasiclib.TiBasicLib(
     tb.utime_sec(vn_now)
     tb.raw(f'{vn_now}-{vn_start}->{vn_now}')
     tb.print_str('"TIME PASSED:"')
-    tb.printvar(vn_now)
+    tb.print(vn_now)
     tb.print_str('"SECOND(S)"')
     tb.press_any_key()
     tb.raw(f'Goto {lbl_main_loop}')
