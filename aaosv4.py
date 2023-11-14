@@ -37,38 +37,39 @@ with tibasiclib.TiBasicLib(
         lbl_time_get = tb.get_label()
         lbl_time_set = tb.get_label()
         lbl_timer = tb.get_label()
+        lbl_test = tb.get_label()
 
         tb.menu(
             vs_menu_title,
             [
-                '"EXIT"',
+                '"* EXIT"',
+                '"NOTES"',
                 '"BATTERY"',
                 '"DATE:GET"',
                 '"DATE:SET"',
                 '"MEMORY"',
-                '"NOTES"',
                 '"POWEROFF"',
                 # '"RASPISANIE"',
                 '"TIME:GET"',
                 '"TIME:SET"',
                 '"TIMER"',
+                '"TEST"',
             ],
             [
                 lbl_exit,
+                lbl_notes,
                 lbl_battery,
                 lbl_date_get,
                 lbl_date_set,
                 lbl_memory,
-                lbl_notes,
                 lbl_poweroff,
                 # lbl_raspisanie,
                 lbl_time_get,
                 lbl_time_set,
                 lbl_timer,
+                lbl_test,
             ]
         )
-
-        lbl_press_any_key = tb.get_label()
 
         # with tb.if_var_equ_strs(command, CMDS_BATTERY):
         with tb.scope():
@@ -90,19 +91,21 @@ with tibasiclib.TiBasicLib(
             tb.printstr('and')
             tb.printvar(high_bound)
             tb.printstr('percent')
-        tb.goto(lbl_press_any_key) # has to be here so that the `scope onexit` functionality executes
 
-        # with tb.if_var_equ_strs(command, CMDS_DATE_GET):
+            tb.press_any_key()
+        tb.goto(lbl_main_menu) # has to be here so that the `scope onexit` functionality executes
+
+        tb.label(lbl_date_get)
         with tb.scope():
-            tb.label(lbl_date_get)
             date = tb.get_var_str()
             tb.date_get(date)
             tb.printvar(date)
-        tb.goto(lbl_press_any_key)
 
-        # with tb.if_var_equ_strs(command, CMDS_DATE_SET):
+            tb.press_any_key()
+        tb.goto(lbl_main_menu)
+
+        tb.label(lbl_date_set)
         with tb.scope():
-            tb.label(lbl_date_set)
             year = tb.get_var_num()
             month = tb.get_var_num()
             day = tb.get_var_num()
@@ -131,7 +134,9 @@ with tibasiclib.TiBasicLib(
 
             tb.printstr('free memory:')
             tb.printvar(free_mem)
-        tb.goto(lbl_press_any_key)
+
+            tb.press_any_key()
+        tb.goto(lbl_main_menu)
 
         tb.label(lbl_notes)
         with tb.scope():
@@ -154,7 +159,8 @@ with tibasiclib.TiBasicLib(
             time = tb.get_var_str()
             tb.time_get(time)
             tb.printvar(date)
-        tb.goto(lbl_press_any_key)
+            tb.press_any_key()
+        tb.goto(lbl_main_menu)
 
         tb.label(lbl_time_set)
         with tb.scope():
@@ -175,10 +181,10 @@ with tibasiclib.TiBasicLib(
             tb.call('timer')
         tb.continuee(lbl_main_menu)
 
-        # TODO prgmNOTES
-
+        tb.label(lbl_test)
         with tb.scope():
-            tb.label(lbl_press_any_key)
+            tb.print('"hi"')
             tb.press_any_key()
+        tb.continuee(lbl_main_menu)
 
     tb.label(lbl_main_menu_break)

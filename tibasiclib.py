@@ -46,7 +46,7 @@ class TiBasicLib:
 
     # display
 
-    disp_len_x = 16
+    DISP_LEN_X = 16
 
     # variables
 
@@ -77,7 +77,9 @@ class TiBasicLib:
     stack = []
     stack_num = 0 # used for youngest stack
 
-    # functions stuff
+    ##########
+    ########## functions stuff
+    ##########
 
     def __init__(s, archive=None):
         # get filename of caller
@@ -155,7 +157,9 @@ class TiBasicLib:
                 else:
                     shutil.copyfile(s.compiled_file, s.previously_sent_file)
 
-    # asserts, checks, data extraction
+    ##########
+    ########## asserts, checks, data extraction [legacy]
+    ##########
 
     def _assert_str(s, text): # TODO can be improved; also naming is confusing, will probably be better if we have `str` and `rawstr`
         assert type(text) == str
@@ -163,9 +167,6 @@ class TiBasicLib:
     
     def _assert_strvar_or_str(s, thing):
         assert s.is_strvar(thing) or s.is_str(thing)
-    
-    def is_str(s, text):
-        return text.startswith('"') and text.endswith('"')
     
     def extract_str(s, text):
         assert s.is_str(text)
@@ -177,13 +178,47 @@ class TiBasicLib:
     def is_list(s, var):
         return var.startswith('L') or var.startswith('[list]')
 
-    # IO
+    ##########
+    ########## asserts, checks, data extraction [updated]
+    ##########
+
+    # string
+
+    def is_str(s, text):
+        if text.startswith('"'):
+            if text.endswith('"'):
+                data = text[1:-1] # this sucks but otherwise we get infinite recursion
+                assert '"' not in data, f'using `"` in a string is not allowed: `{text}`'
+                return True
+            assert False, f'strings that start with `"` but do not end with `"` are not considered valid: `{text}`'
+        return False
+
+    def is_var_str(s, var):
+        return var in ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']
+    
+    def is_var_lstr(s, var):
+        return s.is_var_lst(var)
+    
+    def extract_str_data(s, data):
+        assert s.is_str(data)
+        return data[1:-1]
+    
+    # list
+
+    def is_var_lst(s, var):
+        if var.startswith('[list]'):
+            return True
+        return var in ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6']
+
+    ##########
+    ########## IO [legacy]
+    ##########
 
     def printstr(s, text):
         s._assert_str(text)
 
         while text:
-            part = text[:s.disp_len_x]
+            part = text[:s.DISP_LEN_X]
             text = text[len(part):]
             s.raw(f'Disp "{part}') # save 1 char by ommiting `"`
         
@@ -201,9 +236,9 @@ class TiBasicLib:
         if prompt_str != None:
             s._assert_str(prompt_str)
 
-            while len(prompt_str) > s.disp_len_x:
-                s.printstr(prompt_str[:s.disp_len_x])
-                prompt_str = prompt_str[s.disp_len_x:]
+            while len(prompt_str) > s.DISP_LEN_X:
+                s.printstr(prompt_str[:s.DISP_LEN_X])
+                prompt_str = prompt_str[s.DISP_LEN_X:]
 
             to_write += f'"{prompt_str}",'
 
@@ -227,7 +262,40 @@ class TiBasicLib:
     # def input_ut14(s, store_in, prompt_str=None): # TODO
         # prompt = 'ENTER UP TO 14 CHARACTERS'
 
-    # control flow
+    ##########
+    ########## IO [updated]
+    ##########
+
+    # print
+
+    def print(s, atom):
+        if s.is_str(atom):
+            return s.print_str(atom)
+
+        if s.is_var_str(atom):
+            return s.print_var_str(atom)
+        
+        if s.is_var_lstr(atom):
+            return s.print_var_lstr(atom)
+        
+        assert False, f'could not determine type of `{atom}`'
+    
+    def print_str(s, data):
+        assert s.is_str(data)
+
+        data = s.extract_str_data(data)
+
+        while len(data) > s.DISP_LEN_X:
+            chunk = data[:s.DISP_LEN_X]
+            data = data[s.DISP_LEN_X:]
+
+            s.raw(f'Disp "{chunk}') # save 1 char
+        
+        s.raw(f'Disp "{data}') # save 1 char
+
+    ##########
+    ########## control flow
+    ##########
 
     def label(s, label):
         # TODO since we're doing this in an idiotic manner we can actually check
@@ -360,7 +428,9 @@ class TiBasicLib:
         s.raw('getKey')
         s.raw('End')
 
-    # date and time
+    ##########
+    ########## date and time
+    ##########
 
     def date_get(s, var_out):
         assert var_out in s.vars_str
@@ -379,7 +449,9 @@ class TiBasicLib:
     def utime_sec(s, var_num):
         s.raw(f'startTmr->{var_num}')
 
-    # variable generation and scopes
+    ##########
+    ########## variable generation and scopes
+    ##########
 
     def get_label(s):
         assert s.label_count <= 99, 'time to fix this'
@@ -469,7 +541,9 @@ class TiBasicLib:
         return '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[num] # if this crashes then we need to add some more characters
         # also it's fine if some if these characters cause touble and we need to remove them
 
-    # other
+    ##########
+    ########## other
+    ##########
 
     def raw(s, code, end='\n'):
         s.f.write(code)
