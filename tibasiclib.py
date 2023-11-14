@@ -66,7 +66,7 @@ class TiBasicLib:
     LCHAR_SLASH = str(CHARACTER_MAP.index('/') + 1)
     LCHAR_SPACE = str(CHARACTER_MAP.index(' ') + 1)
 
-    DIGIT_TO_LCHAR = 1
+    DIGIT_TO_LCHAR = CHARACTER_MAP.index('0') + 1
     # add that much to a digit (so 0 to 9) and it will be valid to it's equivalent lchar
 
     # variables used for args, return, trash
