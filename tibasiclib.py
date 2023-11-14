@@ -121,7 +121,7 @@ class TiBasicLib:
 
             # compile
             while True:
-                print(f'`{s.program_name}`: compiling')
+                #print(f'`{s.program_name}`: compiling')
                 cmd = ['ti84cc']
                 if s.archive:
                     cmd += ['-a']
@@ -130,9 +130,9 @@ class TiBasicLib:
 
                 if s.archive == None:
                     compiled_binary_size = os.path.getsize(s.compiled_file)
-                    print(f'`{s.program_name}`: compiled binary size is `{compiled_binary_size}` bytes')
+                    #print(f'`{s.program_name}`: compiled binary size is `{compiled_binary_size}` bytes')
                     if compiled_binary_size >= s.archive_if_that_big:
-                        print(f'`{s.program_name}`: compiled binary size is >= `{s.archive_if_that_big}` bytes; archive flag will be set')
+                        #print(f'`{s.program_name}`: compiled binary size is >= `{s.archive_if_that_big}` bytes; archive flag will be set')
                         s.archive = True
                     else:
                         s.archive = False
@@ -146,7 +146,8 @@ class TiBasicLib:
                 skip = False
 
             if skip:
-                print(f'`{s.program_name}`: skipping sending')
+                #print(f'`{s.program_name}`: skipping sending')
+                pass
             else:
                 # send to calc
                 print(f'`{s.program_name}`: sending to calc')
@@ -176,9 +177,6 @@ class TiBasicLib:
     def is_strvar(s, var):
         return var.startswith('Str') # TODO can be improved
 
-    def is_list(s, var):
-        return var.startswith('L') or var.startswith('[list]')
-
     ##########
     ########## asserts, checks, data extraction [updated]
     ##########
@@ -198,7 +196,7 @@ class TiBasicLib:
         return var in ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']
     
     def is_var_lstr(s, var):
-        return s.is_var_lst(var)
+        return s.is_var_list(var)
     
     def extract_str_data(s, data):
         assert s.is_str(data)
@@ -206,7 +204,7 @@ class TiBasicLib:
     
     # list
 
-    def is_var_lst(s, var):
+    def is_var_list(s, var):
         if var.startswith('[list]'):
             return True
         return var in ['L0', 'L1', 'L2', 'L3', 'L4', 'L5', 'L6']
@@ -240,7 +238,7 @@ class TiBasicLib:
         s.raw(to_write)
     
     def input_lstr(s, store_in, prompt_str):
-        assert s.is_list(store_in)
+        assert s.is_var_list(store_in)
         assert s.is_str(prompt_str)
 
         s.input(s.var_arg_str_0, s.extract_str(prompt_str))
@@ -369,7 +367,7 @@ class TiBasicLib:
         assert len(options) == len(labels)
   
         if len(options) <= 7:
-            if all([not s.is_list(opt) for opt in options]):
+            if all([not s.is_var_list(opt) for opt in options]):
                 return s.menu_raw(title, options, labels)
 
         lbl_page_cur = s.get_label()
@@ -394,7 +392,7 @@ class TiBasicLib:
             labels_slice  = labels [:5]
 
             for idx, opt in enumerate(options_slice):
-                if s.is_list(opt):
+                if s.is_var_list(opt):
                     s.raw(f'{opt}->{s.var_arg_list_0}')
 
                     s.call('lst2st')
