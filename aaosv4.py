@@ -21,7 +21,7 @@ with tibasiclib.TiBasicLib(
 
             vs_time = tb.get_var_str()
             tb.time_get(vs_time)
-            
+
             tb.raw(f'{vs_date}+" "+{vs_time}->{vs_menu_title}')
 
         # menu labels
