@@ -24,6 +24,7 @@ with tibasiclib.TiBasicLib(
 
             tb.lst_cat(vls_menu_title, vls_date, tb.LSTR_SPACE)
             tb.lst_cat(vls_menu_title, vls_menu_title, vls_time)
+            # TODO also add battery level
 
         # menu labels
 
