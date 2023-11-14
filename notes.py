@@ -1,14 +1,13 @@
 
 import tibasiclib
 
-NUMBER_OF_NOTES = 8
+NUMBER_OF_NOTES = 5
+LINES_PER_NOTE = 5
 
 with tibasiclib.TiBasicLib() as tb:
 
-    assert len(str(NUMBER_OF_NOTES)) <= 2 # now we have 3 chars left for the list name
-    
-    vars_title = [f'[list]NTT{i}' for i in range(NUMBER_OF_NOTES)] # TODO implement a function for a more eficient encoder (we could be saving 1 char here)
-    vars_content = [f'[list]NTC{i}' for i in range(NUMBER_OF_NOTES)]
+    vars_title    = [f'[list]NTTT{tb.encode_to_1char(i)}' for i in range(NUMBER_OF_NOTES)]
+    vars_content = [[f'[list]NTC{tb.encode_to_1char(i)}{tb.encode_to_1char(k)}' for k in range(LINES_PER_NOTE)]  for i in range(NUMBER_OF_NOTES)]
 
     lbl_exit = tb.get_label()
 
@@ -50,29 +49,70 @@ with tibasiclib.TiBasicLib() as tb:
 
             tb.label(lbl_rename)
             with tb.scope():
-                tb.input(tb.var_arg_str_0, 'ENTER NEW NAME: ')
+                # tb.input(tb.var_arg_str_0, 'ENTER NEW NAME: ')
 
-                tb.call('st2lst')
-                # input : tb.var_arg_str_0
-                # output: tb.var_ret_list_0
-                # trash : tb.var_trash_num_0
+                # tb.call('st2lst')
+                # # input : tb.var_arg_str_0
+                # # output: tb.var_ret_list_0
+                # # trash : tb.var_trash_num_0
 
-                tb.raw(f'{tb.var_ret_list_0}->{vars_title[note_idx]}')
+                # tb.raw(f'{tb.var_ret_list_0}->{vars_title[note_idx]}')
+                tb.input_lstr(vars_title[note_idx], '"ENTER NEW NAME: "')
             tb.goto(lbl_main_menu)
 
             tb.label(lbl_edit)
+            with tb.scope():
 
-            # tb.setupeditor_lstr(vars_content[i])
-            # ...
+                for content_var in vars_content[note_idx]:
+                    tb.setupeditor_lstr(content_var)
 
+                line_labels = [tb.get_label() for _ in range(LINES_PER_NOTE)]
+
+                lbl_exit_this_notes_content_exitor = tb.get_label()
+
+                lbl_note_main_menu = tb.get_label()
+                tb.label(lbl_note_main_menu)
+
+                tb.menu(
+                    '"EDIT"',
+                    ['"* EXIT"']                         + vars_content[note_idx],
+                    [lbl_exit_this_notes_content_exitor] + line_labels,
+                )
+
+                for line_idx, line_label in enumerate(line_labels):
+                    tb.label(line_label)
+                    with tb.scope():
+                        # tb.input(tb.var_arg_str_0, 'ENTR NEW CNTENT:')
+
+                        # tb.call('st2lst')
+                        # # input : tb.var_arg_str_0
+                        # # output: tb.var_ret_list_0
+                        # # trash : tb.var_trash_num_0
+
+                        # tb.raw(f'{tb.var_ret_list_0}->{vars_content[note_idx][line_idx]}')
+                        tb.input_lstr(vars_content[note_idx][line_idx], '"ENTR NEW CNTENT:"')
+                    tb.goto(lbl_note_main_menu)
+
+                tb.label(lbl_exit_this_notes_content_exitor)
+                with tb.scope():
+                    for content_var_idx, content_var in enumerate(vars_content[note_idx]):
+                        tb.printstr(f'ARCH CONTENT {content_var_idx+1}/{LINES_PER_NOTE}')
+                        tb.archive_var(content_var)
+                tb.printstr('ARCH CNTNTS DONE')
+                tb.goto(lbl_main_menu)
+
+                # tb.printstr('NOT IMPLEMENTED YET')
+                # tb.press_any_key()
+                # # tb.setupeditor_lstr(vars_content[i])
+                # # ...
+            tb.goto(lbl_main_menu)
 
     tb.label(lbl_exit)
     with tb.scope():
         for i in range(NUMBER_OF_NOTES):
-            tb.printstr(f'archiving {i+1}/{NUMBER_OF_NOTES}')
+            tb.printstr(f'ARCH TITLE {i+1}/{NUMBER_OF_NOTES}')
             tb.archive_var(vars_title[i])
-        tb.printstr('archiving done')
-
+        tb.printstr('ARCH TITLES DONE')
 
 
     # create note titles if hey don't exist

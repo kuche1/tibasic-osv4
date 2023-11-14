@@ -155,7 +155,7 @@ class TiBasicLib:
                 else:
                     shutil.copyfile(s.compiled_file, s.previously_sent_file)
 
-    # asserts and checks
+    # asserts, checks, data extraction
 
     def _assert_str(s, text): # TODO can be improved; also naming is confusing, will probably be better if we have `str` and `rawstr`
         assert type(text) == str
@@ -165,7 +165,11 @@ class TiBasicLib:
         assert s.is_strvar(thing) or s.is_str(thing)
     
     def is_str(s, text):
-        return text.startswith('"')
+        return text.startswith('"') and text.endswith('"')
+    
+    def extract_str(s, text):
+        assert s.is_str(text)
+        return text[1:-1]
     
     def is_strvar(s, var):
         return var.startswith('Str') # TODO can be improved
@@ -206,6 +210,22 @@ class TiBasicLib:
         to_write += f'{store_in}'
 
         s.raw(to_write)
+    
+    def input_lstr(s, store_in, prompt_str):
+        assert s.is_list(store_in)
+        assert s.is_str(prompt_str)
+
+        s.input(s.var_arg_str_0, s.extract_str(prompt_str))
+
+        s.call('st2lst')
+        # input : tb.var_arg_str_0
+        # output: tb.var_ret_list_0
+        # trash : tb.var_trash_num_0
+
+        s.raw(f'{s.var_ret_list_0}->{store_in}')
+
+    # def input_ut14(s, store_in, prompt_str=None): # TODO
+        # prompt = 'ENTER UP TO 14 CHARACTERS'
 
     # control flow
 
@@ -272,6 +292,7 @@ class TiBasicLib:
         assert len(options) <= 7
         for opt in options:
             s._assert_strvar_or_str(opt)
+            # TODO check if str and if len is >14 and warn that it will clip
 
         labels = [lbl.upper() for lbl in labels]
 
@@ -440,6 +461,13 @@ class TiBasicLib:
 
         s.raw(f'If dim({var})=0')
         s.raw(f'1->{var}(1)')
+    
+    def encode_to_1char(s, num):
+        # returns an encoded version of the input that can be used in variable names
+        assert type(num) == int
+        assert num >= 0
+        return '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[num] # if this crashes then we need to add some more characters
+        # also it's fine if some if these characters cause touble and we need to remove them
 
     # other
 

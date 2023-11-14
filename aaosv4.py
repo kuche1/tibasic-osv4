@@ -41,10 +41,10 @@ with tibasiclib.TiBasicLib(
         tb.menu(
             vs_menu_title,
             [
+                '"EXIT"',
                 '"BATTERY"',
                 '"DATE:GET"',
                 '"DATE:SET"',
-                '"EXIT"',
                 '"MEMORY"',
                 '"NOTES"',
                 '"POWEROFF"',
@@ -54,10 +54,10 @@ with tibasiclib.TiBasicLib(
                 '"TIMER"',
             ],
             [
+                lbl_exit,
                 lbl_battery,
                 lbl_date_get,
                 lbl_date_set,
-                lbl_exit,
                 lbl_memory,
                 lbl_notes,
                 lbl_poweroff,
