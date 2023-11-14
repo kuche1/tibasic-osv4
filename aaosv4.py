@@ -142,7 +142,7 @@ with lib_tibasic.TiBasicLib(
             tb.print(high_bound)
             tb.print_str('"PERCENT"')
 
-            tb.press_any_key()
+            tb.call('pause')
         tb.goto(lbl_main_menu) # has to be here so that the `scope onexit` functionality executes
 
         tb.label(lbl_date_get)
@@ -151,7 +151,7 @@ with lib_tibasic.TiBasicLib(
             tb.date_get(date)
             tb.print(date)
 
-            tb.press_any_key()
+            tb.call('pause')
         tb.goto(lbl_main_menu)
 
         tb.label(lbl_date_set)
@@ -185,7 +185,7 @@ with lib_tibasic.TiBasicLib(
             tb.print_str('"FREE MEMORY:"')
             tb.print(free_mem)
 
-            tb.press_any_key()
+            tb.call('pause')
         tb.goto(lbl_main_menu)
 
         tb.label(lbl_notes)
@@ -208,7 +208,7 @@ with lib_tibasic.TiBasicLib(
             time = tb.gen_var_lstr()
             tb.time_get(time)
             tb.print(time)
-            tb.press_any_key()
+            tb.call('pause')
         tb.goto(lbl_main_menu)
 
         tb.label(lbl_time_set)
@@ -233,7 +233,7 @@ with lib_tibasic.TiBasicLib(
         tb.label(lbl_test)
         with tb.scope():
             tb.print('"hi"')
-            tb.press_any_key()
+            tb.call('pause')
         tb.continuee(lbl_main_menu)
 
     tb.label(lbl_main_menu_break)

@@ -173,10 +173,11 @@ class TiBasicLib:
                 # send to calc
                 print(f'`{s.program_name}`: sending to calc')
                 try:
-                    # TODO not sure if it's the timeout that fixes the problem with `notes`
-                    term(['tilp', '--no-gui', '--silent', '--timeout', '50', s.compiled_file], silent=True)
+                    # if anything happens try playing with this: --timeout 50
+                    term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
+                    print('    try restarting the calculator')
                     sys.exit(1)
                 else:
                     shutil.copyfile(s.compiled_file, s.previously_sent_file)
@@ -529,12 +530,6 @@ class TiBasicLib:
         if dep_tb.archive:
             s.raw(f'"{program_name}') # set Ans
             s.raw('prgmDOARCPRG')
-
-    def press_any_key(s):
-        s.print_str('"PRESS ANY KEY"')
-        s.raw('Repeat Ans')
-        s.raw('getKey')
-        s.raw('End')
 
     ##########
     ########## date and time [legacy]

@@ -40,7 +40,7 @@ with lib_tibasic.TiBasicLib(
     tb.print_str('"TIME PASSED:"')
     tb.print(vn_now)
     tb.print_str('"SECOND(S)"')
-    tb.press_any_key()
+    tb.call('pause')
     tb.raw(f'Goto {lbl_main_loop}')
 
     tb.raw(f'Lbl {lbl_exit}')
