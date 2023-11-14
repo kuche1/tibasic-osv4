@@ -9,7 +9,9 @@ from lib_character_map import CHARACTER_MAP
 # output: tb.var_ret_str_0
 # trash : tb.var_trash_num_0
 
-with tibasiclib.TiBasicLib() as tb:
+with tibasiclib.TiBasicLib(
+        archive=False, # this fnc is used way too often
+    ) as tb:
 
     vl_in = tb.var_arg_list_0
     vs_out = tb.var_ret_str_0

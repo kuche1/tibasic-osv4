@@ -81,6 +81,7 @@ class TiBasicLib:
 
     stack_num = 0 # used for youngest stack
     stack_var_num = []
+    stack_var_lstr = []
 
     ##########
     ########## functions stuff
@@ -235,10 +236,10 @@ class TiBasicLib:
 
         if s.is_var_str(atom):
             return s.print_var_str(atom)
-        
+
         if s.is_var_lstr(atom):
             return s.print_var_lstr(atom)
-        
+
         if s.is_var_num(atom):
             return s.print_var_num(atom)
         
@@ -258,7 +259,19 @@ class TiBasicLib:
             s.raw(f'Disp "{chunk}') # save 1 char
         
         s.raw(f'Disp "{data}') # save 1 char
-    
+
+    def print_var_lstr(s, var):
+        assert s.is_var_lstr(var)
+
+        s.raw(f'{var}->{s.var_arg_list_0}')
+
+        s.call('lst2st')
+        # input : tb.var_arg_list_0
+        # output: tb.var_ret_str_0
+        # trash : tb.var_trash_num_0
+
+        s.print(s.var_ret_str_0)
+
     def print_var_num(s, var):
         assert s.is_var_num(var)
         s.raw(f'Disp {var}')
@@ -491,10 +504,6 @@ class TiBasicLib:
     def date_set(s, var_year, var_month, var_day):
         s.raw(f'setDate({var_year},{var_month},{var_day}')
     
-    def time_get(s, var_out):
-        assert var_out in s.vars_str
-        s.raw(f'getTmStr(24->{var_out}')
-    
     def time_set(s, var_hour, var_minute, var_second):
         s.raw(f'setTime({var_hour},{var_minute},{var_second}')
     
@@ -514,6 +523,25 @@ class TiBasicLib:
             assert False, 'not implemented yet'
         else:
             assert False, f'unsupported data type of `{var}`'
+
+    def time_get(s, var):
+        if s.is_var_str(var):
+            return s.raw(f'getTmStr(24->{var}')
+
+        elif s.is_var_lstr(var):
+            s.time_get(s.var_trash_str[0])
+
+            s.raw(f'{s.var_trash_str[0]}->{s.var_arg_str_0}')
+
+            s.call('st2lst')
+            # input : tb.var_arg_str_0
+            # output: tb.var_ret_list_0
+            # trash : tb.var_trash_num_0
+
+            s.raw(f'{s.var_ret_list_0}->{var}')
+
+        else:
+            assert False, f'unsuported data type of `{var}`'
 
     ##########
     ########## variable generation, deletion and scopes
@@ -548,6 +576,7 @@ class TiBasicLib:
         # s.vars_num_used_in_this_scope.append([])
         s.vars_str_used_in_this_scope.append([])
         s.stack_var_num.append(StackInfo())
+        s.stack_var_lstr.append(StackInfo())
         s.stack_num += 1
 
     def _delete_last_scope(s):
@@ -565,24 +594,48 @@ class TiBasicLib:
         if stack_var_num.in_use:
             s.del_var(stack_var_num.name)
         del s.stack_var_num[-1]
+
+        stack_var_lstr = s.stack_var_lstr[-1]
+        if stack_var_lstr.in_use:
+            s.del_var(stack_var_lstr.name)
+        del s.stack_var_lstr[-1]
     
     def scope(s):
         return ContextManager(s, lambda:0)
     
     def get_var_num_stack(s): # these vars don't really seem slower than the regular `A`, `B`, `C`, ...
-        stack_var_num = s.stack_var_num[-1]
+        stack = s.stack_var_num[-1]
 
-        if not stack_var_num.in_use:
-            stack_var_num.in_use = True
-            assert len(str(s.stack_num)) <= 4, 'too many stacks, this can be fixed by not abusing `s.stack_num`'
-            stack_var_num.name = f'[list]S{s.stack_num}'
+        if not stack.in_use:
+            stack.in_use = True
+            num = s.encode_to_1char(s.stack_num) # if you get an error here you can either: (1: stop abusibng `s.stack_num`) (2: extend the 1char encoder) (3: use a 2char encoder)
+            stack.name = f'[list]S{num}'
 
-            s.setupeditor(stack_var_num.name) # TODO check if this is needed
+            s.setupeditor(stack.name) # TODO check if this is needed
             # create list if it doesn't exist
             # this will also unarchive it if it is archived
 
-        stack_var_num.var_count += 1 # tibasic starts count at 1
-        ret = f'{stack_var_num.name}({stack_var_num.var_count})'
+        stack.var_count += 1 # tibasic starts count at 1
+        num = s.encode_to_1char(stack.var_count)
+        ret = f'{stack.name}({num})'
+
+        return ret
+    
+    def gen_var_lstr(s): # TODO copy-pasta
+        stack = s.stack_var_lstr[-1]
+
+        if not stack.in_use:
+            stack.in_use = True
+            num = s.encode_to_1char(s.stack_num) # if you get an error here you can either: (1: stop abusibng `s.stack_num`) (2: extend the 1char encoder) (3: use a 2char encoder)
+            stack.name = f'[list]T{num}'
+
+            s.setupeditor(stack.name) # TODO check if this is needed
+            # create list if it doesn't exist
+            # this will also unarchive it if it is archived
+
+        stack.var_count += 1 # tibasic starts count at 1
+        num = s.encode_to_1char(stack.var_count)
+        ret = f'{stack.name}{num}'
 
         return ret
     

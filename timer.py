@@ -15,7 +15,20 @@ with tibasiclib.TiBasicLib(
     tb.utime_sec(vn_start)
 
     tb.raw(f'Lbl {lbl_main_loop}')
-    tb.raw(f'Menu("**TIMER**","RESET",{lbl_reset},"SHOW",{lbl_show},"EXIT",{lbl_exit}')
+
+    tb.menu(
+        '"**TIMER**"',
+        [
+            '"* EXIT"',
+            '"RESET"',
+            '"SHOW"',
+        ],
+        [
+            lbl_exit,
+            lbl_reset,
+            lbl_show,
+        ],
+    )
 
     tb.raw(f'Lbl {lbl_reset}')
     tb.utime_sec(vn_start)

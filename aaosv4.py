@@ -153,12 +153,11 @@ with tibasiclib.TiBasicLib(
         #     tb.call('rspsnie')
         # tb.goto(lbl_main_menu)
         
-        # with tb.if_var_equ_strs(command, CMDS_TIME_GET):
+        tb.label(lbl_time_get)
         with tb.scope():
-            tb.label(lbl_time_get)
-            time = tb.get_var_str()
+            time = tb.gen_var_lstr()
             tb.time_get(time)
-            tb.print(date)
+            tb.print(time)
             tb.press_any_key()
         tb.goto(lbl_main_menu)
 
