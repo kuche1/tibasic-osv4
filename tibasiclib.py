@@ -60,6 +60,7 @@ class TiBasicLib:
     DISP_LEN_X = 16
 
     LSTR_SPACE = '{' + str(CHARACTER_MAP.index(' ')+1) + '}'
+    # NOTE mind the fact that fact that some of these "characters" consist of multiple bytes (example `[theta]`)
 
     # variables used for args, return, trash
 
