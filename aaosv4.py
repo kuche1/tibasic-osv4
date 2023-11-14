@@ -13,7 +13,7 @@ with tibasiclib.TiBasicLib(
 
         # menu title
 
-        vls_menu_title = tb.gen_var_lstr()
+        vls_menu_title = tb.gen_var_lstr() # TODO also add the free memory
 
         with tb.scope():
             vls_time = tb.gen_var_lstr()
