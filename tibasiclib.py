@@ -75,7 +75,7 @@ class TiBasicLib:
     var_ret_str_0 = 'Str8'
     var_ret_list_0 = 'L6'
 
-    var_trash_num_0 = 'Y'
+    VAR_TRASH_NUM = ['Y']
     VAR_TRASH_STR = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
 
     # stack
@@ -272,7 +272,7 @@ class TiBasicLib:
         s.call('lst2st')
         # input : tb.var_arg_list_0
         # output: tb.var_ret_str_0
-        # trash : tb.var_trash_num_0
+        # trash : tb.VAR_TRASH_NUM[0]
 
         s.print(s.var_ret_str_0)
 
@@ -317,7 +317,7 @@ class TiBasicLib:
         s.call('st2lst')
         # input : tb.var_arg_str_0
         # output: tb.var_ret_list_0
-        # trash : tb.var_trash_num_0
+        # trash : tb.VAR_TRASH_NUM[0]
 
         s.raw(f'{s.var_ret_list_0}->{var}')
 
@@ -356,7 +356,7 @@ class TiBasicLib:
             s.call('lst2st')
             # input : tb.var_arg_list_0
             # output: tb.var_ret_str_0
-            # trash : tb.var_trash_num_0
+            # trash : tb.VAR_TRASH_NUM[0]
 
             s.raw(f'{s.var_ret_str_0}->{s.VAR_TRASH_STR[5]}')
 
@@ -401,7 +401,7 @@ class TiBasicLib:
                     s.call('lst2st')
                     # input : tb.var_arg_list_0
                     # output: tb.var_ret_str_0
-                    # trash : tb.var_trash_num_0
+                    # trash : tb.VAR_TRASH_NUM[0]
 
                     s.raw(f'{s.var_ret_str_0}->{s.VAR_TRASH_STR[idx]}')
 
@@ -549,7 +549,7 @@ class TiBasicLib:
             s.call('st2lst')
             # input : tb.var_arg_str_0
             # output: tb.var_ret_list_0
-            # trash : tb.var_trash_num_0
+            # trash : tb.VAR_TRASH_NUM[0]
 
             s.raw(f'{s.var_ret_list_0}->{var}')
 
@@ -568,7 +568,7 @@ class TiBasicLib:
             s.call('st2lst')
             # input : tb.var_arg_str_0
             # output: tb.var_ret_list_0
-            # trash : tb.var_trash_num_0
+            # trash : tb.VAR_TRASH_NUM[0]
 
             s.raw(f'{s.var_ret_list_0}->{var}')
 

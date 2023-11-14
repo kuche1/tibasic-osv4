@@ -7,7 +7,7 @@ from lib_character_map import CHARACTER_MAP
 
 # input : tb.var_arg_list_0
 # output: tb.var_ret_str_0
-# trash : tb.var_trash_num_0
+# trash : tb.VAR_TRASH_NUM[0]
 
 with tibasiclib.TiBasicLib(
         archive=False, # this fnc is used way too often
@@ -15,7 +15,7 @@ with tibasiclib.TiBasicLib(
 
     vl_in = tb.var_arg_list_0
     vs_out = tb.var_ret_str_0
-    vn = tb.var_trash_num_0
+    vn = tb.VAR_TRASH_NUM[0]
 
     tb.raw('" "')
     tb.raw(f'For({vn},1,dim({vl_in}))')
