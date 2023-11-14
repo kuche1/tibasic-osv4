@@ -99,7 +99,7 @@ class TiBasicLib:
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
         s.previously_sent_file = f'{s.tibasic_source_file}-previously-sent' # needs tp be >8 characters long
-        s.previously_sent_file_max_mtime_diff = 60 * 25 # in seconds
+        s.previously_sent_file_max_mtime_diff = 60 * 30 # in seconds
 
         s.archive = archive
         s.archive_if_that_big = 500 # (bytes)
@@ -166,7 +166,7 @@ class TiBasicLib:
     def _assert_str(s, text): # TODO can be improved; also naming is confusing, will probably be better if we have `str` and `rawstr`
         assert type(text) == str
         assert '"' not in text
-    
+
     def _assert_strvar_or_str(s, thing):
         assert s.is_var_str(thing) or s.is_str(thing)
 
