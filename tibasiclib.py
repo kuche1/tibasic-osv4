@@ -168,14 +168,7 @@ class TiBasicLib:
         assert '"' not in text
     
     def _assert_strvar_or_str(s, thing):
-        assert s.is_strvar(thing) or s.is_str(thing)
-    
-    def extract_str(s, text):
-        assert s.is_str(text)
-        return text[1:-1]
-    
-    def is_strvar(s, var):
-        return var.startswith('Str') # TODO can be improved
+        assert s.is_var_str(thing) or s.is_str(thing)
 
     ##########
     ########## asserts, checks, data extraction [updated]
@@ -241,7 +234,7 @@ class TiBasicLib:
         assert s.is_var_list(store_in)
         assert s.is_str(prompt_str)
 
-        s.input(s.var_arg_str_0, s.extract_str(prompt_str))
+        s.input(s.var_arg_str_0, s.extract_str_data(prompt_str))
 
         s.call('st2lst')
         # input : tb.var_arg_str_0
