@@ -103,7 +103,7 @@ class TiBasicLib:
         s.tibasic_source_file = f'/tmp/{s.program_name}.tib' # extension has to be `.tib` otherwise the compiler refuses to work
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
-        s.previously_sent_file = f'{s.tibasic_source_file}-previously-sent' # needs tp be >8 characters long
+        s.previously_sent_file = f'/tmp/{s.program_name}-previously-sent' # needs tp be >8 characters long
         s.previously_sent_file_max_mtime_diff = 60 * 30 # in seconds
 
         s.archive = archive
@@ -157,7 +157,8 @@ class TiBasicLib:
                 # send to calc
                 print(f'`{s.program_name}`: sending to calc')
                 try:
-                    term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
+                    # TODO not sure if it's the timeout that fixes the problem with `notes`
+                    term(['tilp', '--no-gui', '--silent', '--timeout', '50', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
                     sys.exit(1)
@@ -308,9 +309,11 @@ class TiBasicLib:
         s.raw(f'Disp "{data}') # save 1 char
     
     def print_var_num(s, var):
+        assert s.is_var_num(var)
         s.raw(f'Disp {var}')
     
     def print_var_str(s, var):
+        assert s.is_var_str(var)
         s.raw(f'Disp {var}')
 
     ##########
