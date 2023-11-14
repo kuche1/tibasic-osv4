@@ -71,7 +71,7 @@ class TiBasicLib:
     var_arg_str_0 = 'Str9'
     var_arg_list_0 = 'L5'
 
-    var_ret_num_0 = 'Z'
+    VAR_RET_NUM = ['Z']
     VAR_RET_STR = ['Str8']
     VAR_RET_LIST = ['L6']
 

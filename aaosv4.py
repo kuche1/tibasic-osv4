@@ -84,7 +84,7 @@ with tibasiclib.TiBasicLib(
             low_bound = tb.get_var_num_stack()
             high_bound = tb.get_var_num()
 
-            tb.raw(f'{tb.var_ret_num_0}*20->{low_bound}')
+            tb.raw(f'{tb.VAR_RET_NUM[0]}*20->{low_bound}')
             tb.raw(f'{low_bound}+20->{high_bound}')
 
             tb.print_str('"BATTERY BETWEEN"')
@@ -131,7 +131,7 @@ with tibasiclib.TiBasicLib(
             # returns free bytes
 
             free_mem = tb.get_var_num()
-            tb.raw(f'{tb.var_ret_num_0}->{free_mem}')
+            tb.raw(f'{tb.VAR_RET_NUM[0]}->{free_mem}')
 
             tb.print_str('"FREE MEMORY:"')
             tb.print(free_mem)
