@@ -177,7 +177,7 @@ class TiBasicLib:
                     term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
-                    print('    try restarting the calculator')
+                    print('    try restarting your calculator')
                     sys.exit(1)
                 else:
                     shutil.copyfile(s.compiled_file, s.previously_sent_file)

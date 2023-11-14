@@ -348,8 +348,8 @@ I lever up my upper torso by my arms again, trying to answer, but all that comes
 '''
 
 the_story = '    '.join([line for line in the_story.splitlines() if len(line) > 0])
-the_story = the_story.replace('“', 'BQS')
-the_story = the_story.replace('”', 'BQE')
+the_story = the_story.replace('“', '<')
+the_story = the_story.replace('”', '>')
 the_story = the_story.replace('’', "'")
 the_story = the_story.replace('—', '-')
 the_story = the_story.replace('–', '-')
@@ -359,7 +359,7 @@ the_story = the_story.replace('‘', 'RTQ')
 with lib_tibasic.TiBasicLib() as tb:
 
     for var in ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']:
-        chunk = the_story[:100]
+        chunk = the_story[:16]
         the_story = the_story[len(chunk):]
         if len(chunk) == 0:
             break
