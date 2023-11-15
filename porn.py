@@ -436,7 +436,14 @@ with lib_tibasic.TiBasicLib() as tb:
 
                 for idx, var_smalldata in enumerate(SMALLDATA_VARS):
                     idx_start = idx * tb.MENU_ITEM_LEN + (page_idx * DATA_IN_PAGE) + 1
+
+                    # TODO I hate this
+                    tb.raw(f'If length({var_bigdata})-{idx_start}<{tb.MENU_ITEM_LEN}')
+                    tb.raw('Then')
+                    tb.raw(f'sub({var_bigdata},{idx_start},length({var_bigdata})-{idx_start}->{var_smalldata}')
+                    tb.raw('Else')
                     tb.raw(f'sub({var_bigdata},{idx_start},{tb.MENU_ITEM_LEN}->{var_smalldata}')
+                    tb.raw('End')
 
                 tb.raw(
                     'Menu("PORN"' +
