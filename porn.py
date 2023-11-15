@@ -357,12 +357,12 @@ the_story = the_story.replace('–', '-')
 the_story = the_story.replace(';', '<.,>')
 the_story = the_story.replace('‘', "'")
 the_story = the_story.replace('->', '=>')
-the_story = the_story.replace(' or ', ' OR ')
+# the_story = the_story.replace(' or ', ' OR ')
 
-# fuck this
-the_story = the_story.upper()
-# I can believe this shit
-# even now the compiler fucks me over
+# # fuck this
+# the_story = the_story.upper()
+# # I can believe this shit
+# # even now the compiler fucks me over
 
 #########3
 #########3
@@ -385,9 +385,9 @@ with lib_tibasic.TiBasicLib() as tb:
     # DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
     # DATA_VARS = [f'Str{var_idx}' for var_idx in range(NUMBER_OF_DATA_VARS)]
 
-    NUMBER_OF_SUBPROGRAMS_LIMIT = 4
+    NUMBER_OF_SUBPROGRAMS_LIMIT = 2
 
-    MENU_PAGES_IN_DATA_VAR = 2
+    MENU_PAGES_IN_DATA_VAR = 4
     DATA_VARS = ['Str9', 'Str8', 'Str7', 'Str6', 'Str5', 'Str4'] # how many pages per arch/unarch
     SMALLDATA_VARS = ['Str0', 'Str1', 'Str2', 'Str3'] # how many items per page
     DATA_IN_PAGE = tb.MENU_ITEM_LEN * len(SMALLDATA_VARS)
