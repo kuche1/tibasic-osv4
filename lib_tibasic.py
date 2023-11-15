@@ -68,6 +68,13 @@ class TiBasicLib:
     DIGIT_TO_LCHAR = CHARACTER_MAP_1B_CHARS.index('0') + 1
     # add that much to a digit (so 0 to 9) and it will be valid to it's equivalent lchar
 
+    # related to the encoding table
+
+    # troublemaker: SS -> removing S
+    ENCODE_TABLE = '0123456789ABCDEFGHIJKLMNOPQRTUVWXYZ'
+    # if this crashes then we need to add some more characters (unlikely to happen)
+    # also it's fine if some if these characters cause touble and we need to remove them
+
     # variables used for args, return, trash
 
     VAR_ARG_STR = ['Str9']
@@ -171,6 +178,7 @@ class TiBasicLib:
                     term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
+                    print('    this usually happens if you manually run TiLP2')
                     print('    try restarting your calculator')
                     sys.exit(1)
                 else:
@@ -591,10 +599,9 @@ class TiBasicLib:
     ########## variable generation, deletion and scopes
     ##########
 
-    def gen_label(s):
-        assert s.label_count <= 99, 'time to fix this'
-        ret = str(s.label_count)
-        s.label_count += 1
+    def gen_label(tb):
+        ret = tb.encode_to_2char(tb.label_count)
+        tb.label_count += 1
         return ret
 
     def _create_new_scope(s):
@@ -666,27 +673,20 @@ class TiBasicLib:
         # returns an encoded version of the input that can be used in variable names
         assert type(num) == int
         assert num >= 0
-        # troublemaker: SS -> removing S
-        return '0123456789ABCDEFGHIJKLMNOPQRTUVWXYZ'[num] # not eough character, encode using more characters
-        # if this crashes then we need to add some more characters (unlikely to happen)
-        # also it's fine if some if these characters cause touble and we need to remove them
+        assert num < len(s.ENCODE_TABLE), f'cannot encode `{num}` into a single character; use 2char encoding instead'
+        return s.ENCODE_TABLE[num]
     
     def encode_to_2char(tb, num):
         assert type(num) == int
         assert num >= 0
 
-        # TODO this sucks
-        while True:
-            try:
-                char_1 = tb.encode_to_1char(num)
-            except IndexError:
-                num -= 1
-            else:
-                break
+        num_high = int(num / len(tb.ENCODE_TABLE))
+        num_low = num - (num_high * len(tb.ENCODE_TABLE))
 
-        char_0 = tb.encode_to_1char(num)
+        num_high = tb.encode_to_1char(num_high)
+        num_low = tb.encode_to_1char(num_low)
 
-        return char_1 + char_0
+        return num_high + num_low
 
     ##########
     ########## lists
@@ -722,6 +722,11 @@ class TiBasicLib:
             res = res[:-1]
         res += '}'
         return res
+    
+    def pystr_to_str(tb, pystr):
+        assert type(pystr) == str
+        assert '"' not in pystr
+        return f'"{pystr}"'
 
     ##########
     ########## other
