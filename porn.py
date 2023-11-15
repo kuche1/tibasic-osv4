@@ -14,23 +14,13 @@ with lib_tibasic.TiBasicLib() as tb:
 
     tb.call('porn0')
 
-    # tb.menu(
-    #     '"PORN"',
-    # )
+    lbl_hack = tb.gen_label()
 
+    tb.menu(
+        '"PORN"',
+        DATA_VARS,
+        [lbl_hack] * len(DATA_VARS),
+    )
 
     for var in DATA_VARS:
-
-        # tb.menu(
-        #     'PORN',
-        #     [
-        #         ...
-        #     ],
-        #     [
-        #         ...
-        #     ],
-        # )
-
-        tb.print(var)
         tb.del_var(var)
-        tb.call('pause')

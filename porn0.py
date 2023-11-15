@@ -347,7 +347,7 @@ I lever up my upper torso by my arms again, trying to answer, but all that comes
 ...where?
 '''
 
-the_story = '    '.join([line for line in the_story.splitlines() if len(line) > 0])
+the_story = ' <> '.join([line for line in the_story.splitlines() if len(line) > 0])
 the_story = the_story.replace('“', '<')
 the_story = the_story.replace('”', '>')
 the_story = the_story.replace('’', "'")
