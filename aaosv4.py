@@ -120,7 +120,7 @@ with lib_tibasic.TiBasicLib(
         tb.goto(lbl_exit)
 
         tb.label(lbl_garbage_collect)
-        tb.raw('GarbageCollect') # TODO this might be missing from the compiler
+        tb.garbage_collect()
         tb.goto(lbl_main_menu)
 
         tb.label(lbl_porn)

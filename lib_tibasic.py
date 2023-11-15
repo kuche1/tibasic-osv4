@@ -739,6 +739,16 @@ class TiBasicLib:
         return f'"{pystr}"'
 
     ##########
+    ########## memory related
+    ##########
+
+    def archive_var(s, var):
+        s.raw(f'Archive {var}')
+    
+    def garbage_collect(s):
+        s.raw('GarbageCollect')
+
+    ##########
     ########## other
     ##########
 
@@ -752,9 +762,6 @@ class TiBasicLib:
         code = code.replace('\t', '')
         code = code.replace(' ', '')
         s.raw(code, end='')
-
-    def archive_var(s, var):
-        s.raw(f'Archive {var}')
     
     def digit_to_lchar(s, output_var, input_var):
         if s.is_var_num(input_var):
