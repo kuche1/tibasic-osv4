@@ -82,6 +82,7 @@ with lib_tibasic.TiBasicLib(
         lbl_timer = tb.gen_label()
         lbl_test = tb.gen_label()
         lbl_porn = tb.gen_label()
+        lbl_garbage_collect = tb.gen_label()
 
         tb.menu(
             vls_menu_title,
@@ -89,6 +90,7 @@ with lib_tibasic.TiBasicLib(
                 '"NOTES"',
                 '"TIMER"',
                 '"PORN"',
+                '"GC"',
                 '"POWEROFF"',
                 '"DATE:GET"',
                 '"DATE:SET"',
@@ -103,6 +105,7 @@ with lib_tibasic.TiBasicLib(
                 lbl_notes,
                 lbl_timer,
                 lbl_porn,
+                lbl_garbage_collect,
                 lbl_poweroff,
                 lbl_date_get,
                 lbl_date_set,
@@ -115,6 +118,10 @@ with lib_tibasic.TiBasicLib(
             ]
         )
         tb.goto(lbl_exit)
+
+        tb.label(lbl_garbage_collect)
+        tb.raw('GarbageCollect') # TODO this might be missing from the compiler
+        tb.goto(lbl_main_menu)
 
         tb.label(lbl_porn)
         with tb.scope():

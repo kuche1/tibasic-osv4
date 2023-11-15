@@ -356,6 +356,7 @@ the_story = the_story.replace('—', '-')
 the_story = the_story.replace('–', '-')
 the_story = the_story.replace(';', '<.,>')
 the_story = the_story.replace('‘', "'")
+the_story = the_story.replace('->', '=>')
 
 #########3
 #########3
@@ -370,13 +371,20 @@ with lib_tibasic.TiBasicLib() as tb:
 
     # constants
 
-    NUMBER_OF_DATA_VARS = tb.MENU_ITEMS_PER_PAGE * 8
-    DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
-    DATA_VARS = [f'[list]POD{tb.encode_to_2char(var_idx)}' for var_idx in range(NUMBER_OF_DATA_VARS)]
+    # NUMBER_OF_DATA_VARS = tb.MENU_ITEMS_PER_PAGE * 8
+    # DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
+    # DATA_VARS = [f'[list]POD{tb.encode_to_2char(var_idx)}' for var_idx in range(NUMBER_OF_DATA_VARS)]
 
     # NUMBER_OF_DATA_VARS = 5 # tb.MENU_ITEMS_PER_PAGE * 2
     # DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
     # DATA_VARS = [f'Str{var_idx}' for var_idx in range(NUMBER_OF_DATA_VARS)]
+
+    MENU_PAGES_IN_DATA_VAR = 2
+    DATA_VARS = ['Str9', 'Str8', 'Str7', 'Str6', 'Str5', 'Str4'] # how many pages per arch/unarch
+    SMALLDATA_VARS = ['Str0', 'Str1', 'Str2', 'Str3'] # how many items per page
+    DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN * len(SMALLDATA_VARS) * MENU_PAGES_IN_DATA_VAR
+
+    NUMBER_OF_SUBPROGRAMS_LIMIT = 4
 
     # main
 
@@ -386,42 +394,55 @@ with lib_tibasic.TiBasicLib() as tb:
     shutil.rmtree('porn')
     os.makedirs('porn')
 
-    # lbl_current = tb.gen_label()
-    # lbl_next = tb.gen_label()
+    lbl_next = None
 
     program_idx = 0
     while len(the_story) > 0:
-        if program_idx >= 5:
+        if program_idx >= NUMBER_OF_SUBPROGRAMS_LIMIT:
             break
+
+        # gen file
 
         new_program = f'porn{tb.encode_to_2char(program_idx)}'
         shutil.copyfile(source_program+'.py', f'porn/{new_program}.py')
 
-        # tb.label(lbl_current)
+        # tibasic code
+
+        if lbl_next == None:
+            pass
+        else:
+            tb.label(lbl_next)
 
         tb.call(new_program, cd='porn')
 
-        # lbl_nothing = lbl_current
-        # tb.raw(f'Menu("PORN","* EXIT",{lbl_exit},"* NEXT",{lbl_next},Str0,{lbl_nothing},Str1,{lbl_nothing},Str2,{lbl_nothing},Str3,{lbl_nothing},Str4,{lbl_nothing}')
 
-        # lbl_current = lbl_next
-        # lbl_next = tb.gen_label()
+        lbl_next = tb.gen_label()
 
-        for i in range(int(NUMBER_OF_DATA_VARS / tb.MENU_ITEMS_PER_PAGE)):
-            idx_start = i * tb.MENU_ITEMS_PER_PAGE
-            idx_end = idx_start + tb.MENU_ITEMS_PER_PAGE
+        for var_bigdata in DATA_VARS:
 
-            lbl_nothing = tb.gen_label()
-            tb.label(lbl_nothing)
-            tb.menu(
-                '"PORN"',
-                DATA_VARS[idx_start:idx_end],
-                [lbl_nothing] * tb.MENU_ITEMS_PER_PAGE,
-            )
+            lbl_current = lbl_next
+            lbl_next = tb.gen_label()
+
+            tb.label(lbl_current)
+
+            for idx, var_smalldata in enumerate(SMALLDATA_VARS):
+                idx_start = idx * tb.MENU_ITEM_LEN + 1
+                tb.raw(f'sub({var_bigdata},{idx_start},{tb.MENU_ITEM_LEN}->{var_smalldata}')
+
+            tb.raw(
+                'Menu("PORN"' +
+                f',"- EXIT",{lbl_exit}' +
+                f',"- NEXT",{lbl_next}' +
+                ''.join([f',{var},{lbl_current}' for var in SMALLDATA_VARS]))
 
         program_idx += 1
 
+    if lbl_next != None:
+        tb.label(lbl_next)
+        tb.print('"THE END"')
+        tb.call('pause')
+
     tb.label(lbl_exit)
 
-    for var in DATA_VARS:
+    for var in DATA_VARS + SMALLDATA_VARS:
         tb.del_var(var)

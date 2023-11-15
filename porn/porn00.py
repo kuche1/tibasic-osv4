@@ -12,7 +12,7 @@ with lib_tibasic.TiBasicLib(
         if len(chunk) == 0:
             break
 
-        chunk = tb.pystr_to_lstr(chunk)
-        # chunk = tb.pystr_to_str(chunk)
+        # chunk = tb.pystr_to_lstr(chunk)
+        chunk = tb.pystr_to_str(chunk)
 
         tb.raw(f'{chunk}->{var}')

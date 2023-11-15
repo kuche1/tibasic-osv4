@@ -174,8 +174,10 @@ class TiBasicLib:
                 # send to calc
                 print(f'`{s.program_name}`: sending to calc')
                 try:
-                    # if anything happens try playing with this: --timeout 50
-                    term(['tilp', '--no-gui', '--silent', s.compiled_file], silent=True)
+                    # if anything happens try increasing the timeout
+                    # bad  : 16
+                    # good?: 32
+                    term(['tilp', '--no-gui', '--silent', '--timeout', '32', s.compiled_file], silent=True)
                 except subprocess.CalledProcessError:
                     print(f'ERROR: could not send `{s.program_name}`')
                     print('    this usually happens if you manually run TiLP2')
