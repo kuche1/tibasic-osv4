@@ -61,7 +61,6 @@ class TiBasicLib:
 
     # related to the character map
 
-    # TODO depricate
     DIGIT_TO_LCHAR = CHARACTER_MAP_1B_CHARS.index('0') + 1
     # add that much to a digit (so 0 to 9) and it will be valid to it's equivalent lchar
 
