@@ -7,7 +7,7 @@ import shutil
 import time
 import sys
 
-from lib_character_map import CHARACTER_MAP
+from lib_character_map import CHARACTER_MAP_1B_CHARS
 
 # TODO
 # check if the file ends with new line and if that is the case delete it
@@ -61,17 +61,8 @@ class TiBasicLib:
 
     # related to the character map
 
-    # NOTE mind the fact that fact that some of these "characters" consist of multiple bytes (example `[theta]`)
-    LCHAR_0     = str(CHARACTER_MAP.index('0') + 1)
-    LCHAR_1     = str(CHARACTER_MAP.index('1') + 1)
-    LCHAR_4     = str(CHARACTER_MAP.index('4') + 1)
-    LCHAR_6     = str(CHARACTER_MAP.index('6') + 1)
-    LCHAR_K     = str(CHARACTER_MAP.index('K') + 1)
-    LCHAR_X     = str(CHARACTER_MAP.index('X') + 1)
-    LCHAR_SLASH = str(CHARACTER_MAP.index('/') + 1)
-    LCHAR_SPACE = str(CHARACTER_MAP.index(' ') + 1)
-
-    DIGIT_TO_LCHAR = CHARACTER_MAP.index('0') + 1
+    # TODO depricate
+    DIGIT_TO_LCHAR = CHARACTER_MAP_1B_CHARS.index('0') + 1
     # add that much to a digit (so 0 to 9) and it will be valid to it's equivalent lchar
 
     # variables used for args, return, trash
@@ -680,6 +671,26 @@ class TiBasicLib:
         assert s.is_var_list(list1) or s.is_list(list1)
         assert s.is_var_list(list2) or s.is_list(list2)
         s.raw(f'augment({list1},{list2})->{store_in}')
+
+    ##########
+    ########## pystr
+    ##########
+
+    def pychar_to_lchar(tb, pychar):
+        assert type(pychar) == str
+        assert len(pychar) == 1
+        return str(CHARACTER_MAP_1B_CHARS.index(pychar) + 1) # tibasic is 1-indexed
+
+    def pystr_to_lstr(tb, pystr):
+        assert type(pystr) == str
+        res = '{'
+        for char in pystr:
+            lchar = tb.pychar_to_lchar(char)
+            res += lchar
+            res += ','
+        if res.endswith(','):
+            res = res[:-1]
+        res += '}'
 
     ##########
     ########## other

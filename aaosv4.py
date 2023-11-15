@@ -52,8 +52,8 @@ with lib_tibasic.TiBasicLib(
                 vls_menu_title,
                 vls_time,
                 '{'
-                    + tb.LCHAR_SPACE +','+ v_battery +','+ tb.LCHAR_SLASH +','+ tb.LCHAR_4
-                    +','+ tb.LCHAR_SPACE
+                    + tb.pychar_to_lchar(' ') +','+ v_battery +','+ tb.pychar_to_lchar('/') +','+ tb.pychar_to_lchar('4')
+                    +','+ tb.pychar_to_lchar(' ')
                 + '}'
             )
 
@@ -63,7 +63,7 @@ with lib_tibasic.TiBasicLib(
                 vls_menu_title,
                 vls_menu_title,
                 '{'
-                    + tb.LCHAR_SLASH +','+ tb.LCHAR_1 +','+ tb.LCHAR_6 +','+ tb.LCHAR_K
+                    + tb.pychar_to_lchar('/') +','+ tb.pychar_to_lchar('1') +','+ tb.pychar_to_lchar('6') +','+ tb.pychar_to_lchar('K')
                 + '}'
             )
 

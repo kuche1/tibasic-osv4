@@ -4,6 +4,8 @@ import lib_tibasic
 # the initial version of this ended up being 31KiB
 # this needs to be split
 
+# source: USK@7wtLtUFBQrqMAkvLCMzYBwXWbjc3-iuz2YkvvlZeZ6E,Ygw4SHfPErmyLPCcLsAgFCPtkkMnbRf57oghQ0pbOTw,AQACAAE/sites/-1
+
 the_story = '''
 Resurrection
 (edition 15)

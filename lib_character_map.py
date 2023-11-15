@@ -1,8 +1,15 @@
 
-CHARACTER_MAP = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ /:?[theta].,()'
+# NOTE 1B and multibyte referes to python bytes, not ti84+ bytes
+# so that we can easily index characters
 
 # NOTE if you are to add new characters append them to the end so that we don't loose backwards compatibility
+# if you are to add a 1B character, them we'll loose backwards compatibility for the multibyte chars (code will be moved by 1)
+# oh well...
 
-# NOTE make sure that any characters that need to be indexed stay at the beginning so the indexes don't get fucked by the multibyte chars
+# TODO? add lower case letters?
 
-# TODO? lower case letters are missing
+CHARACTER_MAP_1B_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ  /:?.,()'
+
+CHARACTER_MAP_MULTIBYTE_CHARS = '[theta]'
+
+CHARACTER_MAP = CHARACTER_MAP_1B_CHARS + CHARACTER_MAP_MULTIBYTE_CHARS
