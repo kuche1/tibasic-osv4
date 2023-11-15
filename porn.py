@@ -362,6 +362,7 @@ the_story = the_story.replace('‘', "'")
 #########3
 
 import shutil
+import os
 
 import lib_tibasic
 
@@ -369,39 +370,54 @@ with lib_tibasic.TiBasicLib() as tb:
 
     # constants
 
-    # NUMBER_OF_DATA_VARS = tb.MENU_ITEMS_PER_PAGE * 12
-    # DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
-    # DATA_VARS = [f'[list]POD{tb.encode_to_2char(var_idx)}' for var_idx in range(NUMBER_OF_DATA_VARS)]
-
-    NUMBER_OF_DATA_VARS = tb.MENU_ITEMS_PER_PAGE * 2
+    NUMBER_OF_DATA_VARS = tb.MENU_ITEMS_PER_PAGE * 8
     DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
-    DATA_VARS = [f'Str{var_idx}' for var_idx in range(NUMBER_OF_DATA_VARS)]
+    DATA_VARS = [f'[list]POD{tb.encode_to_2char(var_idx)}' for var_idx in range(NUMBER_OF_DATA_VARS)]
+
+    # NUMBER_OF_DATA_VARS = 5 # tb.MENU_ITEMS_PER_PAGE * 2
+    # DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
+    # DATA_VARS = [f'Str{var_idx}' for var_idx in range(NUMBER_OF_DATA_VARS)]
 
     # main
 
     lbl_exit = tb.gen_label()
     source_program = 'porn0'
 
+    shutil.rmtree('porn')
+    os.makedirs('porn')
+
+    # lbl_current = tb.gen_label()
+    # lbl_next = tb.gen_label()
+
     program_idx = 0
     while len(the_story) > 0:
+        if program_idx >= 5:
+            break
 
         new_program = f'porn{tb.encode_to_2char(program_idx)}'
+        shutil.copyfile(source_program+'.py', f'porn/{new_program}.py')
 
-        try:
-            shutil.copyfile(source_program+'.py', new_program+'.py')
-        except shutil.SameFileError:
-            pass
+        # tb.label(lbl_current)
 
-        tb.call(new_program)
+        tb.call(new_program, cd='porn')
 
-        lbl_hack = tb.gen_label()
+        # lbl_nothing = lbl_current
+        # tb.raw(f'Menu("PORN","* EXIT",{lbl_exit},"* NEXT",{lbl_next},Str0,{lbl_nothing},Str1,{lbl_nothing},Str2,{lbl_nothing},Str3,{lbl_nothing},Str4,{lbl_nothing}')
 
-        tb.menu(
-            '"PORN"',
-            DATA_VARS,
-            [lbl_hack] * len(DATA_VARS),
-        )
-        tb.goto(lbl_exit)
+        # lbl_current = lbl_next
+        # lbl_next = tb.gen_label()
+
+        for i in range(int(NUMBER_OF_DATA_VARS / tb.MENU_ITEMS_PER_PAGE)):
+            idx_start = i * tb.MENU_ITEMS_PER_PAGE
+            idx_end = idx_start + tb.MENU_ITEMS_PER_PAGE
+
+            lbl_nothing = tb.gen_label()
+            tb.label(lbl_nothing)
+            tb.menu(
+                '"PORN"',
+                DATA_VARS[idx_start:idx_end],
+                [lbl_nothing] * tb.MENU_ITEMS_PER_PAGE,
+            )
 
         program_idx += 1
 

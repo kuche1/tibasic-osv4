@@ -512,14 +512,22 @@ class TiBasicLib:
     def continuee(s, label):
         s.goto(label)
     
-    def call(s, program_name, asm=False):
+    def call(s, program_name, asm=False, cd=None):
 
         dependencies = ['unarcprg', 'doarcprg'] + [program_name] # program name has to be the last item
-        for file in dependencies:
+        cds          = [None,       None]       + [cd]
+        for file, cd in zip(dependencies, cds, strict=True):
+
             try:
-                dep_module = __import__(file) # note that python will take care of double includes
-            except ModuleNotFoundError:
-                raise Exception(f'could not find program `{file}`')
+                sys.path.append(cd)
+
+                try:
+                    dep_module = __import__(file) # note that python will take care of double includes
+                except ModuleNotFoundError:
+                    raise Exception(f'could not find program `{file}`')
+            
+            finally:
+                del sys.path[-1]
 
             dep_tb = dep_module.tb # TODO this can crash (but it's a nice check)
 
