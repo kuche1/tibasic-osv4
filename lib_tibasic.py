@@ -57,7 +57,11 @@ class TiBasicLib:
     ########## constants
     ##########
 
+    # display
+
     DISP_LEN_X = 16
+    MENU_ITEMS_PER_PAGE = 4
+    MENU_ITEM_LEN = 14
 
     # related to the character map
 
@@ -293,10 +297,7 @@ class TiBasicLib:
     ########## Input [updated]
     ##########
 
-    # def input_ut14(s, store_in, prompt_str=None): # TODO
-        # prompt = 'ENTER UP TO 14 CHARACTERS'
-
-    def input(s, store, prompt, ut14c=False):
+    def input(s, store, prompt, ut14c=False): # TODO maybe we could rename `ut14c` to something less hardcoded
         if s.is_var_num(store):
             return s.input_var_num(store, prompt, ut14c=ut14c)
         elif s.is_var_str(store):
@@ -356,9 +357,8 @@ class TiBasicLib:
     def menu(s, title, options, labels):
         assert len(options) == len(labels)
   
-        PAYLOAD_ITEMS_PER_PAGE      = 4
-        TRASH_VARS_USED_FOR_OPTIONS = s.VAR_TRASH_STR[:PAYLOAD_ITEMS_PER_PAGE]
-        TRASH_VAR_USED_FOR_TITLE    = s.VAR_TRASH_STR[PAYLOAD_ITEMS_PER_PAGE]
+        TRASH_VARS_USED_FOR_OPTIONS = s.VAR_TRASH_STR[:s.MENU_ITEMS_PER_PAGE]
+        TRASH_VAR_USED_FOR_TITLE    = s.VAR_TRASH_STR[s.MENU_ITEMS_PER_PAGE]
 
         # if len(options) <= 7:
         #     if all([s.is_str(opt) and s.is_var_str(opt) for opt in options]):
@@ -389,7 +389,7 @@ class TiBasicLib:
         lbl_exit = s.gen_label()
 
         while len(options):
-            if len(options) <= PAYLOAD_ITEMS_PER_PAGE:
+            if len(options) <= s.MENU_ITEMS_PER_PAGE:
                 lbl_page_next = lbl_page_cur
                 str_next = '"X NEXT"'
             else:
@@ -403,8 +403,8 @@ class TiBasicLib:
 
             s.label(lbl_page_cur)
 
-            options_slice = options[:PAYLOAD_ITEMS_PER_PAGE]
-            labels_slice  = labels [:PAYLOAD_ITEMS_PER_PAGE]
+            options_slice = options[:s.MENU_ITEMS_PER_PAGE]
+            labels_slice  = labels [:s.MENU_ITEMS_PER_PAGE]
 
             for idx, opt in enumerate(options_slice):
                 if s.is_str(opt):
@@ -452,7 +452,7 @@ class TiBasicLib:
         for opt in options:
             if s.is_str(opt):
                 data = s.extract_str_data(opt)
-                if len(data) > 14:
+                if len(data) > s.MENU_ITEM_LEN:
                     print(f'WARNING: menu item will clip `{opt}`')
             elif s.is_var_str(opt):
                 pass
