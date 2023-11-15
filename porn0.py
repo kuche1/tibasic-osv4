@@ -1,6 +1,4 @@
 
-import lib_tibasic
-
 # the initial version of this ended up being 31KiB
 # this needs to be split
 
@@ -355,15 +353,20 @@ the_story = the_story.replace('”', '>')
 the_story = the_story.replace('’', "'")
 the_story = the_story.replace('—', '-')
 the_story = the_story.replace('–', '-')
-the_story = the_story.replace(';', 'SMC')
-the_story = the_story.replace('‘', 'RTQ')
+the_story = the_story.replace(';', '<.,>')
+the_story = the_story.replace('‘', "'")
+
+import lib_tibasic
+from porn import DATA_VARS, DATA_IN_DATA_VAR
 
 with lib_tibasic.TiBasicLib() as tb:
 
-    for var in ['Str0', 'Str1', 'Str2', 'Str3', 'Str4', 'Str5', 'Str6', 'Str7', 'Str8', 'Str9']:
-        chunk = the_story[:16]
+    for var in DATA_VARS:
+        chunk = the_story[:DATA_IN_DATA_VAR]
         the_story = the_story[len(chunk):]
         if len(chunk) == 0:
             break
 
-        tb.raw(f'"{chunk}"->{var}')
+        lstr_chunk = tb.pystr_to_lstr(chunk)
+
+        tb.raw(f'{lstr_chunk}->{var}')

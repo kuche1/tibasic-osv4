@@ -8,8 +8,11 @@
 
 # TODO? add lower case letters?
 
-CHARACTER_MAP_1B_CHARS = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ  /:?.,()'
+numbers = '0123456789'
+letters_capital = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+letters_lower_case = 'abcdefghijklmnopqrstuvwxyz'
+expansion_0 = ' /:?.,()<>!\'-'
 
+CHARACTER_MAP_1B_CHARS = numbers + letters_capital + letters_lower_case + expansion_0
 CHARACTER_MAP_MULTIBYTE_CHARS = '[theta]'
-
 CHARACTER_MAP = CHARACTER_MAP_1B_CHARS + CHARACTER_MAP_MULTIBYTE_CHARS

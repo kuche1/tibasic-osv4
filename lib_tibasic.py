@@ -16,7 +16,7 @@ from lib_character_map import CHARACTER_MAP_1B_CHARS
 
 # INFO
 # ti84+ ROM: 404     KB
-# ti84+ RAM:  16_354  B
+# ti84+ RAM:  24_015  B
 
 def term(cmds:list, silent=False):
     if silent:
@@ -658,8 +658,27 @@ class TiBasicLib:
         # returns an encoded version of the input that can be used in variable names
         assert type(num) == int
         assert num >= 0
-        return '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ'[num] # if this crashes then we need to add some more characters
+        # troublemaker: SS -> removing S
+        return '0123456789ABCDEFGHIJKLMNOPQRTUVWXYZ'[num] # not eough character, encode using more characters
+        # if this crashes then we need to add some more characters (unlikely to happen)
         # also it's fine if some if these characters cause touble and we need to remove them
+    
+    def encode_to_2char(tb, num):
+        assert type(num) == int
+        assert num >= 0
+
+        # TODO this sucks
+        while True:
+            try:
+                char_1 = tb.encode_to_1char(num)
+            except IndexError:
+                num -= 1
+            else:
+                break
+
+        char_0 = tb.encode_to_1char(num)
+
+        return char_1 + char_0
 
     ##########
     ########## lists
@@ -678,7 +697,11 @@ class TiBasicLib:
     def pychar_to_lchar(tb, pychar):
         assert type(pychar) == str
         assert len(pychar) == 1
-        return str(CHARACTER_MAP_1B_CHARS.index(pychar) + 1) # tibasic is 1-indexed
+        idx = CHARACTER_MAP_1B_CHARS.find(pychar)
+        if idx == -1:
+            assert False, f'could not convert pychar `{pychar}` to lchar; character is missing from character table'
+        idx += 1 # tibasic is 1-indexed
+        return str(idx)
 
     def pystr_to_lstr(tb, pystr):
         assert type(pystr) == str
@@ -690,6 +713,7 @@ class TiBasicLib:
         if res.endswith(','):
             res = res[:-1]
         res += '}'
+        return res
 
     ##########
     ########## other
@@ -719,20 +743,15 @@ class TiBasicLib:
 
         s.raw(f'{input_var}+{s.DIGIT_TO_LCHAR}->{output_var}')
 
-    def num0to16_to_lstr(tb, out, inp):
+    def num0to99_to_lstr(tb, out, inp):
         assert tb.is_var_num(inp)
         assert tb.is_var_lstr(out)
 
-        vn = tb.gen_var_num()
+        vn_high = tb.gen_var_num()
+        vn_low = tb.gen_var_num()
 
-        tb.raw(f'{inp}->{vn}')
+        tb.raw(f'int({inp}/10)->{vn_high}')
+        tb.digit_to_lchar(f'{out}(1)', vn_high)
 
-        tb.raw(f'If int({vn}/10)=0')
-        tb.raw('Then')
-        tb.raw(f'{0+tb.DIGIT_TO_LCHAR}->{out}(1)')
-        tb.raw('Else')
-        tb.raw(f'{1+tb.DIGIT_TO_LCHAR}->{out}(1)')
-        tb.raw(f'{vn}-10->{vn}')
-        tb.raw('End')
-
-        tb.digit_to_lchar(f'{out}(2)', vn)
+        tb.raw(f'{inp}-10*{vn_high}->{vn_low}')
+        tb.digit_to_lchar(f'{out}(2)', vn_low)

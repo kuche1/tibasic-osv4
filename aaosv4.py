@@ -44,7 +44,7 @@ with lib_tibasic.TiBasicLib(
 
             vls_memory = tb.gen_var_lstr()
 
-            tb.num0to16_to_lstr(vls_memory, vn_memory)
+            tb.num0to99_to_lstr(vls_memory, vn_memory)
 
             # glue together
 
@@ -63,7 +63,7 @@ with lib_tibasic.TiBasicLib(
                 vls_menu_title,
                 vls_menu_title,
                 '{'
-                    + tb.pychar_to_lchar('/') +','+ tb.pychar_to_lchar('1') +','+ tb.pychar_to_lchar('6') +','+ tb.pychar_to_lchar('K')
+                    + tb.pychar_to_lchar('/') +','+ tb.pychar_to_lchar('2') +','+ tb.pychar_to_lchar('4') +','+ tb.pychar_to_lchar('K')
                 + '}'
             )
 
