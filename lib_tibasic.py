@@ -74,7 +74,7 @@ class TiBasicLib:
     VAR_RET_LIST = ['L6']
 
     VAR_TRASH_NUM = ['Y']
-    VAR_TRASH_STR = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3', 'Str2']
+    VAR_TRASH_STR = ['Str7', 'Str6', 'Str5', 'Str4', 'Str3']
 
     ##########
     ########## shared data over different instances
@@ -356,9 +356,13 @@ class TiBasicLib:
     def menu(s, title, options, labels):
         assert len(options) == len(labels)
   
-        if len(options) <= 7:
-            if all([s.is_str(opt) and s.is_var_str(opt) for opt in options]):
-                return s.menu_raw(title, options, labels)
+        PAYLOAD_ITEMS_PER_PAGE      = 4
+        TRASH_VARS_USED_FOR_OPTIONS = s.VAR_TRASH_STR[:PAYLOAD_ITEMS_PER_PAGE]
+        TRASH_VAR_USED_FOR_TITLE    = s.VAR_TRASH_STR[PAYLOAD_ITEMS_PER_PAGE]
+
+        # if len(options) <= 7:
+        #     if all([s.is_str(opt) and s.is_var_str(opt) for opt in options]):
+        #         return s.menu_raw(title, options, labels)
 
         if s.is_var_lstr(title):
             s.raw(f'{title}->{s.VAR_ARG_LIST[0]}')
@@ -368,9 +372,9 @@ class TiBasicLib:
             # output: tb.VAR_RET_STR[0]
             # trash : tb.VAR_TRASH_NUM[0]
 
-            s.raw(f'{s.VAR_RET_STR[0]}->{s.VAR_TRASH_STR[5]}')
+            s.raw(f'{s.VAR_RET_STR[0]}->{TRASH_VAR_USED_FOR_TITLE}')
 
-            title = s.VAR_TRASH_STR[5]
+            title = TRASH_VAR_USED_FOR_TITLE
         
         elif s.is_str(title):
             pass
@@ -382,8 +386,10 @@ class TiBasicLib:
         lbl_page_cur = s.gen_label()
         lbl_page_prev = lbl_page_cur
 
+        lbl_exit = s.gen_label()
+
         while len(options):
-            if len(options) <= 5:
+            if len(options) <= PAYLOAD_ITEMS_PER_PAGE:
                 lbl_page_next = lbl_page_cur
                 str_next = '"X NEXT"'
             else:
@@ -397,8 +403,8 @@ class TiBasicLib:
 
             s.label(lbl_page_cur)
 
-            options_slice = options[:5]
-            labels_slice  = labels [:5]
+            options_slice = options[:PAYLOAD_ITEMS_PER_PAGE]
+            labels_slice  = labels [:PAYLOAD_ITEMS_PER_PAGE]
 
             for idx, opt in enumerate(options_slice):
                 if s.is_str(opt):
@@ -413,22 +419,24 @@ class TiBasicLib:
                     # output: tb.VAR_RET_STR[0]
                     # trash : tb.VAR_TRASH_NUM[0]
 
-                    s.raw(f'{s.VAR_RET_STR[0]}->{s.VAR_TRASH_STR[idx]}')
+                    s.raw(f'{s.VAR_RET_STR[0]}->{TRASH_VARS_USED_FOR_OPTIONS[idx]}')
 
-                    options_slice[idx] = s.VAR_TRASH_STR[idx]
+                    options_slice[idx] = TRASH_VARS_USED_FOR_OPTIONS[idx]
                 else:
                     assert False, f'unsupported type of `{opt}`'
 
             s._menu_raw(
                 title, # TODO? add page num
-                [str_prev,      str_next]      + options_slice,
-                [lbl_page_prev, lbl_page_next] + labels_slice,
+                ['"* EXIT"', str_prev,      str_next]      + options_slice,
+                [lbl_exit,   lbl_page_prev, lbl_page_next] + labels_slice,
             )
             options = options[len(options_slice):]
             labels  = labels [len(labels_slice):]
 
             lbl_page_prev = lbl_page_cur
             lbl_page_cur = lbl_page_next
+        
+        s.label(lbl_exit) # TODO not optimal, we can optimize away this label
 
     def _menu_raw(s, title, options, labels):
         if s.is_str(title):

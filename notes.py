@@ -21,9 +21,10 @@ with lib_tibasic.TiBasicLib() as tb:
 
     tb.menu(
         '"SELECT NOTE"',
-        ['"* EXIT"'] + vars_title,
-        [lbl_exit]   + note_selection_labels,
+        vars_title,
+        note_selection_labels,
     )
+    tb.goto(lbl_exit)
 
     for note_idx, label in enumerate(note_selection_labels):
         tb.label(label)
@@ -36,16 +37,15 @@ with lib_tibasic.TiBasicLib() as tb:
             tb.menu(
                 '"NOTE ACTION"',
                 [
-                    '"* EXIT"',
                     '"EDIT"',
                     '"RENAME"',
                 ],
                 [
-                    lbl_main_menu,
                     lbl_edit,
                     lbl_rename,
                 ]
             )
+            tb.goto(lbl_main_menu)
 
             tb.label(lbl_rename)
             with tb.scope():
@@ -67,9 +67,10 @@ with lib_tibasic.TiBasicLib() as tb:
 
                 tb.menu(
                     '"EDIT CONTENT"',
-                    ['"* EXIT"']                         + vars_content[note_idx],
-                    [lbl_exit_this_notes_content_exitor] + line_labels,
+                    vars_content[note_idx],
+                    line_labels,
                 )
+                tb.goto(lbl_exit_this_notes_content_exitor)
 
                 for line_idx, line_label in enumerate(line_labels):
                     tb.label(line_label)

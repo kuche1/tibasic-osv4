@@ -86,7 +86,6 @@ with lib_tibasic.TiBasicLib(
         tb.menu(
             vls_menu_title,
             [
-                '"* EXIT"',
                 '"NOTES"',
                 '"TIMER"',
                 '"PORN"',
@@ -101,7 +100,6 @@ with lib_tibasic.TiBasicLib(
                 '"TEST"',
             ],
             [
-                lbl_exit,
                 lbl_notes,
                 lbl_timer,
                 lbl_porn,
@@ -116,6 +114,7 @@ with lib_tibasic.TiBasicLib(
                 lbl_test,
             ]
         )
+        tb.goto(lbl_exit)
 
         tb.label(lbl_porn)
         with tb.scope():

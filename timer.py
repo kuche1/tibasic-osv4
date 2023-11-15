@@ -19,16 +19,15 @@ with lib_tibasic.TiBasicLib(
     tb.menu(
         '"**TIMER**"',
         [
-            '"* EXIT"',
             '"RESET"',
             '"SHOW"',
         ],
         [
-            lbl_exit,
             lbl_reset,
             lbl_show,
         ],
     )
+    tb.goto(lbl_exit)
 
     tb.raw(f'Lbl {lbl_reset}')
     tb.utime_sec(vn_start)
