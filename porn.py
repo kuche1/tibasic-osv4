@@ -377,17 +377,9 @@ with lib_tibasic.TiBasicLib() as tb:
 
     # constants
 
-    # NUMBER_OF_DATA_VARS = tb.MENU_ITEMS_PER_PAGE * 8
-    # DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
-    # DATA_VARS = [f'[list]POD{tb.encode_to_2char(var_idx)}' for var_idx in range(NUMBER_OF_DATA_VARS)]
-
-    # NUMBER_OF_DATA_VARS = 5 # tb.MENU_ITEMS_PER_PAGE * 2
-    # DATA_IN_DATA_VAR = tb.MENU_ITEM_LEN
-    # DATA_VARS = [f'Str{var_idx}' for var_idx in range(NUMBER_OF_DATA_VARS)]
-
     NUMBER_OF_SUBPROGRAMS_LIMIT = 2
-
     MENU_PAGES_IN_DATA_VAR = 4
+
     DATA_VARS = ['Str9', 'Str8', 'Str7', 'Str6', 'Str5', 'Str4'] # how many pages per arch/unarch
     SMALLDATA_VARS = ['Str0', 'Str1', 'Str2', 'Str3'] # how many items per page
     DATA_IN_PAGE = tb.MENU_ITEM_LEN * len(SMALLDATA_VARS)
