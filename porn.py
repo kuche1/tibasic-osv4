@@ -415,9 +415,7 @@ with lib_tibasic.TiBasicLib() as tb:
 
         # tibasic code
 
-        if lbl_next == None:
-            pass
-        else:
+        if lbl_next != None:
             tb.label(lbl_next)
 
         tb.call(new_program, cd='porn')
