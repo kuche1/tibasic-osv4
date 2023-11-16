@@ -119,7 +119,7 @@ class TiBasicLib:
         s.compiled_file = f'/tmp/{s.program_name}.8xp'
         s.f = open(s.tibasic_source_file, 'w')
         s.previously_sent_file = f'/tmp/{s.program_name}-previously-sent' # needs tp be >8 characters long
-        s.previously_sent_file_max_mtime_diff = 60 * 45 # in seconds
+        s.previously_sent_file_max_mtime_diff = 60 * 60 * 2 # in seconds
 
         s.archive = archive
         s.archive_if_that_big = 500 # (bytes)

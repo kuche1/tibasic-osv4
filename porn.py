@@ -393,14 +393,24 @@ with lib_tibasic.TiBasicLib() as tb:
     DATA_IN_PAGE = tb.MENU_ITEM_LEN * len(SMALLDATA_VARS)
     DATA_IN_DATA_VAR = DATA_IN_PAGE * MENU_PAGES_IN_DATA_VAR
 
+    # subprogram generation stuff
+
+    source_program = 'porn_subprogram_template'
+    subprograms_folder = 'porn'
+    shutil.rmtree(subprograms_folder)
+    os.makedirs(subprograms_folder)
+
     # main
 
+    # vl_checkpoint_page = '[list]prnck(1)'
+    # vn_checkpoint_page = vl_checkpoint_page + '(1)'
+    # tb.setupeditor(vn_checkpoint_page)
+
+    # tb.raw(f'If dim({vl_checkpoint_page})=0')
+    # tb.raw(f'0->{vn_checkpoint_page}')
+
+
     lbl_exit = tb.gen_label()
-    source_program = 'porn_subprogram_template'
-
-    shutil.rmtree('porn')
-    os.makedirs('porn')
-
     lbl_next = None
 
     program_idx = 0
@@ -411,7 +421,7 @@ with lib_tibasic.TiBasicLib() as tb:
         # gen file
 
         new_program = f'porn{tb.encode_to_2char(program_idx)}'
-        shutil.copyfile(source_program+'.py', f'porn/{new_program}.py')
+        shutil.copyfile(source_program+'.py', f'{subprograms_folder}/{new_program}.py')
 
         # tibasic code
 
